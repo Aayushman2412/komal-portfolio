@@ -1,0 +1,322 @@
+:root {
+  --night: #070605;
+  --warm: #f4e6cf;
+  --warm-dim: rgba(244, 230, 207, 0.62);
+  --ai-bg: #efeeea;
+  --ai-ink: #141418;
+  --ai-mute: #6b6b75;
+  --ai-accent: #3d5afe;
+  --paper: #f3ecdc;
+  --kraft: #b98d5f;
+  --ink: #1f1a17;
+  --thread: #b3261e;
+
+  --f-ai: 'Instrument Sans Variable', system-ui, sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --f-hand: 'Caveat Variable', 'Gochi Hand', cursive;
+  --f-kid: 'Gochi Hand', cursive;
+  --f-type: 'Special Elite', 'IBM Plex Mono', monospace;
+  --f-bodoni: 'Bodoni Moda Variable', serif;
+  --f-marker: 'Permanent Marker', cursive;
+  --f-osd: 'VT323', monospace;
+
+  /* layers: canvas < hud < story < controls < book < preloader */
+  --z-hud: 10;
+  --z-story: 20;
+  --z-controls: 30;
+  --z-book: 40;
+  --z-pre: 50;
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--warm);
+  font-family: var(--f-ai);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+body {
+  min-height: 100dvh;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.stage-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+.scroll-track {
+  height: 1000vh;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .scroll-track {
+    height: 820vh;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only--focusable:focus-visible {
+  position: fixed;
+  left: 16px;
+  top: 16px;
+  width: auto;
+  height: auto;
+  margin: 0;
+  clip: auto;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--warm);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+:focus-visible {
+  outline: 2px solid #ffcf7a;
+  outline-offset: 3px;
+}
+
+/* ---------- controls ---------- */
+
+.controls {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-controls);
+  pointer-events: none;
+}
+
+.controls button,
+.controls a {
+  pointer-events: auto;
+}
+
+.namemark {
+  position: absolute;
+  left: clamp(16px, 3vw, 32px);
+  top: clamp(16px, 3vw, 28px);
+  display: grid;
+  gap: 2px;
+  opacity: 0;
+  color: var(--warm);
+}
+
+.namemark strong {
+  font-family: var(--f-hand);
+  font-size: clamp(24px, 2.4vw, 32px);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.namemark span {
+  font-family: var(--f-type);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--warm-dim);
+}
+
+.controls__top {
+  position: absolute;
+  right: clamp(16px, 3vw, 28px);
+  bottom: clamp(16px, 3vw, 28px);
+  display: flex;
+  gap: 8px;
+}
+
+.chip,
+.sound {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 230, 207, 0.22);
+  background: rgba(14, 11, 9, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--warm);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.15s, border-color 0.25s;
+}
+
+.chip:hover,
+.sound:hover {
+  background: rgba(40, 30, 22, 0.75);
+  border-color: rgba(244, 230, 207, 0.45);
+}
+
+.chip:active,
+.sound:active {
+  transform: scale(0.97);
+}
+
+.chip--loud {
+  background: var(--warm);
+  color: var(--ink);
+  border-color: var(--warm);
+}
+
+.chip--loud:hover {
+  background: #fff3df;
+}
+
+.chip--close {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(16px, 3vw, 28px);
+  transform: translateX(-50%);
+}
+
+.chip--close:active {
+  transform: translateX(-50%) scale(0.97);
+}
+
+.sound {
+  position: fixed;
+  left: clamp(16px, 3vw, 28px);
+  bottom: clamp(16px, 3vw, 28px);
+  z-index: 45;
+}
+
+@media (max-width: 767px) {
+  .controls__top {
+    left: 16px;
+    right: auto;
+    bottom: 64px;
+    flex-wrap: wrap;
+  }
+  .sound span {
+    display: none;
+  }
+  .sound {
+    width: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+  /* the book's page controls own the bottom row on phones */
+  body:has(.book-layer) .sound {
+    bottom: 78px;
+  }
+  .chip--close {
+    bottom: 112px;
+  }
+}
+
+/* ---------- hints anchored in 3D ---------- */
+
+.hint {
+  font-family: var(--f-hand);
+  font-size: clamp(26px, 2.4vw, 34px);
+  font-weight: 600;
+  color: #fff4dd;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
+  white-space: nowrap;
+  user-select: none;
+  animation: hint-bob 2.4s ease-in-out infinite;
+}
+
+.hint::after {
+  content: '';
+  display: block;
+  width: 46px;
+  height: 26px;
+  margin: 2px auto 0;
+  border-bottom: 3px solid #fff4dd;
+  border-left: 3px solid transparent;
+  border-radius: 0 0 40px 40px;
+  transform: rotate(-12deg);
+  opacity: 0.85;
+}
+
+.hint--book {
+  transform: rotate(-6deg);
+}
+
+@keyframes hint-bob {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -6px;
+  }
+}
+
+/* ---------- narration ---------- */
+
+.story {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-story);
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+}
+
+.story p {
+  grid-area: 1 / 1;
+  margin: 0;
+  opacity: 0;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.story__off {
+  align-self: end;
+  margin-bottom: 18vh !important;
+  font-family: var(--f-osd);
+  font-size: clamp(28px, 4vw, 52px);
+  color: #e9e3cf;
+  text-transform: uppercase;
+  text-shadow: 0 0 18px rgba(255, 240, 200, 0.45);
+}
+
+.story__room {
+  align-self: end;
+  margin-bottom: 14vh !important;
+  font-family: var(--f-hand);
+  font-size: clamp(28px, 3.2vw, 46px);
+  font-weight: 500;
+  color: #fff1d9;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+  max-width: 22ch;
+  line-height: 1.1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hint {
+    animation: none;
+  }
+}
