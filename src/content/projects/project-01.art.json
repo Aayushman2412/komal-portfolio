@@ -1,0 +1,25 @@
+{
+ "pages": [
+  {
+   "src": "projects/project-01/pages/page-1.webp",
+   "w": 1620,
+   "h": 1080
+  },
+  {
+   "src": "projects/project-01/pages/page-2.webp",
+   "w": 1620,
+   "h": 1080
+  },
+  {
+   "src": "projects/project-01/pages/page-3.webp",
+   "w": 1620,
+   "h": 1080
+  },
+  {
+   "src": "projects/project-01/pages/page-4.webp",
+   "w": 1620,
+   "h": 1080
+  }
+ ],
+ "cuts": {}
+}
