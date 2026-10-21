@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { art, clipPolygon, FRAME, fitFrame, frameTransform, polyBox, regions } from '../lib/art'
 import { onFrame } from '../lib/frame'
 import { gsap } from '../lib/gsap'
@@ -6,11 +6,12 @@ import { sound } from '../lib/audio'
 import { openAlmirah } from '../lib/story'
 import { beats, easeInOut, live, span, useStory } from '../state/store'
 import { DOORS_CENTRE, DOORWAY, doorsTarget, INSIDE_VIEW, insideCam, OPEN_ZOOM, roomCam } from './cams'
+import { RoomSwirl } from './RoomSwirl'
 
 /**
  * Frame 3: nani's almirah. After the power cut the screen is black; the bulb in the corner of her
  * drawing flickers, catches, and the view pulls back from it until the whole room is lit. Then the
- * almirah can be opened: its two upper doors (cut from her drawing) swing out onto her drawing of
+ * almirah can be opened (her pink and orange swirls flow slowly behind it, 21 Oct): its two upper doors (cut from her drawing) swing out onto her drawing of
  * the inside (the clothes, the scrapbook, the tin; she asked for them to be there "as soon as the
  * cupboard opens", 21 Oct), and the view goes in.
  */
@@ -56,6 +57,9 @@ export function Room() {
   const doorR = useRef<HTMLImageElement>(null)
   const behind = useRef<HTMLSpanElement>(null)
   const stage = useStory((s) => s.stage)
+  // her swirls only move while the room is on screen
+  const [onScreen, setOnScreen] = useState(false)
+  const shown = useRef(false)
 
   // open the doors and go in (the inside scene takes over in the doorway and finishes the stage);
   // close them on the way back out
@@ -89,6 +93,10 @@ export function Room() {
         const intro = st === 'intro' || st === 'loading'
         const visible = intro ? p >= beats.tear[0] : st === 'room' || st === 'opening' || (st === 'open' && insideCam.k < 1)
         el.style.visibility = visible ? 'visible' : 'hidden'
+        if (visible !== shown.current) {
+          shown.current = visible
+          setOnScreen(visible)
+        }
         if (!visible) return
 
         const vw = window.innerWidth
@@ -147,7 +155,7 @@ export function Room() {
   return (
     <div ref={root} className={`room ${clickable ? 'is-ready' : ''}`}>
       <div ref={frame} className="art-frame" style={{ width: FRAME.w, height: FRAME.h }}>
-        <img className="art-frame__img" src={art.room} alt="" draggable={false} />
+        <RoomSwirl src={art.room} active={onScreen} />
         {regions.room.stars.map(([x, y], i) => (
           <span key={i} className="room__star" style={{ left: x, top: y, animationDelay: `${(i * 0.77) % 3}s` }} />
         ))}
