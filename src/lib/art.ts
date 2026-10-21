@@ -8,7 +8,9 @@ import regions from '../content/regions.json'
 export const FRAME = { w: 1620, h: 1080 }
 export { regions }
 
-const a = (p: string) => `/art/${p}`
+// absolute URLs, so the site also works from a sub-path (and inside CSS variables, which resolve
+// relative URLs against the stylesheet that uses them, not the page)
+const a = (p: string) => new URL(`${import.meta.env.BASE_URL}art/${p}`, document.baseURI).href
 
 export const art = {
   feed: {
