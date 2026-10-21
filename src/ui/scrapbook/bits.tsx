@@ -1,7 +1,7 @@
 import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import type { Project } from '../../content/site'
-import { art } from '../../lib/art'
+import { art, regions } from '../../lib/art'
 import { sound } from '../../lib/audio'
 import { fabricUrl } from '../../lib/textures/fabrics'
 import { FACE } from './size'
@@ -36,6 +36,48 @@ export function Spot({ box, label, onGo }: { box: number[]; label: string; onGo:
         onGo()
       }}
     />
+  )
+}
+
+/** Her corner flap with her "turn" beside it: the way her own pages say "next". Box in page pixels. */
+export function Flap({ label, color = 'yellow', onGo }: { label: string; color?: 'yellow' | 'green'; onGo: () => void }) {
+  const [x0, y0, x1, y1] = regions.book.turnFlap
+  return (
+    <>
+      <img className="turn-note" src={art.book.turn} alt="" draggable={false} style={{ left: `${(535 / FACE.w) * 100}%`, top: `${(858 / FACE.h) * 100}%`, width: `${(142 / FACE.w) * 100}%` }} />
+      <button
+        className={`flap flap--${color}`}
+        data-interactive
+        aria-label={label}
+        style={{ left: `${(x0 / FACE.w) * 100}%`, top: `${(y0 / FACE.h) * 100}%`, width: `${((x1 - x0) / FACE.w) * 100}%`, height: `${((y1 - y0) / FACE.h) * 100}%` }}
+        onClick={(e) => {
+          e.stopPropagation()
+          onGo()
+        }}
+      >
+        <img src={color === 'yellow' ? art.book.flapYellow : art.book.flapGreen} alt="" draggable={false} />
+        <span>{label}</span>
+      </button>
+    </>
+  )
+}
+
+/** A sheet of her red paper, pinned with her tape, like the ones on her first spread. */
+export function RedPaper({ children, tape = 1, ...pos }: Pos & { children?: ReactNode; tape?: 1 | 2 }) {
+  return (
+    <div className="red-paper" style={place(pos)}>
+      {children}
+      <img className="red-paper__tape" src={tape === 1 ? art.book.tape1 : art.book.tape2} alt="" draggable={false} />
+    </div>
+  )
+}
+
+/** Speckled grey paper with a pink loop border, like her index. */
+export function IndexCard({ children, className = '', ...pos }: Pos & { children: ReactNode; className?: string }) {
+  return (
+    <div className={`index-card ${className}`} style={place(pos)}>
+      {children}
+    </div>
   )
 }
 

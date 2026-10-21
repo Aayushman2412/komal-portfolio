@@ -1,5 +1,5 @@
 {
-  "_": "Places in Komal's frames, in the frames' own 1620x1080 pixels. Shared by scripts/slice-art.py and the site.",
+  "_": "Places in Komal's frames, in the frames' own 1620x1080 pixels. Shared by scripts/slice-art.py and the site. A scene's safe box is what stays centred when a narrow screen crops her drawing.",
   "room": {
     "bulb": [328, 178],
     "stars": [[1235, 80], [420, 535], [130, 628], [1185, 568], [1470, 728], [207, 175]],
@@ -9,7 +9,7 @@
       [1050, 905], [1046, 960], [1012, 960], [1008, 905], [600, 905], [596, 960], [564, 960], [560, 905],
       [558, 652], [546, 652], [546, 615], [568, 615], [568, 192], [560, 190]
     ],
-    "safe": [270, 40, 1075, 975]
+    "safe": [546, 40, 1064, 975]
   },
   "inside": {
     "book": [
@@ -17,7 +17,7 @@
       [1148, 576], [874, 574], [866, 540]
     ],
     "shelves": [525, 40, 1180, 1000],
-    "safe": [480, 60, 1220, 1010]
+    "safe": [640, 60, 1180, 1010]
   },
   "book": {
     "_": "Hotspots on the page faces (810x1080 each; the right face's x is measured from the spine).",

@@ -1,14 +1,14 @@
-import { EnvelopeSimple, InstagramLogo } from '@phosphor-icons/react'
 import type { ReactNode } from 'react'
 import { site, type Project } from '../../content/site'
 import { art, regions } from '../../lib/art'
-import { Envelope, Note, Polaroid, SpecTab, Sticker, Swatch, Tape } from './bits'
+import { Envelope, Flap, IndexCard, Note, Polaroid, RedPaper, SpecTab, Sticker, Swatch, Tape } from './bits'
 
 /**
  * The faces of the scrapbook, in reading order. A face is one side of one leaf; on desktop two
  * faces show as a spread. The first ones are her drawn pages exactly as she drew them, with
- * clickable spots over her tabs, her "turn" flap and her index rows. Project pages are built on a
- * blank page cut from her drawing until she draws or sends them.
+ * clickable spots over her tabs, her "turn" flap and her index rows. Project pages are built from
+ * her own pieces (a blank page cut from her spread, her index paper and lettering, her red paper,
+ * tape, stickers, corner flap and "turn") until she draws or sends them.
  */
 export type Go = (target: string) => void
 export type Spot = { box: number[]; to: string; label: string }
@@ -27,31 +27,38 @@ const tabs = (): Spot[] => [
 function ProjectLeft({ p, n }: { p: Project; n: number }) {
   return (
     <>
-      <h2 className="proj__num">PROJECT {num(n)}</h2>
+      <IndexCard x={10} y={13} w={50} h={13.5} r={-2} className="proj__card">
+        <img className="proj__lettering" src={art.projectTitles[n] ?? art.projectTitles[0]} alt={`Project ${num(n)}`} draggable={false} />
+      </IndexCard>
+      <Sticker src={art.book.smiley} x={66} y={14} w={9} r={10} />
+      <Sticker src={art.book.sparkle} x={80} y={20} w={6} r={-6} />
       <p className="proj__title">
         {p.title} <span>{p.year}</span>
       </p>
-      <Tape kind={2} x={4} y={24} r={-8} w={20} />
-      <Note x={9} y={29} w={82} h={33} r={-1.2}>
+      <Tape kind={2} x={3} y={32.5} r={-8} w={18} />
+      <Note x={9} y={34} w={82} h={29} r={-1.2}>
         <p>{p.story}</p>
       </Note>
-      <Envelope x={10} y={67} w={40} h={20} r={-4} text={p.concept} />
-      <SpecTab x={58} y={66} w={32} h={24} r={3} specs={p.specs} />
-      <Sticker src={art.book.smiley} x={82} y={14} w={9} r={10} />
+      <Envelope x={9} y={67.5} w={40} h={19} r={-4} text={p.concept} />
+      <SpecTab x={57} y={66} w={34} h={23} r={3} specs={p.specs} />
     </>
   )
 }
 
-function ProjectRight({ p }: { p: Project }) {
+function ProjectRight({ p, next, go }: { p: Project; next: { to: string; label: string }; go: Go }) {
   return (
     <>
-      <Polaroid x={8} y={12} w={44} r={-5} photo={p.photos[0]} tape={1} />
-      <Polaroid x={47} y={30} w={40} r={5} photo={p.photos[1]} tape={2} lift="right" />
-      <Sticker src={art.book.sparkle} x={78} y={14} w={8} r={-8} />
-      <Sticker src={art.book.sparkle} x={8} y={60} w={6} r={12} />
+      <RedPaper x={7} y={13} w={56} h={50} r={-3}>
+        <span className="red-paper__note">{p.photos[0].caption}</span>
+      </RedPaper>
+      <Polaroid x={12} y={17} w={44} r={-5} photo={p.photos[0]} tape={1} />
+      <Polaroid x={55} y={33} w={37} r={6} photo={p.photos[1]} tape={1} lift="right" />
+      <Sticker src={art.book.sparkle} x={78} y={15} w={8} r={-8} />
+      <Sticker src={art.book.heart} x={46} y={64} w={8} r={-14} />
       {p.swatches.map((s, i) => (
-        <Swatch key={s.name + i} x={12 + i * 32} y={72 - i * 3} w={22} r={i % 2 ? 6 : -7} swatch={s} />
+        <Swatch key={s.name + i} x={10 + i * 25} y={68 + (i % 2) * 3} w={19} r={i % 2 ? 6 : -7} swatch={s} />
       ))}
+      <Flap label={next.label} onGo={() => go(next.to)} />
     </>
   )
 }
@@ -60,22 +67,23 @@ function Contact() {
   const c = site.contact
   return (
     <>
-      <h2 className="proj__num">{c.heading}</h2>
-      <Tape kind={1} x={60} y={21} r={10} w={22} />
-      <Note x={10} y={26} w={80} h={40} r={1}>
-        <p>{c.note}</p>
-        <p>
+      <IndexCard x={9} y={15} w={82} h={52} r={-1} className="contact">
+        <h2>WRITE TO ME</h2>
+        <p className="contact__note">{c.note}</p>
+        <span className="contact__table">
+          <span>EMAIL</span>
           <a href={`mailto:${c.email}`} data-interactive>
-            <EnvelopeSimple size="1em" weight="bold" /> {c.email}
+            {c.email}
           </a>
-        </p>
-        <p>
+          <span>INSTAGRAM</span>
           <a href={`https://instagram.com/${c.instagram.replace('@', '')}`} target="_blank" rel="noreferrer" data-interactive>
-            <InstagramLogo size="1em" weight="bold" /> {c.instagram}
+            {c.instagram}
           </a>
-        </p>
-      </Note>
-      <Sticker src={art.book.heart} x={76} y={68} w={12} r={-12} />
+        </span>
+      </IndexCard>
+      <Tape kind={1} x={58} y={11} r={10} w={22} />
+      <Sticker src={art.book.heart} x={72} y={64} w={12} r={-12} />
+      <Sticker src={art.book.smiley} x={14} y={70} w={11} r={8} />
     </>
   )
 }
@@ -83,20 +91,17 @@ function Contact() {
 function End({ go }: { go: Go }) {
   return (
     <>
-      <p className="the-end">the end (for now)</p>
-      <button
-        className="back-to-index"
-        data-interactive
-        onClick={(e) => {
-          e.stopPropagation()
-          go('index')
-        }}
-      >
-        back to the index
-      </button>
-      <Sticker src={art.book.sparkle} x={22} y={30} w={9} r={-10} />
-      <Sticker src={art.book.sparkle} x={70} y={58} w={7} r={14} />
-      <Sticker src={art.book.smiley} x={44} y={62} w={11} r={-6} />
+      <RedPaper x={11} y={16} w={74} h={50} r={2} tape={2}>
+        <span className="the-end">
+          the end,
+          <br />
+          for now.
+        </span>
+      </RedPaper>
+      <Sticker src={art.book.sparkle} x={14} y={66} w={9} r={-10} />
+      <Sticker src={art.book.sparkle} x={78} y={12} w={7} r={14} />
+      <Sticker src={art.book.smiley} x={70} y={60} w={11} r={-6} />
+      <Flap label="INDEX" color="green" onGo={() => go('index')} />
     </>
   )
 }
@@ -119,8 +124,9 @@ export function buildFaces(): Face[] {
     },
   ]
   site.projects.forEach((p, i) => {
+    const next = site.projects[i + 1] ? { to: site.projects[i + 1].slug, label: `PROJECT ${num(i + 1)}` } : { to: 'contact', label: 'WRITE TO ME' }
     faces.push({ id: p.slug, label: `project ${num(i)}`, src: art.book.blankL, render: () => <ProjectLeft p={p} n={i} /> })
-    faces.push({ id: `${p.slug}:r`, label: `project ${num(i)}`, src: art.book.blankR, spots: tabs(), render: () => <ProjectRight p={p} /> })
+    faces.push({ id: `${p.slug}:r`, label: `project ${num(i)}`, src: art.book.blankR, spots: tabs(), render: (go) => <ProjectRight p={p} next={next} go={go} /> })
   })
   faces.push({ id: 'contact', label: site.contact.heading, src: art.book.blankL, render: () => <Contact /> })
   faces.push({ id: 'end', label: 'the end', src: art.book.blankR, spots: tabs(), render: (go) => <End go={go} /> })

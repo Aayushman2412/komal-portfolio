@@ -13,11 +13,107 @@
 .book {
   position: absolute;
   left: 50%;
-  top: calc((100% - var(--nav)) / 2);
   width: calc(var(--pw) * 2);
   height: var(--ph);
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   perspective: 3200px;
+  --board-top: calc(var(--ph) * 95 / 1080);
+  --board-h: calc(var(--ph) * 925 / 1080);
+  /* one board's thickness in the stack */
+  --ply: calc(var(--ph) * 0.0034);
+}
+
+/* the book's own shadow on the table */
+.book::before {
+  content: '';
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  top: calc(var(--board-top) + var(--board-h) * 0.55);
+  height: calc(var(--board-h) * 0.5);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5), transparent 68%);
+  filter: blur(14px);
+  pointer-events: none;
+}
+
+/* the pages under the visible ones: a stack of her teal board edges, thicker on whichever side has more */
+.book__stack {
+  position: absolute;
+  top: var(--board-top);
+  height: var(--board-h);
+  border-radius: calc(var(--ph) * 0.016);
+  background: #1f9aa6;
+  transform: translateZ(-2px);
+  pointer-events: none;
+}
+
+.book__stack--l {
+  left: calc(var(--pw) * 25 / 810);
+  width: calc(var(--pw) * 775 / 810);
+  --t: var(--stack-l);
+  box-shadow:
+    calc(var(--t) * var(--ply) * -1) calc(var(--t) * var(--ply) * 0.85) 0 #187f8a,
+    calc(var(--t) * var(--ply) * -2) calc(var(--t) * var(--ply) * 1.7) 0 #126670,
+    calc(var(--t) * var(--ply) * -3) calc(var(--t) * var(--ply) * 2.55) 0 #0d4f57;
+}
+
+.book__stack--r {
+  left: calc(50% + var(--pw) * 5 / 810);
+  width: calc(var(--pw) * 780 / 810);
+  --t: var(--stack-r);
+  box-shadow:
+    calc(var(--t) * var(--ply)) calc(var(--t) * var(--ply) * 0.85) 0 #187f8a,
+    calc(var(--t) * var(--ply) * 2) calc(var(--t) * var(--ply) * 1.7) 0 #126670,
+    calc(var(--t) * var(--ply) * 3) calc(var(--t) * var(--ply) * 2.55) 0 #0d4f57;
+}
+
+.book--single .book__stack {
+  display: none;
+}
+
+/* closed: only her cover and the page edges and tabs beside it */
+.book.is-closed .book__stack--l {
+  display: none;
+}
+
+.book.is-closed .book__stack--r {
+  width: calc(var(--pw) * 640 / 810);
+}
+
+/* at the back: only the back cover, as narrow as the front one */
+.book.is-end .book__stack--r {
+  display: none;
+}
+
+.book.is-end .book__stack--l {
+  left: calc(var(--pw) * 165 / 810);
+  width: calc(var(--pw) * 640 / 810);
+}
+
+.book--spread:not(.is-turning) .leaf:not(.is-near) {
+  visibility: hidden;
+}
+
+.book--spread.is-closed .leaf:not(.leaf--cover) {
+  visibility: hidden;
+}
+
+.book__edges {
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.35s;
+  pointer-events: none;
+}
+
+.book__edges img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.book.is-closed .book__edges {
+  opacity: 1;
 }
 
 .book--single {
@@ -204,32 +300,122 @@
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18));
 }
 
-.proj__num {
+/* her index paper: speckled grey with a pink loop border */
+.index-card {
   position: absolute;
-  left: 11%;
-  top: 12.5%;
-  margin: 0;
-  font-family: var(--f-hand);
-  font-weight: 400;
-  font-size: 6.4cqh;
-  letter-spacing: 0.03em;
+  z-index: 1;
+  border: 1.9cqh solid transparent;
+  border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cg fill='none' stroke='%23ea4f8c' stroke-width='2.6'%3E%3Ccircle cx='10' cy='10' r='5.6'/%3E%3Ccircle cx='30' cy='10' r='5.6'/%3E%3Ccircle cx='50' cy='10' r='5.6'/%3E%3Ccircle cx='10' cy='30' r='5.6'/%3E%3Ccircle cx='50' cy='30' r='5.6'/%3E%3Ccircle cx='10' cy='50' r='5.6'/%3E%3Ccircle cx='30' cy='50' r='5.6'/%3E%3Ccircle cx='50' cy='50' r='5.6'/%3E%3C/g%3E%3C/svg%3E")
+    20 round;
+  background: url(/art/paper-grain.webp) 0 0 / 220px, radial-gradient(ellipse at 40% 35%, #f1f0ee, #d9d8d6);
+  background-blend-mode: multiply;
+  background-clip: padding-box;
   color: #17171c;
-  transform: rotate(-2deg);
+  font-family: var(--f-hand);
+}
+
+.proj__card {
+  display: grid;
+  place-items: center;
+}
+
+/* her own lettering, cut from her index */
+.proj__lettering {
+  width: 84%;
+  height: auto;
 }
 
 .proj__title {
   position: absolute;
   left: 12%;
-  top: 20%;
+  top: 27.6%;
   margin: 0;
-  font-family: var(--f-note);
-  font-size: 4.4cqh;
-  color: #3a2620;
+  font-family: var(--f-hand);
+  font-size: 3.3cqh;
+  color: #2a1d18;
+  transform: rotate(-1.5deg);
 }
 
 .proj__title span {
   opacity: 0.6;
-  font-size: 0.8em;
+  font-size: 0.85em;
+}
+
+/* her red paper, pinned with her tape, cut a little unevenly by hand */
+.red-paper {
+  position: absolute;
+  z-index: 1;
+  background: url(/art/paper-grain.webp) 0 0 / 200px, radial-gradient(ellipse at 45% 40%, #d8342a, #b8201b);
+  background-blend-mode: multiply;
+  clip-path: polygon(1% 1.5%, 34% 0, 71% 1%, 99% 0.4%, 100% 37%, 98.8% 72%, 99.6% 99%, 62% 100%, 27% 98.9%, 0.4% 99.6%, 0 61%, 1.2% 28%);
+}
+
+.red-paper__tape {
+  position: absolute;
+  left: -3%;
+  top: -2%;
+  width: 30%;
+  height: auto;
+  transform: rotate(-24deg);
+}
+
+.red-paper__note {
+  position: absolute;
+  left: 7%;
+  bottom: 4%;
+  font-family: var(--f-hand);
+  font-size: 3.4cqh;
+  color: #fff8f2;
+  transform: rotate(-4deg);
+}
+
+/* her corner flap and her "turn": the next page */
+.flap {
+  position: absolute;
+  z-index: 4;
+  padding: 0;
+  border: 0;
+  background: none;
+  transition: transform 0.2s;
+}
+
+.flap img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.flap span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0 12% 0 6%;
+  font-family: var(--f-hand);
+  font-size: 2.1cqh;
+  line-height: 1;
+  text-align: center;
+  transform: rotate(-38deg);
+}
+
+.flap--yellow span {
+  color: #17171c;
+}
+
+.flap--green span {
+  color: #fff;
+}
+
+.flap:hover {
+  transform: rotate(-3deg) scale(1.06);
+}
+
+.turn-note {
+  position: absolute;
+  z-index: 3;
+  height: auto;
+  pointer-events: none;
 }
 
 /* pink lined paper with a loop border, like her About page */
@@ -240,8 +426,10 @@
   border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cg fill='none' stroke='%23ea4f8c' stroke-width='2.6'%3E%3Ccircle cx='10' cy='10' r='5.6'/%3E%3Ccircle cx='30' cy='10' r='5.6'/%3E%3Ccircle cx='50' cy='10' r='5.6'/%3E%3Ccircle cx='10' cy='30' r='5.6'/%3E%3Ccircle cx='50' cy='30' r='5.6'/%3E%3Ccircle cx='10' cy='50' r='5.6'/%3E%3Ccircle cx='30' cy='50' r='5.6'/%3E%3Ccircle cx='50' cy='50' r='5.6'/%3E%3C/g%3E%3C/svg%3E")
     20 round;
   background:
+    url(/art/paper-grain.webp) 0 0 / 200px,
     repeating-linear-gradient(transparent 0, transparent calc(4.2cqh - 1px), rgba(110, 104, 130, 0.38) calc(4.2cqh - 1px), rgba(110, 104, 130, 0.38) 4.2cqh) 0 2.2cqh / 100% 100%,
     linear-gradient(160deg, #fde9f2, #f7c9dc);
+  background-blend-mode: multiply;
   background-clip: padding-box;
   box-shadow: 0 0.6cqh 1.6cqh rgba(60, 20, 30, 0.18);
   font-family: var(--f-note);
@@ -296,7 +484,8 @@
   width: 100%;
   padding: 5% 5% 0;
   border: 0;
-  background: #fbf9f3;
+  background: url(/art/paper-grain.webp) 0 0 / 180px, #fbf9f3;
+  background-blend-mode: multiply;
   box-shadow: 0 0.8cqh 2cqh rgba(0, 0, 0, 0.3);
   text-align: center;
   transform-origin: 50% 2%;
@@ -316,7 +505,7 @@
   place-items: center;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: #cbc4bd url(/art/feed-bg.webp);
+  background: url(/art/paper-grain.webp) 0 0 / 160px, #c9c3bd;
   background-blend-mode: multiply;
 }
 
@@ -369,7 +558,8 @@
 .envelope__back {
   inset: 0;
   border-radius: 0.5cqh;
-  background: #e2a3b8;
+  background: url(/art/paper-grain.webp) 0 0 / 200px, #e2a3b8;
+  background-blend-mode: multiply;
   box-shadow: 0 0.6cqh 1.4cqh rgba(60, 20, 30, 0.25);
 }
 
@@ -408,7 +598,8 @@
   display: flex;
   align-items: flex-end;
   padding: 0 0 1.4cqh 2cqw;
-  background: #eeb6c9;
+  background: url(/art/paper-grain.webp) 0 0 / 200px, #eeb6c9;
+  background-blend-mode: multiply;
   clip-path: polygon(0 0, 50% 52%, 100% 0, 100% 100%, 0 100%);
   border-radius: 0.5cqh;
 }
@@ -468,9 +659,8 @@
   padding: 2.2cqh 2cqw 1cqh;
   border: 0;
   text-align: left;
-  background: #f1f1ee url(/art/feed-bg.webp);
+  background: url(/art/paper-grain.webp) 0 0 / 220px, #e9e8e6;
   background-blend-mode: multiply;
-  background-size: 300px;
   box-shadow: 0 0.4cqh 1cqh rgba(0, 0, 0, 0.2);
   transform: translateY(46%);
   transition: transform 0.6s cubic-bezier(0.3, 1.2, 0.5, 1);
@@ -508,10 +698,15 @@
 
 .spec__row {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1.4cqw;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.35);
+  grid-template-columns: 42% 1fr;
+  border-bottom: 1.5px solid #1b1b22;
   padding-bottom: 0.3cqh;
+  text-transform: uppercase;
+}
+
+.spec__row span:first-child {
+  border-right: 1.5px solid #1b1b22;
+  margin-right: 1.2cqw;
 }
 
 .spec__pocket {
@@ -522,8 +717,11 @@
   height: 58%;
   z-index: 2;
   border-radius: 0.4cqh;
-  background: #f5c9da;
-  background-image: repeating-linear-gradient(90deg, transparent 0 1.1cqh, rgba(234, 79, 140, 0.14) 1.1cqh 2.2cqh);
+  background:
+    url(/art/paper-grain.webp) 0 0 / 200px,
+    repeating-linear-gradient(90deg, transparent 0 1.1cqh, rgba(234, 79, 140, 0.14) 1.1cqh 2.2cqh),
+    #f5c9da;
+  background-blend-mode: multiply;
   box-shadow: 0 0.6cqh 1.4cqh rgba(60, 20, 30, 0.22);
   pointer-events: none;
 }
@@ -601,32 +799,67 @@
   color: rgba(255, 244, 234, 0.6);
 }
 
+/* white lettering on her red paper, like "Komal, age 7" */
 .the-end {
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 40%;
-  margin: 0;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--f-hand);
+  font-size: 8cqh;
+  line-height: 1.05;
   text-align: center;
-  font-family: var(--f-note);
-  font-size: 7cqh;
-  color: #2a2030;
-  transform: rotate(-3deg);
+  color: #fff8f2;
+  transform: rotate(-4deg);
 }
 
-.back-to-index {
-  position: absolute;
-  left: 50%;
-  top: 53%;
-  transform: translateX(-50%) rotate(2deg);
-  padding: 1cqh 2.6cqw 1.3cqh;
-  border: 0;
-  border-radius: 0.6cqh;
-  background: var(--tab-yellow);
+.contact {
+  display: grid;
+  align-content: start;
+  gap: 2.4cqh;
+  padding: 3cqh 4cqw;
+}
+
+.contact h2 {
+  margin: 0;
+  text-align: center;
   font-family: var(--f-hand);
-  font-size: 3cqh;
-  color: #2a2010;
-  box-shadow: 0 0.5cqh 1.2cqh rgba(0, 0, 0, 0.22);
+  font-weight: 400;
+  font-size: 5cqh;
+}
+
+.contact__note {
+  margin: 0;
+  font-family: var(--f-note);
+  font-size: 3.1cqh;
+  line-height: 1.15;
+  color: #2a2030;
+}
+
+/* like her index: a ruled table in marker capitals */
+.contact__table {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  border: 1.5px solid #17171c;
+  font-size: 2.7cqh;
+}
+
+.contact__table > * {
+  padding: 1.1cqh 1.4cqw;
+  border-bottom: 1.5px solid #17171c;
+}
+
+.contact__table > :nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.contact__table > :nth-child(odd) {
+  border-right: 1.5px solid #17171c;
+}
+
+.contact__table a {
+  color: #2b3b9a;
+  overflow-wrap: anywhere;
 }
 
 @keyframes fade {

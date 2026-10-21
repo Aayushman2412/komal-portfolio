@@ -4,13 +4,27 @@ Sources, newest first. When they disagree, the newer one wins.
 
 | When | What | Where |
 |---|---|---|
+| 21 Oct | **Third call**, her fixes after seeing the drawn build (2 min), and a corrected About/Index spread | [`docs/meet-3-transcript-en.txt`](docs/meet-3-transcript-en.txt); the new spread is [`docs/frames/6th.jpg`](docs/frames/6th.jpg) |
 | after 18 Oct | **Her six drawn frames**, one per beat. These are the visuals. | [`docs/frames/`](docs/frames) (originals in `art-src/`) |
 | after 18 Oct | **Her notebook pages**: the concept and the inside of the scrapbook | [`docs/notes-concept.jpg`](docs/notes-concept.jpg), [`docs/notes-scrapbook.jpg`](docs/notes-scrapbook.jpg) |
 | 18 Oct | **Second call**, after she saw the first build (11 min, Hindi/English) | [`docs/meet-2-transcript-en.txt`](docs/meet-2-transcript-en.txt) |
 | 15 Oct | First call, with her two Procreate sketches (32 min) | [`docs/meet-transcript-en.txt`](docs/meet-transcript-en.txt), [`docs/storyboard.jpg`](docs/storyboard.jpg), [`docs/book-plan.jpg`](docs/book-plan.jpg) |
 
-Both calls were transcribed with Whisper large-v3 in translate mode. Timestamps below are mm:ss into
+All calls were transcribed with Whisper large-v3 in translate mode. Timestamps below are mm:ss into
 the 18 Oct recording unless marked otherwise.
+
+## Her fixes from the 21 Oct call
+
+| Time | She said | Done |
+|---|---|---|
+| 00:00 | "I have to expand the photos." (Aayushman: her drawings should fill the screen.) | Every frame now covers the whole screen, kept centred on what matters (the almirah, the scrapbook) where a narrow screen crops it. No blurred bands. The open book is sized by its boards, not the table around them. |
+| 00:14–00:23 | "When the cupboard opens, the box is empty. My zoom-in photo with clothes, portfolio, book, box should be there as soon as the cupboard opens." | Her inside drawing is behind the doors as they swing open; the view goes in through the doorway and her drawing grows to fill the screen, with no cut. |
+| 00:35 | "The last page has not been drawn properly." (Aayushman: the project and end pages.) | Rebuilt from her own pieces: her index paper with her own PROJECT 01–05 lettering, her red paper and tape, her stickers, her corner flap with her "turn" to go on. The contact page is a table like her index; the end page is white lettering on her red paper. |
+| 00:40 | "Portfolio has changed its shape." | The closed book is her cover at the proportions she drew it (the first version stretched it 22% wider), with her page edges and tabs beside it. It flies out of the almirah in her drawing and lands on that shape. |
+| 00:50 | "When the portfolio opens, it should look like a proper book." | It lies closed, then the cover swings open, heavier and slower than a page. Under each side is a stack of board edges that thickens on whichever side has more pages, and the book casts a shadow on the table. |
+| 00:59–01:05 | "The [page] noise should be the sound of the paper. And when you open it, it should sound like it is being opened." | Paper synthesised in `src/lib/paperSound.ts`: page turns are a corner lifting, a swish, crackle and a soft flop; the cover is the spine giving, a whoosh and a card flop. |
+| 01:16–01:30 | "Behind the almirah there are curves... those curve lines should move... those orange lines should move like this." | Her pink-and-orange swirls flow slowly (`src/scenes/RoomSwirl.tsx`, WebGL); the almirah, bulb and stars stay still. |
+| (Aayushman) | Use the corrected About/Index drawing; the star's colours at the top were distorted. | Her new spread replaces the old one, and pages are now cut from the table by colour, so every tip of the star and its spray of dots keep their shape and colour. |
 
 ## What she is saying with it
 
@@ -62,7 +76,7 @@ needle thread to act as the cursor" (04:34–04:44; notes: "the click → a need
 **Sound**: "I want as much nostalgia as possible" (07:57), and the clothes rustle goes (08:07–08:11).
 What remains is old-house sound: the wall switch and bulb, the almirah creak, page turns.
 
-## What changed from the first build
+## What changed from the first build (18 Oct)
 
 - The 3D scene (CRT TV, steel almirah, cloth physics, generated textures) is gone; her frames replace it.
 - No TV, no switch-off on a set: the feed glitches and blacks out on its own (08:35–08:47).

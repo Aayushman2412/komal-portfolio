@@ -158,25 +158,40 @@ def slice_inside() -> None:
 SPINE = 810  # the faces split at the gutter between the two boards
 
 
+def table_distance(f: np.ndarray) -> np.ndarray:
+    """How far each pixel is from the colour of the dark table the book lies on (her grain smoothed out)."""
+    table = np.concatenate([f[:60].reshape(-1, 3), f[-40:].reshape(-1, 3)]).mean(0)
+    sm = ndimage.gaussian_filter(f, sigma=(1.2, 1.2, 0))
+    return np.sqrt(((sm - table) ** 2).sum(-1))
+
+
 def page_mask(f: np.ndarray) -> np.ndarray:
-    """Everything that is not the dark table: the boards, tabs, rings and anything stuck past the edge."""
-    L = ndimage.uniform_filter(lum(f), 7)
-    m = L > 62
-    m = ndimage.binary_opening(m, iterations=2)
-    m = ndimage.binary_closing(m, iterations=6)
+    """The solid shapes on the table: the boards, tabs and rings, with everything inside them filled."""
+    m = table_distance(f) > 30
+    m = ndimage.binary_opening(m, iterations=1)
     m = ndimage.binary_fill_holes(m)
     lab, n = ndimage.label(m)
     sizes = ndimage.sum(m, lab, range(1, n + 1))
-    keep = np.isin(lab, [i + 1 for i, s in enumerate(sizes) if s > 400])
-    return keep
+    return np.isin(lab, [i + 1 for i, s in enumerate(sizes) if s > 400])
+
+
+def page_alpha(f: np.ndarray) -> np.ndarray:
+    """
+    Alpha for a page: the solid shapes, plus a soft matte for everything else she drew on the table
+    (the tips of the About star, its spray of dots), so nothing she drew past the board is clipped
+    or loses its colour. The table itself goes fully transparent.
+    """
+    soft = np.clip((table_distance(f) - 16) / 30, 0, 1)
+    return np.maximum(soft * 255, feather(page_mask(f), 0.8)).astype(np.uint8)
 
 
 def slice_book() -> None:
     for n, name in ((5, "s1"), (6, "s2")):
         f = frame(n)
-        a = feather(page_mask(f), 1.0)
-        save(f[:, :SPINE], f"book/{name}-l.webp", a[:, :SPINE])
-        save(f[:, SPINE:], f"book/{name}-r.webp", a[:, SPINE:])
+        a = page_alpha(f)
+        # her spreads are shown big and close: keep their grain and colour nearly lossless
+        save(f[:, :SPINE], f"book/{name}-l.webp", a[:, :SPINE], q=93)
+        save(f[:, SPINE:], f"book/{name}-r.webp", a[:, SPINE:], q=93)
 
     # Blank pages for the project spreads: her boards, rings and paper, with the content replaced by
     # paper. The paper is a smooth fit of the bare margins plus her grain.
@@ -233,46 +248,113 @@ def slice_book() -> None:
     cut(5, "sparkle", 1296, 520, 1372, 604, lambda g: (g[..., 0] > 200) & (g[..., 1] > 190))
 
 
+COVER_W, COVER_H = 640, 925  # her closed scrapbook, straightened, at the proportions she drew it
+EDGE_W = 110  # the page edges and tabs that stick out past its cover
+
+
+def warp(img: Image.Image, quad: list, w: int, h: int) -> np.ndarray:
+    """Straighten a quad (top-left, top-right, bottom-right, bottom-left) of a frame into a w x h image."""
+    tl, tr, br, bl = quad
+    # PIL's QUAD maps the output rectangle onto the source quad as (ul, ll, lr, ur)
+    out = img.transform((w, h), Image.QUAD, data=(*tl, *bl, *br, *tr), resample=Image.BICUBIC)
+    return np.asarray(out).astype(np.float32)
+
+
+def rounded(w: int, h: int, r: int) -> np.ndarray:
+    m = Image.new("L", (w, h), 0)
+    ImageDraw.Draw(m).rounded_rectangle((0, 0, w - 1, h - 1), radius=r, fill=255)
+    return np.asarray(m) > 127
+
+
 def cover() -> None:
-    """The closed scrapbook, flattened out of frame 4 into a face the size of a page."""
+    """
+    The closed scrapbook, straightened out of frame 4 at the proportions she drew it (21 Oct: the
+    first version stretched it to the width of a page and she saw it "change its shape"), plus the
+    page edges and tabs that stick out on its right, which stay put while the cover opens.
+    """
     f = Image.open(SRC / "frame-4.webp").convert("RGB")
-    # cover corners in frame 4: top-left, top-right, bottom-right, bottom-left
-    quad = [(831, 236), (1097, 178), (1101, 566), (873, 564)]
-    W, H = 780, 925  # the right board in frames 5 and 6
-    # PIL's QUAD maps the output rectangle onto the source quad (ul, ll, lr, ur)
-    flat = f.transform((W, H), Image.QUAD, data=(*quad[0], *quad[3], *quad[2], *quad[1]), resample=Image.BICUBIC)
-    flat = np.asarray(flat).astype(np.float32)
+    flat = warp(f, [(831, 236), (1097, 178), (1101, 566), (873, 564)], COVER_W, COVER_H)
     # her grain gets smeared by the stretch; put fresh grain back at the same strength
-    flat += rng.normal(0, 9, (H, W, 1))
+    flat += rng.normal(0, 9, (COVER_H, COVER_W, 1))
     face = np.zeros((1080, 1620 - SPINE, 3), np.float32)
-    face[95 : 95 + H, 5 : 5 + W] = flat
-    # same silhouette as the right board of the first spread, without its tabs
-    m = page_mask(frame(5))[:, SPINE:].copy()
-    m[:, 785:] = False
-    yy, xx = np.mgrid[0:1080, 0 : 1620 - SPINE]
-    m &= (yy >= 95) & (yy < 95 + H) & (xx >= 5) & (xx < 5 + W)
-    save(face, "book/cover.webp", feather(m, 1.2), q=88)
+    face[95 : 95 + COVER_H, 5 : 5 + COVER_W] = flat
+    m = np.zeros((1080, 1620 - SPINE), bool)
+    m[95 : 95 + COVER_H, 5 : 5 + COVER_W] = rounded(COVER_W, COVER_H, 16)
+    save(face, "book/cover.webp", feather(m, 1.2), q=90)
+
+    # the page block beside it: white page edges, her coloured tabs and the green clip
+    edge = warp(f, [(1099, 172), (1178, 182), (1178, 578), (1103, 570)], EDGE_W, COVER_H)
+    shelf = np.asarray(f).astype(np.float32)[200:560, 1182:1196].reshape(-1, 3).mean(0)
+    d = np.sqrt(((ndimage.gaussian_filter(edge, sigma=(1, 1, 0)) - shelf) ** 2).sum(-1))
+    em = ndimage.binary_opening(d > 40, iterations=1)
+    em = ndimage.binary_closing(em, iterations=2)
+    em = ndimage.binary_fill_holes(em)
+    save(edge, "book/cover-edges.webp", feather(em, 1.0), q=90)
 
     # the back cover: her cover's teal and its dark mottling, without the lettering and stickers
     teal = flat.reshape(-1, 3)
     teal = teal[(teal[:, 2] > teal[:, 0] + 40) & (teal[:, 1] > teal[:, 0] + 30)]
     base, dark = np.median(teal, 0), np.percentile(teal, 12, axis=0)
+    W, H = COVER_W, COVER_H
     field = ndimage.gaussian_filter(rng.random((H, W)), 3)
     field = (field - field.mean()) / field.std()
     blot = (np.clip((field - 0.9) * 1.2, 0, 1) * 0.55)[..., None]
     back = base * (1 - blot) + dark * blot
     yy, xx = np.mgrid[0:H, 0:W]
-    edge = np.minimum.reduce([xx, W - 1 - xx, yy, H - 1 - yy]).astype(np.float32)
-    back *= (0.62 + 0.38 * np.clip(edge / 170, 0, 1) ** 0.8)[..., None]
+    rim = np.minimum.reduce([xx, W - 1 - xx, yy, H - 1 - yy]).astype(np.float32)
+    back *= (0.62 + 0.38 * np.clip(rim / 170, 0, 1) ** 0.8)[..., None]
     back += rng.normal(0, 10, (H, W, 1))
-    face = np.zeros((1080, 1620 - SPINE, 3), np.float32)
     # a back cover is a left face: its board sits against the spine on the right
-    m = page_mask(frame(5))[:, :SPINE].copy()
-    yy, xx = np.mgrid[0:1080, 0:SPINE]
+    face = np.zeros((1080, SPINE, 3), np.float32)
     bx = SPINE - 5 - W
     face[95 : 95 + H, bx : bx + W] = back
-    m &= (yy >= 95) & (yy < 95 + H) & (xx >= bx) & (xx < bx + W)
+    m = np.zeros((1080, SPINE), bool)
+    m[95 : 95 + H, bx : bx + W] = rounded(W, H, 16)
     save(face, "book/back.webp", feather(m, 1.2), q=86)
+
+
+def lettering() -> None:
+    """Her own hand-lettered PROJECT 01..05 from the index (frame 6), as ink cut-outs for the project pages."""
+    f = frame(6)
+    rows = [(408, 480), (486, 558), (563, 636), (640, 714), (717, 793)]
+    for i, (y0, y1) in enumerate(rows):
+        g = f[y0:y1, 1040:1310]
+        ink = ndimage.gaussian_filter(lum(g), 0.6) < 125
+        ink = ndimage.binary_opening(ink, iterations=1) | (lum(g) < 70)
+        alpha = feather(ink, 0.7)
+        # pure ink colour, so the grey index paper does not come along at the soft edges
+        rgb = np.zeros_like(g) + np.array([24, 22, 26], np.float32)
+        save(rgb, f"book/project-{i + 1:02d}.webp", alpha, q=92)
+
+    # her "turn" and its arrow (frame 5), white strokes only
+    g = frame(5)[858:958, 1342:1484]
+    white = (ndimage.gaussian_filter(lum(g), 0.8) > 226) & (sat(g) < 0.14)
+    lab, k = ndimage.label(white)
+    sizes = ndimage.sum(white, lab, range(1, k + 1))
+    white = np.isin(lab, [i + 1 for i, n in enumerate(sizes) if n > 40])
+    save(np.zeros_like(g) + 250, "book/turn.webp", feather(white, 0.7), q=92)
+
+    # her corner flaps, emptied of their lettering so the site can letter them (frames 5 and 6)
+    def flap(n: int, name: str, box: tuple, test) -> None:
+        x0, y0, x1, y1 = box
+        g = frame(n)[y0:y1, x0:x1]
+        m = test(g)
+        m = ndimage.binary_opening(m, iterations=1)
+        m = ndimage.binary_closing(m, iterations=3)
+        m = ndimage.binary_fill_holes(m)
+        lab, k = ndimage.label(m)
+        m = lab == 1 + int(np.argmax(ndimage.sum(m, lab, range(1, k + 1))))
+        paper = g[m & test(g)]
+        base = np.median(paper, 0)
+        # her lettering on the flap: anything far lighter or darker than the flap's own colour
+        letters = m & (np.abs(lum(g) - lum(base[None, None])[0, 0]) > 45)
+        letters = ndimage.binary_dilation(letters, iterations=2) & m
+        out = g.copy()
+        out[letters] = base + rng.normal(0, paper.std(0).mean() * 0.8, (letters.sum(), 1))
+        save(out, f"book/{name}.webp", feather(m, 0.8), q=92)
+
+    flap(6, "flap-yellow", (1474, 900, 1592, 1004), lambda g: (g[..., 0] > 190) & (g[..., 1] > 120) & (g[..., 2] < 110))
+    flap(5, "flap-green", (1474, 900, 1592, 1004), lambda g: (g[..., 1] > 150) & (g[..., 0] < 150) & (g[..., 2] < 140))
 
 
 # ---------------------------------------------------------------- shared textures
@@ -293,6 +375,8 @@ def textures() -> None:
         mean, std = sample(n, *box)
         save(grain(512, 512, mean, max(4.0, std * 0.8), speck), f"{name}.webp", q=80)
         print(name, mean.round(), round(float(std), 1))
+    # a near-white grain to multiply over anything drawn in CSS, so it gets the grain of her paper
+    save(grain(384, 384, (238, 236, 233), 11, 0.06), "paper-grain.webp", q=82)
 
 
 if __name__ == "__main__":
@@ -302,4 +386,5 @@ if __name__ == "__main__":
     slice_inside()
     slice_book()
     cover()
+    lettering()
     textures()

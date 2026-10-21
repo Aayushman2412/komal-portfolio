@@ -23,7 +23,6 @@
 
 .inside {
   z-index: 3;
-  background: #1a0c07;
 }
 
 .art-frame {
@@ -40,16 +39,6 @@
   width: 100%;
   height: 100%;
   user-select: none;
-}
-
-/* behind the frame, for the parts of a tall or narrow screen her drawing does not reach */
-.room__backdrop,
-.inside__backdrop {
-  position: absolute;
-  inset: -6%;
-  background-size: cover;
-  background-position: center;
-  filter: blur(34px) brightness(0.72) saturate(1.1);
 }
 
 /* ---------- frames 1-2: the feed and its glitch ---------- */
@@ -207,10 +196,12 @@
   perspective: 1500px;
 }
 
+/* her inside drawing, already there behind the doors */
 .room__inside {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 35%, #3b1e11, #160904 78%);
+  background-color: #1a0c07;
+  background-repeat: no-repeat;
 }
 
 .room__door {

@@ -30,6 +30,7 @@ export const art = {
   table: a('table.webp'),
   book: {
     cover: a('book/cover.webp'),
+    coverEdges: a('book/cover-edges.webp'),
     back: a('book/back.webp'),
     s1l: a('book/s1-l.webp'),
     s1r: a('book/s1-r.webp'),
@@ -42,7 +43,13 @@ export const art = {
     heart: a('book/heart.webp'),
     smiley: a('book/smiley.webp'),
     sparkle: a('book/sparkle.webp'),
+    turn: a('book/turn.webp'),
+    flapYellow: a('book/flap-yellow.webp'),
+    flapGreen: a('book/flap-green.webp'),
   },
+  /** Her own lettering of PROJECT 01..05, cut from her index. */
+  projectTitles: Array.from({ length: 5 }, (_, i) => a(`book/project-${String(i + 1).padStart(2, '0')}.webp`)),
+  paperGrain: a('paper-grain.webp'),
 }
 
 const cache = new Map<string, Promise<HTMLImageElement>>()
@@ -77,25 +84,26 @@ export const laterAssets = () => [
   art.insideBook,
   art.table,
   ...Object.values(art.book),
+  ...art.projectTitles,
+  art.paperGrain,
 ]
 
 export type Fit = { s: number; x: number; y: number }
 
 /**
- * Put a 1620x1080 frame on a viewport: as large as `cover` would make it, but never so large that
- * the `safe` box (the part of her drawing that must stay in view) is cropped. Whatever the frame
- * does not cover is filled by a blurred copy behind it.
+ * Put a 1620x1080 frame on a viewport so her drawing fills the whole screen ("expand the photos",
+ * 21 Oct): scaled to cover, and where the screen crops it, kept centred on the `safe` box (the
+ * part of her drawing that matters most) as far as the frame's edges allow.
  */
 export function fitFrame(vw: number, vh: number, safe: number[]): Fit {
   const [x0, y0, x1, y1] = safe
-  const cover = Math.max(vw / FRAME.w, vh / FRAME.h)
-  const s = Math.min(cover, vw / (x1 - x0), vh / (y1 - y0))
-  const place = (view: number, size: number, centre: number) => {
-    if (size <= view) return (view - size) / 2
-    return Math.min(0, Math.max(view - size, view / 2 - centre * s))
-  }
+  const s = Math.max(vw / FRAME.w, vh / FRAME.h)
+  const place = (view: number, size: number, centre: number) => Math.min(0, Math.max(view - size, view / 2 - centre * s))
   return { s, x: place(vw, FRAME.w * s, (x0 + x1) / 2), y: place(vh, FRAME.h * s, (y0 + y1) / 2) }
 }
+
+/** Where a frame point lands on screen under a fit. */
+export const onScreen = (f: Fit, [x, y]: readonly number[]): [number, number] => [f.x + x * f.s, f.y + y * f.s]
 
 /** CSS transform for a frame-sized element placed by a fit, then zoomed by `z` about frame point `p`, which lands on screen point `at`. */
 export function frameTransform(f: Fit, z = 1, p?: [number, number], at?: [number, number]) {

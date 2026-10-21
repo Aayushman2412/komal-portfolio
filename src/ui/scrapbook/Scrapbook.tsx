@@ -8,13 +8,15 @@ import { closeBook } from '../../lib/story'
 import { useStory } from '../../state/store'
 import { Spot } from './bits'
 import { buildFaces, type Face, type Go } from './pages'
-import { pageSize } from './size'
+import { CLOSED_SHIFT, COVER, FACE, pageSize } from './size'
 
 /**
  * The scrapbook. Desktop: a two-page spread with real 3D page turns (click a page, drag its edge,
  * use the arrow keys, or click her tabs and index rows; jumping riffles through the pages in
  * between). Phones: one page at a time, swipe or tap the arrows.
- * It appears where the book from the almirah landed, closed, and opens itself on "who is she?".
+ * It appears where the book from the almirah landed, closed (her cover at the proportions she drew
+ * it, with its page edges and tabs), and opens itself on "who is she?". The pages already turned
+ * and still to turn show as a stack of board edges under each side, so it reads as a real book.
  */
 function faceToSpread(f: number) {
   return f % 2 ? (f + 1) / 2 : f / 2
@@ -46,6 +48,10 @@ export function Scrapbook() {
   const [size, setSize] = useState(pageSize)
   const [spread, setSpread] = useState(0)
   const [face, setFace] = useState(0)
+  /** Fully closed: only the cover and its page edges show. Cleared as soon as it starts to open, set once it has shut. */
+  const [closed, setClosed] = useState(true)
+  /** A page is moving: every leaf shows. At rest only the two open pages do, so nothing stuck out of a page further in peeks past the edges. */
+  const [turning, setTurning] = useState(false)
   const reduced = useMemo(prefersReducedMotion, [])
   const layer = useRef<HTMLDivElement>(null)
   const stageEl = useRef<HTMLDivElement>(null)
@@ -86,15 +92,19 @@ export function Scrapbook() {
       const forward = target > spread
       const ids = forward ? Array.from({ length: target - spread }, (_, k) => spread + k) : Array.from({ length: spread - target }, (_, k) => spread - 1 - k)
       const tl = gsap.timeline()
+      if (spread === 0) setClosed(false)
+      setTurning(true)
       ids.forEach((i, k) => {
         const o = { a: angles.current[i] }
+        // the cover swings slower and heavier than a page
+        const cover = i === 0
         tl.to(
           o,
           {
             a: forward ? 180 : 0,
-            duration: reduced ? 0.01 : fast || ids.length > 1 ? 0.55 : 0.9,
-            ease: 'power2.inOut',
-            onStart: () => sound.page(),
+            duration: reduced ? 0.01 : cover ? 1.15 : fast || ids.length > 1 ? 0.55 : 0.9,
+            ease: cover ? 'power3.inOut' : 'power2.inOut',
+            onStart: () => (cover ? sound.bookOpen() : sound.page(ids.length > 1)),
             onUpdate: () => {
               angles.current[i] = o.a
               paintLeaf(i)
@@ -106,6 +116,8 @@ export function Scrapbook() {
       setSpread(target)
       return tl.then(() => {
         busy.current = false
+        setTurning(false)
+        if (target === 0) setClosed(true)
       })
     },
     [N, spread, paintLeaf, reduced],
@@ -116,8 +128,10 @@ export function Scrapbook() {
       f = Math.max(0, Math.min(faces.length - 1, f))
       if (single) {
         if (f === face) return Promise.resolve()
-        sound.page()
+        if (face === 0) sound.bookOpen()
+        else sound.page()
         setFace(f)
+        setClosed(f === 0)
         return Promise.resolve()
       }
       return goSpread(faceToSpread(f))
@@ -133,12 +147,21 @@ export function Scrapbook() {
     [faces, goFace],
   )
 
+  // a link followed while the book is already open (#index, #p/<slug>) turns to it
+  const lastTarget = useRef(bookTarget)
+  useEffect(() => {
+    if (!bookLanded || bookTarget === lastTarget.current) return
+    lastTarget.current = bookTarget
+    if (bookTarget) goTarget(bookTarget === 'cover' ? 'who' : bookTarget)
+  }, [bookTarget]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // appear where the book landed, closed, then open on wherever the visit asked for
   useEffect(() => {
     if (!bookLanded || !layer.current) return
     gsap.fromTo(layer.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: reduced ? 0.01 : 0.35, ease: 'power1.out' })
     closeBtn.current?.focus({ preventScroll: true })
     const t = !bookTarget || bookTarget === 'cover' ? 'who' : bookTarget
+    lastTarget.current = bookTarget
     const id = window.setTimeout(() => goTarget(t), reduced ? 0 : bookTarget === 'cover' ? 750 : 420)
     return () => window.clearTimeout(id)
   }, [bookLanded]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -197,6 +220,7 @@ export function Scrapbook() {
     const dx = (e.clientX - d.x) * d.dir
     if (Math.abs(dx) > 6) d.moved = true
     if (!d.moved) return
+    if (!turning) setTurning(true)
     const frac = Math.min(1, Math.max(0, (-dx / size.w) * 0.6))
     angles.current[d.leaf] = d.dir === 1 ? frac * 180 : 180 - frac * 180
     paintLeaf(d.leaf)
@@ -229,6 +253,7 @@ export function Scrapbook() {
       },
       onComplete: () => {
         busy.current = false
+        setTurning(false)
         if (complete) {
           sound.page()
           setSpread((s) => s + d.dir)
@@ -237,7 +262,14 @@ export function Scrapbook() {
     })
   }
 
-  const shift = single ? 0 : spread === 0 ? -0.5 : spread === N ? 0.5 : 0
+  // closed, the cover sits centred; at the end, the back cover does (it is as narrow as the cover)
+  const shift = single ? 0 : spread === 0 ? CLOSED_SHIFT : spread === N ? 1 - (FACE.w - COVER.x - COVER.w / 2) / FACE.w : 0
+  const edgesBox = {
+    left: `${((COVER.x + COVER.w) / FACE.w) * 100}%`,
+    top: `${(COVER.y / FACE.h) * 100}%`,
+    width: `${(COVER.edgesW / FACE.w) * 100}%`,
+    height: `${(COVER.h / FACE.h) * 100}%`,
+  }
   const visibleFace = (f: number) => (single ? f === face : f === spread * 2 || f === spread * 2 - 1)
   const faceStyle = (f: Face) => ({ ['--face' as string]: `url(${f.src})` }) as CSSProperties
 
@@ -250,7 +282,17 @@ export function Scrapbook() {
       aria-label={`${site.name}'s scrapbook`}
       style={{ visibility: 'hidden', opacity: 0, backgroundImage: `url(${art.table})` }}
     >
-      <div className={`book ${single ? 'book--single' : 'book--spread'}`} style={{ ['--pw' as string]: `${size.w}px`, ['--ph' as string]: `${size.h}px` }}>
+      <div
+        className={`book ${single ? 'book--single' : 'book--spread'} ${closed ? 'is-closed' : ''} ${!single && spread === N ? 'is-end' : ''} ${turning ? 'is-turning' : ''}`}
+        style={{
+          top: size.top,
+          ['--pw' as string]: `${size.w}px`,
+          ['--ph' as string]: `${size.h}px`,
+          // how thick the stack of pages is on each side
+          ['--stack-l' as string]: String(single ? 0 : spread / N),
+          ['--stack-r' as string]: String(single ? 0 : (N - spread) / N),
+        }}
+      >
         <div
           ref={stageEl}
           className="book__stage"
@@ -260,6 +302,12 @@ export function Scrapbook() {
           onPointerUp={onUp}
           onPointerCancel={() => (drag.current = null)}
         >
+          <span className="book__stack book__stack--l" />
+          <span className="book__stack book__stack--r" />
+          {/* the closed book's page edges and tabs: they stay put while the cover swings open */}
+          <div className="book__edges" style={single ? edgesBox : { ...edgesBox, left: `calc(50% + ${edgesBox.left} / 2)`, width: `calc(${edgesBox.width} / 2)` }}>
+            <img src={art.book.coverEdges} alt="" draggable={false} />
+          </div>
           {single ? (
             <div className="single">
               {faces.map((f, i) =>
@@ -272,7 +320,7 @@ export function Scrapbook() {
             </div>
           ) : (
             Array.from({ length: N }, (_, i) => (
-              <div key={i} ref={(el) => void (leaves.current[i] = el)} className="leaf">
+              <div key={i} ref={(el) => void (leaves.current[i] = el)} className={`leaf ${i === 0 ? 'leaf--cover' : ''} ${i === spread - 1 || i === spread ? 'is-near' : ''}`}>
                 <div className="page leaf__front" inert={!visibleFace(i * 2)} style={faceStyle(faces[i * 2])}>
                   <FaceView face={faces[i * 2]} go={goTarget} />
                   <span className="leaf__shade" />

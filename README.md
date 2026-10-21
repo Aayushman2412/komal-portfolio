@@ -10,14 +10,17 @@ layers and animates them ("I will draw this frame and give it to you; you add an
 2. **The glitch** (frame 2). It stutters; her colour bands, black bars and slipped heads flash in;
    SIGNAL LOST; her jagged black edge sweeps across. Power cut. No TV.
 3. **The bulb** (frame 3). In the dark, the bulb in the corner of her drawing flickers and catches,
-   and the view pulls back from it into the room: nani's carved almirah in a pink-orange haze.
-4. **Open it.** The upper doors (cut from her drawing) swing open and the view goes in.
+   and the view pulls back from it into the room: nani's carved almirah in a pink-orange haze whose
+   swirls slowly flow.
+4. **Open it.** The upper doors (cut from her drawing) swing open onto her drawing of the inside, and
+   the view goes in through the doorway.
 5. **Inside** (frame 4). Folded clothes, the floral tin, dust in the light, and the scrapbook.
-6. **The scrapbook** (frames 5 and 6). It comes out to you closed (*Komal's Fashion World*), opens
-   on "Komal, age 7", then About me and the school-notebook index. Her tabs, her "turn" flap and her
-   index rows are clickable. Project pages use her blank page with a polaroid that lifts to show a
-   note, an envelope with the concept note, a paper tab that pulls out the spec sheet, and fabric
-   swatches that zoom in.
+6. **The scrapbook** (frames 5 and 6). It comes out to you closed, as she drew it (*Komal's Fashion
+   World*, page edges and tabs), opens like a book on "Komal, age 7", then About me and the
+   school-notebook index. Her tabs, her "turn" flap and her index rows are clickable. Project pages
+   are made of her pieces (her index paper and PROJECT lettering, her red paper, tape, stickers and
+   corner flap): a polaroid that lifts to show a note, an envelope with the concept note, a paper tab
+   that pulls out the spec sheet, fabric swatches that zoom in. Paper sounds for every page.
 
 The cursor is a needle with thread, everywhere.
 
@@ -66,7 +69,9 @@ starts in the room. `?motion=force` overrides that for testing.
 | Piece | How | Where |
 |---|---|---|
 | Her frames, cut into layers | Python (numpy, scipy, Pillow), WebP out | `scripts/slice-art.py` → `public/art/` |
-| Placing a frame on any screen, zooms | `fitFrame` / `frameTransform`: cover the screen without cropping what matters, a blurred copy behind | `src/lib/art.ts` |
+| Placing a frame on any screen, zooms | `fitFrame` / `frameTransform`: always fill the screen, centred on what matters | `src/lib/art.ts` |
+| The handover at the almirah doors | shared room and inside cameras | `src/scenes/cams.ts` |
+| Her swirls flowing behind the almirah | WebGL, a slow flow over her frame 3 | `src/scenes/RoomSwirl.tsx` |
 | The feed and its glitch | one canvas 2D: her cards, her header pieces, her band textures | `src/scenes/Feed.tsx` |
 | Dark, bulb, pull-back, doors | CSS transforms and a radial mask over her frame 3 | `src/scenes/Room.tsx` |
 | Inside, dust, the book's flight | DOM + a small dust canvas, GSAP | `src/scenes/Inside.tsx` |
@@ -74,6 +79,6 @@ starts in the room. `?motion=force` overrides that for testing.
 | Needle and thread | canvas, a verlet rope | `src/ui/Cursor.tsx` |
 | Scroll scrubbing | Lenis + GSAP ScrollTrigger | `src/lib/scroll.ts` |
 | Story state | zustand | `src/state/store.ts` |
-| Sound (synthesised, off by default) | Web Audio | `src/lib/audio.ts`, `src/lib/bulbSound.ts` |
+| Sound (synthesised, off by default) | Web Audio | `src/lib/audio.ts`, `src/lib/bulbSound.ts`, `src/lib/paperSound.ts` |
 
 The timing of every beat is in one place: `beats` in `src/state/store.ts`.

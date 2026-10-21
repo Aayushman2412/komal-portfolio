@@ -5,11 +5,14 @@ import { gsap } from '../lib/gsap'
 import { sound } from '../lib/audio'
 import { openAlmirah } from '../lib/story'
 import { beats, easeInOut, live, span, useStory } from '../state/store'
+import { DOORS_CENTRE, DOORWAY, doorsTarget, INSIDE_VIEW, insideCam, OPEN_ZOOM, roomCam } from './cams'
 
 /**
  * Frame 3: nani's almirah. After the power cut the screen is black; the bulb in the corner of her
  * drawing flickers, catches, and the view pulls back from it until the whole room is lit. Then the
- * almirah can be opened: its two upper doors (cut from her drawing) swing out and the view goes in.
+ * almirah can be opened: its two upper doors (cut from her drawing) swing out onto her drawing of
+ * the inside (the clothes, the scrapbook, the tin; she asked for them to be there "as soon as the
+ * cupboard opens", 21 Oct), and the view goes in.
  */
 
 /** Where, through the bulb beat, the filament stops flickering and stays lit. */
@@ -30,15 +33,19 @@ export function bulbLevel(p: number) {
   return f > BULB_CATCH ? 0.85 + 0.15 * span(f, BULB_CATCH, 0.62) : 0
 }
 
-/** The camera after the intro: `z` zooms toward the doors, `k` brings them to the middle, `door` opens them. */
-export const roomCam = { z: 1, k: 0, door: 0 }
-
 const BULB = regions.room.bulb as [number, number]
 const [DL, DR] = [regions.room.doors.left, regions.room.doors.right]
-const DOORS_CENTRE: [number, number] = [(DL[0] + DR[2]) / 2, (DL[1] + DL[3]) / 2]
 const ALMIRAH = regions.room.almirah
 const ALMIRAH_BOX = polyBox(ALMIRAH)
 const ZOOM_FROM = 3.4
+
+// her inside drawing, scaled so the INSIDE_VIEW part of it fills the doorway (in frame-3 pixels)
+const VK = (DOORWAY[2] - DOORWAY[0]) / (INSIDE_VIEW[2] - INSIDE_VIEW[0])
+const INSIDE_BEHIND = {
+  backgroundImage: `url(${art.inside})`,
+  backgroundSize: `${FRAME.w * VK}px ${FRAME.h * VK}px`,
+  backgroundPosition: `${-INSIDE_VIEW[0] * VK}px ${-INSIDE_VIEW[1] * VK}px`,
+}
 
 export function Room() {
   const root = useRef<HTMLDivElement>(null)
@@ -47,15 +54,17 @@ export function Room() {
   const glow = useRef<HTMLDivElement>(null)
   const doorL = useRef<HTMLImageElement>(null)
   const doorR = useRef<HTMLImageElement>(null)
+  const behind = useRef<HTMLSpanElement>(null)
   const stage = useStory((s) => s.stage)
 
-  // open the doors and go in; close them on the way back out
+  // open the doors and go in (the inside scene takes over in the doorway and finishes the stage);
+  // close them on the way back out
   useEffect(() => {
     if (stage === 'opening') {
       sound.creak(1.2)
-      const tl = gsap.timeline({ onComplete: () => useStory.getState().setStage('open') })
-      tl.to(roomCam, { door: 1, duration: 1.2, ease: 'door' }, 0.12)
-      tl.to(roomCam, { z: 2.9, k: 1, duration: 1.45, ease: 'power2.inOut' }, 0.3)
+      const tl = gsap.timeline()
+      tl.to(roomCam, { door: 1, duration: 1.15, ease: 'door' }, 0.12)
+      tl.to(roomCam, { z: OPEN_ZOOM, k: 1, duration: 1.3, ease: 'power2.inOut' }, 0.3)
       return () => {
         tl.kill()
       }
@@ -68,7 +77,7 @@ export function Room() {
         tl.kill()
       }
     }
-    if (stage === 'open' || stage === 'book') Object.assign(roomCam, { z: 2.9, k: 1, door: 1 })
+    if (stage === 'open' || stage === 'book') Object.assign(roomCam, { z: OPEN_ZOOM, k: 1, door: 1 })
   }, [stage])
 
   useEffect(
@@ -78,7 +87,7 @@ export function Room() {
         if (!el || !frame.current) return
         const st = useStory.getState().stage
         const intro = st === 'intro' || st === 'loading'
-        const visible = intro ? p >= beats.tear[0] : st === 'room' || st === 'opening' || (st === 'open' && roomCam.z < 2.89)
+        const visible = intro ? p >= beats.tear[0] : st === 'room' || st === 'opening' || (st === 'open' && insideCam.k < 1)
         el.style.visibility = visible ? 'visible' : 'hidden'
         if (!visible) return
 
@@ -101,12 +110,9 @@ export function Room() {
           light = bulbLevel(p)
           reveal = u
         } else {
-          const doorsAt: [number, number] = [fit.x + DOORS_CENTRE[0] * fit.s, fit.y + DOORS_CENTRE[1] * fit.s]
-          const target: [number, number] = [doorsAt[0] + (vw / 2 - doorsAt[0]) * roomCam.k, doorsAt[1] + (vh / 2 - doorsAt[1]) * roomCam.k]
-          // a breath of parallax while you look at it
-          target[0] -= live.pointer.x * 6
-          target[1] += live.pointer.y * 4
-          transform = frameTransform(fit, roomCam.z, DOORS_CENTRE, target)
+          // a breath of parallax while you look at it, fading out as the camera heads for the doorway
+          // (the inside scene lines its drawing up with the same numbers, see cams.ts)
+          transform = frameTransform(fit, roomCam.z, DOORS_CENTRE, doorsTarget(vw, vh, live.pointer))
         }
         frame.current.style.transform = transform
 
@@ -130,6 +136,8 @@ export function Room() {
         const d = roomCam.door
         if (doorL.current) doorL.current.style.transform = `rotateY(${-104 * d}deg)`
         if (doorR.current) doorR.current.style.transform = `rotateY(${104 * d}deg)`
+        // light from the room falls into the almirah as the doors swing back
+        if (behind.current) behind.current.style.filter = `brightness(${(0.45 + 0.55 * Math.min(1, d * 1.4)).toFixed(3)})`
       }),
     [],
   )
@@ -138,14 +146,13 @@ export function Room() {
 
   return (
     <div ref={root} className={`room ${clickable ? 'is-ready' : ''}`}>
-      <div className="room__backdrop" style={{ backgroundImage: `url(${art.room})` }} />
       <div ref={frame} className="art-frame" style={{ width: FRAME.w, height: FRAME.h }}>
         <img className="art-frame__img" src={art.room} alt="" draggable={false} />
         {regions.room.stars.map(([x, y], i) => (
           <span key={i} className="room__star" style={{ left: x, top: y, animationDelay: `${(i * 0.77) % 3}s` }} />
         ))}
         <div className="room__doors" style={{ left: DL[0], top: DL[1], width: DR[2] - DL[0], height: DL[3] - DL[1] }}>
-          <span className="room__inside" />
+          <span ref={behind} className="room__inside" style={INSIDE_BEHIND} />
           <img ref={doorL} className="room__door room__door--l" src={art.doorL} alt="" draggable={false} style={{ width: DL[2] - DL[0] }} />
           <img ref={doorR} className="room__door room__door--r" src={art.doorR} alt="" draggable={false} style={{ width: DR[2] - DR[0] }} />
         </div>
