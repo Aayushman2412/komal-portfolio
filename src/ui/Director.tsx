@@ -4,8 +4,8 @@ import { onFrame } from '../lib/frame'
 import { prefersReducedMotion } from '../lib/gsap'
 import { initScroll, lockScroll } from '../lib/scroll'
 import { openBookAt, skipIntro, visited } from '../lib/story'
+import { BULB_CATCH, bulbLevel } from '../scenes/Room'
 import { beats, live, span, useStory } from '../state/store'
-import { BULB_CATCH, bulbLevel } from '../three/room/Room'
 
 /** Opens whatever the URL hash points at. Returns false when there is nothing to follow. */
 function followHash() {
@@ -20,8 +20,8 @@ function followHash() {
 
 /**
  * Runs the story: owns the scroll engine, moves between stages as the scroll crosses the end of
- * the intro, honours deep links (#book, #index, #p/<slug>) and reduced motion, locks scrolling
- * while the almirah is open, and feeds the sound engine.
+ * the intro, honours deep links (#almirah, #book, #index, #p/<slug>) and reduced motion, locks
+ * scrolling once the almirah is open, and feeds the sound engine.
  */
 export function Director({ track, ready }: { track: React.RefObject<HTMLDivElement | null>; ready: boolean }) {
   const stage = useStory((s) => s.stage)
@@ -57,22 +57,22 @@ export function Director({ track, ready }: { track: React.RefObject<HTMLDivEleme
 
         const inIntro = st.stage === 'intro' || st.stage === 'loading'
         const q = inIntro ? p : 1
-        const off = span(q, beats.powerOff[0], beats.powerOff[1])
+        const cut = span(q, beats.tear[1] - 0.02, beats.tear[1])
         sound.setLevels({
-          feed: inIntro ? (1 - span(q, 0.42, 0.52)) * (1 - off) : 0,
-          climb: span(q, 0.05, 0.42),
-          glitch: span(q, 0.44, 0.565) * (1 - off),
-          room: span(q, beats.bulb[0], beats.bulb[1]),
+          feed: inIntro ? (1 - span(q, beats.glitch[0], beats.glitch[1])) * (1 - cut) : 0,
+          climb: span(q, beats.feed[0], beats.feed[1]),
+          glitch: span(q, beats.glitch[0], beats.glitch[1]) * (1 - cut),
+          room: span(q, beats.bulb[1], beats.pullBack[1]),
           bulb: bulbLevel(q),
         })
-        const trip = beats.powerOff[0] + 0.012
+        const trip = beats.tear[1] - 0.01
         if (inIntro && prev.current < trip && q >= trip) sound.powerOff()
 
         // the bulb: the switch as you cross into the flicker, an arc each time it lights, a tick
-        // each time it cuts out, a low thunk and warm-up ticks when it catches. Sub-sampled between frames so a
-        // fast scroll still plays every flicker it passes; scrolling back plays them in reverse.
+        // each time it cuts out, a low thunk and warm-up ticks when it catches. Sub-sampled between
+        // frames so a fast scroll still plays every flicker it passes; scrolling back plays them in reverse.
         const from = prev.current
-        const flipped = (from < beats.bulb[0]) !== (q < beats.bulb[0])
+        const flipped = from < beats.bulb[0] !== q < beats.bulb[0]
         let n = 0
         // switching on: the click comes first; switching off (scrolling back): it comes last
         if (flipped && q > from) sound.switchClick()
@@ -96,7 +96,7 @@ export function Director({ track, ready }: { track: React.RefObject<HTMLDivEleme
     [],
   )
 
-  // pointer for camera parallax
+  // pointer, for parallax and the needle
   useEffect(() => {
     const move = (e: PointerEvent) => {
       live.pointer.x = (e.clientX / window.innerWidth) * 2 - 1

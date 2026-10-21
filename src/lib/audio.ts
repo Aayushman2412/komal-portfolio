@@ -1,8 +1,11 @@
 /**
  * All sound is synthesised with the Web Audio API: no files to load, and every sound can follow
  * the scroll. Off by default; the toggle in the corner unlocks the AudioContext on a user gesture.
+ * After the feed it is all old-house sound, as nostalgic as Komal asked for: the wall switch and
+ * the bulb, the almirah's latch and creak, pages turning. (No clothes rustle: she asked for it gone.)
  */
 import { voiceDrop, voiceSpark, voiceSwitch, voiceThunk, voiceTicks } from './bulbSound'
+import { voiceBookClose, voiceBookOpen, voicePageTurn } from './paperSound'
 
 let ctx: AudioContext | null = null
 let master: GainNode | null = null
@@ -59,7 +62,7 @@ function build() {
     return o
   })
 
-  // CRT static and whine
+  // the glitch: static and a whine
   staticGain = c.createGain()
   staticGain.gain.value = 0
   staticFilter = c.createBiquadFilter()
@@ -186,12 +189,18 @@ export const sound = {
     if (ctx && this.enabled) voiceDrop({ c: ctx, out: master! }, ctx.currentTime + delay)
   },
 
-  page() {
-    this.burst(0.18, 3000, 0.28, 0.9)
+  /** The scrapbook: a page of thick, old paper turned by hand (quick when several riffle by in a row), and its card cover opening. */
+  page(quick = false) {
+    if (!ctx || !this.enabled) return
+    voicePageTurn({ c: ctx, out: master! }, ctx.currentTime + 0.005, { quick })
   },
-
-  rustle() {
-    this.burst(0.35, 1800, 0.08, 0.5)
+  bookOpen() {
+    if (!ctx || !this.enabled) return
+    voiceBookOpen({ c: ctx, out: master! }, ctx.currentTime + 0.005)
+  },
+  bookClose() {
+    if (!ctx || !this.enabled) return
+    voiceBookClose({ c: ctx, out: master! }, ctx.currentTime + 0.005)
   },
 
   burst(len: number, freq: number, vol: number, q = 0.8) {

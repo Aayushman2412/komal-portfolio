@@ -1,19 +1,29 @@
 # Komal Singh: portfolio
 
-An interactive story built from Komal's brief on the 15 Oct 2026 call (see [BRIEF.md](BRIEF.md) for
-the transcript summary and her two sketches).
+An interactive story drawn by Komal. Every visual is one of her six frames; the site cuts them into
+layers and animates them ("I will draw this frame and give it to you; you add animation to it").
+[BRIEF.md](BRIEF.md) has what she asked for on both calls, her notes, and how they map to the build.
 
-1. **The feed.** The site opens as a glossy AI fashion app. As you scroll, the generated designs
-   multiply, regenerate faster, start to look the same, and the app begins to glitch.
-2. **The TV.** The camera pulls back. It was all on an old grey CRT in a dark room. The picture
-   drains to grey and rolls, then switches off: a white-hot line, a dot, darkness.
-3. **The room.** A bare bulb flickers on over a red-oxide floor and a steel almirah with childhood
-   stickers, a suitcase and a carton on top. Click to open it.
-4. **The almirah.** Clothes on wire hangers (cloth physics; brush them with the cursor), folded
-   stacks, the cookie tin sewing kit, and her scrapbook glowing on the shelf.
-5. **The scrapbook.** It flies out to you and becomes a real book: cover, about her, an index with
-   sewing buttons, project spreads with flippable polaroids and pinked fabric swatches, the plan,
-   and an inland-letter contact page.
+1. **The feed** (frame 1). The site opens on a black page, then `feed.ai`: a grid of the same drawn
+   dress, scrolling upward on its own like an endless feed. Three indicators only: `generating N
+   looks/sec`, `style: trending`, `originality score`. Scrolling makes the feed faster.
+2. **The glitch** (frame 2). It stutters; her colour bands, black bars and slipped heads flash in;
+   SIGNAL LOST; her jagged black edge sweeps across. Power cut. No TV.
+3. **The bulb** (frame 3). In the dark, the bulb in the corner of her drawing flickers and catches,
+   and the view pulls back from it into the room: nani's carved almirah in a pink-orange haze whose
+   swirls slowly flow.
+4. **Open it.** The upper doors (cut from her drawing) swing open onto her drawing of the inside, and
+   the view goes in through the doorway.
+5. **Inside** (frame 4). Folded clothes, the floral tin, dust in the light, and the scrapbook.
+6. **The scrapbook** (frames 5 and 6). It comes out to you closed, as she drew it (*Komal's Fashion
+   World*, page edges and tabs), opens like a book on "Komal, age 7", then About me and the
+   school-notebook index. Her tabs, her "turn" flap and her index rows are clickable. Project pages
+   are made of her pieces (her index paper and PROJECT lettering, her red paper, tape, stickers and
+   corner flap): a polaroid that lifts to show a note, an envelope with the concept note, a paper tab
+   that pulls out the spec sheet, fabric swatches that zoom in. Paper sounds for every page. Phones
+   and portrait tablets show one page at a time.
+
+The cursor is a needle with thread, everywhere.
 
 ## Run it
 
@@ -28,15 +38,19 @@ npm run dev
 Dev server on http://localhost:5290. `npm run build` type-checks and builds to `dist/`;
 `npm run preview` serves the build on port 5291.
 
-## Editing content
+## When Komal sends something new
 
-Everything Komal will want to change is in [`src/content/site.ts`](src/content/site.ts): her name,
-the intro captions, the about page, contact details, and the `projects` list. Each project needs a
-`slug`, `title`, `year`, `story`, `notes`, two `swatches` and up to three `images`. Put photos in
-`public/projects/<slug>/` and reference them as `/projects/<slug>/photo.jpg`. Empty image slots show
-as "photo to come" polaroids. The index, page numbers and deep links follow the list automatically.
+| She sends | Do this |
+|---|---|
+| A new version of a frame | Save it as `art-src/frame-N.webp` (1620x1080), run `python scripts/slice-art.py` (needs `pip install numpy scipy pillow`) |
+| Her projects | Edit `projects` in [`src/content/site.ts`](src/content/site.ts); photos go in `public/projects/<slug>/` |
+| Fabric photos | Set `src` on a swatch in `site.ts`; it replaces the drawn stand-in |
+| Contact details | `contact` in `site.ts` |
+| AI-made photos for the feed (she mentioned this on the 18 Oct call) | Replace `public/art/feed/card-NN.webp`, keeping the sizes |
 
-The childhood photo for the first page goes in `public/photos/` and in `about.photo`.
+Every place in her frames the site uses (the bulb, the doors, the almirah and scrapbook outlines,
+the tabs and index rows) is in [`src/content/regions.json`](src/content/regions.json), in the
+frames' own pixels. The slicer and the site both read it.
 
 ## Links
 
@@ -44,31 +58,28 @@ The childhood photo for the first page goes in `public/photos/` and in `about.ph
 |---|---|
 | `/` | the full story |
 | `/#almirah` | skips to the room |
-| `/#book` | the scrapbook cover |
+| `/#book` | the scrapbook |
 | `/#index` | the index (send this one to recruiters) |
-| `/#p/<slug>` | a project spread |
+| `/#p/<slug>` | a project spread, e.g. `/#p/project-01` |
 
-Returning visitors get "Skip to the almirah" instead of "Skip intro". `prefers-reduced-motion`
+Returning visitors get "skip to the almirah" instead of "skip intro". `prefers-reduced-motion`
 starts in the room. `?motion=force` overrides that for testing.
 
 ## How it is built
 
-| Piece | Library | Where |
+| Piece | How | Where |
 |---|---|---|
-| 3D scene, render loop | three.js, React Three Fiber, drei | `src/three/` |
-| The AI feed (one instanced draw call, diffusion-style denoise shader) | custom GLSL | `src/three/feed/Feed.tsx` |
-| CRT picture, glitch, power-off line | custom GLSL on the TV screen | `src/three/tv/CrtTv.tsx` |
-| Bloom, grain, vignette, chromatic aberration, ACES tone mapping | postprocessing, @react-three/postprocessing | `src/three/Effects.tsx` |
-| Cloth on hangers | hand-written verlet solver | `src/three/almirah/Cloth.tsx` |
-| Scroll scrubbing, prompt scramble, door and page easing | GSAP (ScrollTrigger, ScrambleText, CustomEase) | `src/lib/scroll.ts`, `src/ui/` |
-| Smooth wheel scrolling | Lenis | `src/lib/scroll.ts` |
+| Her frames, cut into layers | Python (numpy, scipy, Pillow), WebP out | `scripts/slice-art.py` → `public/art/` |
+| Placing a frame on any screen, zooms | `fitFrame` / `frameTransform`: always fill the screen, centred on what matters | `src/lib/art.ts` |
+| The handover at the almirah doors | shared room and inside cameras | `src/scenes/cams.ts` |
+| Her swirls flowing behind the almirah | WebGL, a slow flow over her frame 3 | `src/scenes/RoomSwirl.tsx` |
+| The feed and its glitch | one canvas 2D: her cards, her header pieces, her band textures | `src/scenes/Feed.tsx` |
+| Dark, bulb, pull-back, doors | CSS transforms and a radial mask over her frame 3 | `src/scenes/Room.tsx` |
+| Inside, dust, the book's flight | DOM + a small dust canvas, GSAP; the flight is a perspective (`matrix3d`) map from her drawn cover's corners onto the closed book's | `src/scenes/Inside.tsx` |
+| The scrapbook | DOM + CSS 3D page turns over her page images | `src/ui/scrapbook/` |
+| Needle and thread | canvas, a verlet rope | `src/ui/Cursor.tsx` |
+| Scroll scrubbing | Lenis + GSAP ScrollTrigger | `src/lib/scroll.ts` |
 | Story state | zustand | `src/state/store.ts` |
-| Sound (all synthesised, no files) | Web Audio API | `src/lib/audio.ts` |
-| Every texture (AI renders, textiles, walls, steel, stickers, the cover) | canvas 2D, drawn at load | `src/lib/textures/` |
-| The scrapbook | DOM + CSS 3D page turns, container-query units | `src/ui/scrapbook/` |
+| Sound (synthesised, off by default) | Web Audio | `src/lib/audio.ts`, `src/lib/bulbSound.ts`, `src/lib/paperSound.ts` |
 
-The timing of every story beat is in one place: `beats` in `src/state/store.ts`. The camera's five
-framings are in `src/three/CameraRig.tsx`; furniture positions are in `src/three/layout.ts`.
-
-No images or video files are needed for the intro: everything is generated, so the site loads about
-360 KB of gzipped JavaScript plus fonts. Real photographs will be the only heavy assets.
+The timing of every beat is in one place: `beats` in `src/state/store.ts`.

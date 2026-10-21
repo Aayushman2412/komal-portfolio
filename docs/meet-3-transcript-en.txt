@@ -1,0 +1,18 @@
+===== translate (large-v3)
+[00:00] First, I have to expand the photos.
+[00:14] After that, when the cupboard opens, the box is empty.
+[00:23] So, my zoom-in photo with clothes, portfolio, book, box should be there as soon as the cupboard opens.
+[00:35] The last page has not been drawn properly.
+[00:40] Portfolio has changed its shape.
+[00:42] Yes.
+[00:43] And also...
+[00:44] Hey, say the same thing when it opens.
+[00:48] Yes, I am saying.
+[00:50] And when the portfolio opens, it should look like a proper book.
+[00:59] The font noise should be the sound of the paper.
+[01:05] And when you open it, it should sound like it is being opened.
+[01:16] And behind the albina there are curves, curve lines like this, so those curve lines should move like this in the animation.
+[01:30] Or see those orange lines, those orange lines should move like this.
+[01:38] That's it.
+[01:42] Okay.
+----- 7s

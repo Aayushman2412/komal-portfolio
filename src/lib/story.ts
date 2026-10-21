@@ -17,16 +17,25 @@ export function replayIntro() {
   history.replaceState(null, '', location.pathname + location.search)
 }
 
-/** Open the scrapbook, from anywhere. `target` is 'cover' | 'index' | a project slug. */
-export function openBookAt(target: string) {
+/**
+ * Open the scrapbook, from anywhere. `target` is 'cover' | 'index' | a project slug.
+ * With `fly`, the book is on its way out of the almirah and lands itself (see Inside).
+ */
+export function openBookAt(target: string, { fly = false } = {}) {
   const s = useStory.getState()
   s.setBookTarget(target)
+  // already open: the scrapbook turns to it
+  if (s.stage === 'book' && s.bookLanded) return
+  s.setBookLanded(false)
   if (s.stage === 'intro' || s.stage === 'loading') scrollToProgress(1, true)
   s.setStage('book')
+  if (!fly) s.setBookLanded(true)
 }
 
 export function closeBook() {
-  useStory.getState().setStage('open')
+  const s = useStory.getState()
+  s.setBookLanded(false)
+  s.setStage('open')
   history.replaceState(null, '', location.pathname + location.search)
 }
 

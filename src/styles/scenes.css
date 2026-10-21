@@ -1,0 +1,381 @@
+/* Her frames on screen. Each scene is a fixed layer holding one 1620x1080 .art-frame, moved and
+   zoomed by a transform from art.ts; anything inside it is positioned in her frame's pixels. */
+
+.room,
+.feed,
+.inside {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.room {
+  z-index: 1;
+  background: var(--black);
+  visibility: hidden;
+}
+
+.feed {
+  z-index: 2;
+  background: #d5d9e0;
+}
+
+.inside {
+  z-index: 3;
+}
+
+.art-frame {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.art-frame__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+}
+
+/* ---------- frames 1-2: the feed and its glitch ---------- */
+
+.feed__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.feed__pills {
+  position: absolute;
+  inset: 0;
+}
+
+.feed__pills.is-on {
+  animation: jitter 0.11s steps(2) infinite;
+}
+
+.pill {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32em;
+  margin: 0;
+  padding: 0.26em 0.85em 0.34em;
+  border-radius: 999px;
+  font-family: var(--f-hand);
+  font-size: calc(23px * var(--cs));
+  line-height: 1.1;
+  color: #18204a;
+  background-color: var(--periwinkle);
+  background-image: url(/art/feed-bg.webp);
+  background-size: 200px;
+  background-blend-mode: multiply;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+  white-space: nowrap;
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 0.45s,
+    transform 0.55s cubic-bezier(0.3, 1.7, 0.5, 1);
+}
+
+.pill b {
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+.is-on .pill {
+  opacity: 1;
+  transform: none;
+}
+
+/* they arrive one after the other, as in her notes: generating, style, originality */
+.is-on .pill--gen {
+  transition-delay: 0.9s;
+}
+.is-on .pill--style {
+  transition-delay: 1.35s;
+}
+.is-on .pill--orig {
+  transition-delay: 1.8s;
+}
+
+.pill--gen {
+  top: calc(176px * var(--cs));
+  right: calc(44px * var(--cs));
+}
+
+.pill--style {
+  top: calc(232px * var(--cs));
+  right: calc(44px * var(--cs));
+}
+
+.pill--orig {
+  left: calc(34px * var(--cs));
+  bottom: calc(26px * var(--cs));
+}
+
+.pill__dot {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: #35d64a;
+  box-shadow: 0 0 6px #35d64a;
+  animation: blink 0.9s steps(2) infinite;
+}
+
+.feed__signal {
+  position: absolute;
+  left: 47%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0.32em 1.3em 0.38em;
+  border-radius: 6px;
+  background: #142128;
+  color: #f2f2f2;
+  font-family: var(--f-osd);
+  font-size: clamp(20px, 2.5vw, 40px);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.feed__signal span {
+  animation: blink 0.8s steps(2) infinite;
+}
+
+.feed__hint {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  font-size: 18px;
+  color: #18204a;
+  opacity: 0;
+}
+
+.feed__hint svg {
+  width: 14px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  animation: bob 1.8s ease-in-out infinite;
+}
+
+.feed__tear {
+  position: absolute;
+  inset: 0;
+  background: var(--black) url(/art/black.webp);
+  visibility: hidden;
+}
+
+/* ---------- frame 3: the room ---------- */
+
+.room__star {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  margin: -35px 0 0 -35px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(170, 245, 255, 0.85), rgba(120, 220, 235, 0.25) 30%, transparent 62%);
+  mix-blend-mode: screen;
+  animation: twinkle 3.2s ease-in-out infinite;
+}
+
+.room__doors {
+  position: absolute;
+  perspective: 1500px;
+}
+
+/* her inside drawing, already there behind the doors */
+.room__inside {
+  position: absolute;
+  inset: 0;
+  background-color: #1a0c07;
+  background-repeat: no-repeat;
+}
+
+.room__door {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  backface-visibility: visible;
+  will-change: transform;
+}
+
+.room__door--l {
+  left: 0;
+  transform-origin: left center;
+}
+
+.room__door--r {
+  right: 0;
+  transform-origin: right center;
+}
+
+.room__hit,
+.inside__hit {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+.room.is-ready .room__hit,
+.inside.is-ready .inside__hit {
+  pointer-events: auto;
+}
+
+/* the almirah and the scrapbook answer the needle: a warm glow around her drawing of them */
+.room__almirah,
+.inside__book {
+  position: absolute;
+  height: auto;
+  pointer-events: none;
+  opacity: 0;
+  filter: drop-shadow(0 0 16px rgba(255, 222, 160, 0.85)) brightness(1.06);
+  transition: opacity 0.35s;
+}
+
+.room.is-ready .room__almirah,
+.inside.is-ready .inside__book {
+  animation: answer 4.2s ease-in-out 1.2s infinite;
+}
+
+.room.is-ready .room__hit:hover + .room__almirah,
+.room.is-ready .room__hit:focus-visible + .room__almirah,
+.inside.is-ready .inside__hit:hover + .inside__book,
+.inside.is-ready .inside__hit:focus-visible + .inside__book {
+  animation: none;
+  opacity: 1;
+}
+
+.room__dark {
+  position: absolute;
+  inset: 0;
+  background: var(--black) url(/art/black.webp);
+}
+
+.room__glow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  /* soft enough in the middle that her drawn bulb still reads through it */
+  background: radial-gradient(circle, rgba(255, 240, 200, 0.42) 0%, rgba(255, 222, 150, 0.3) 13%, rgba(255, 180, 110, 0.14) 32%, rgba(255, 150, 90, 0) 62%);
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+
+/* ---------- frame 4: inside ---------- */
+
+.inside {
+  visibility: hidden;
+}
+
+.inside.is-covered {
+  visibility: hidden !important;
+}
+
+.inside__shaft {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(112deg, rgba(255, 214, 160, 0.2), rgba(255, 214, 160, 0.05) 40%, transparent 60%);
+  mix-blend-mode: screen;
+}
+
+.inside__dust {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.inside__dim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--table) url(/art/table.webp);
+  opacity: 0;
+}
+
+.inside__flyer {
+  position: fixed;
+  display: none;
+  z-index: 5;
+  pointer-events: none;
+  filter: drop-shadow(0 24px 30px rgba(0, 0, 0, 0.5));
+}
+
+.inside__flat {
+  position: absolute;
+  display: block;
+  max-width: none;
+}
+
+/* phones: the skip/index tabs own the bottom row, so her originality pill and the hint sit above it */
+@media (max-width: 767px) {
+  .pill--orig {
+    bottom: 62px;
+  }
+  .feed__hint {
+    bottom: 104px;
+  }
+}
+
+@keyframes answer {
+  0%,
+  62%,
+  100% {
+    opacity: 0;
+  }
+  78% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes jitter {
+  50% {
+    translate: calc(var(--g, 0) * 7px) calc(var(--g, 0) * -2px);
+  }
+}
+
+@keyframes bob {
+  50% {
+    translate: 0 5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room__star,
+  .feed__hint svg,
+  .feed__pills.is-on,
+  .room.is-ready .room__almirah,
+  .inside.is-ready .inside__book {
+    animation: none;
+  }
+}

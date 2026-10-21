@@ -1,7 +1,10 @@
-# Vercel builds from source; keep the meeting notes and local tooling out of the upload.
+.vercel
+# Vercel builds from source; keep the meeting notes, her original frames and local tooling out of the upload.
 node_modules
 dist
 docs
+art-src
+scripts
 BRIEF.md
 .claude
 tsconfig.tsbuildinfo
