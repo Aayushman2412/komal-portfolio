@@ -1,0 +1,1237 @@
+{
+ "cuts": [
+  {
+   "name": "cover",
+   "page": 1,
+   "box": [
+    126,
+    0,
+    1525,
+    826
+   ],
+   "alt": "Her project cover: a glitched close-up of leaf veins, pink-red leaf flesh between dark green veins, with pixel blocks and colour bands breaking up the bottom."
+  },
+  {
+   "name": "moodboard",
+   "page": 2,
+   "poly": [
+    [
+     25,
+     92
+    ],
+    [
+     400,
+     92
+    ],
+    [
+     405,
+     78
+    ],
+    [
+     560,
+     78
+    ],
+    [
+     565,
+     92
+    ],
+    [
+     800,
+     92
+    ],
+    [
+     800,
+     143
+    ],
+    [
+     889,
+     143
+    ],
+    [
+     889,
+     206
+    ],
+    [
+     800,
+     206
+    ],
+    [
+     800,
+     252
+    ],
+    [
+     743,
+     252
+    ],
+    [
+     743,
+     318
+    ],
+    [
+     800,
+     318
+    ],
+    [
+     800,
+     400
+    ],
+    [
+     743,
+     400
+    ],
+    [
+     743,
+     462
+    ],
+    [
+     800,
+     462
+    ],
+    [
+     800,
+     530
+    ],
+    [
+     743,
+     530
+    ],
+    [
+     743,
+     594
+    ],
+    [
+     800,
+     594
+    ],
+    [
+     800,
+     666
+    ],
+    [
+     743,
+     666
+    ],
+    [
+     743,
+     728
+    ],
+    [
+     800,
+     728
+    ],
+    [
+     800,
+     810
+    ],
+    [
+     743,
+     810
+    ],
+    [
+     743,
+     872
+    ],
+    [
+     800,
+     872
+    ],
+    [
+     800,
+     870
+    ],
+    [
+     800,
+     870
+    ],
+    [
+     833,
+     870
+    ],
+    [
+     833,
+     935
+    ],
+    [
+     800,
+     935
+    ],
+    [
+     800,
+     1016
+    ],
+    [
+     390,
+     1016
+    ],
+    [
+     388,
+     1057
+    ],
+    [
+     194,
+     1058
+    ],
+    [
+     192,
+     1016
+    ],
+    [
+     25,
+     1016
+    ]
+   ],
+   "alt": "Her inspiration and silhouette board: a collage of a giant leaf, mushrooms, Venus flytraps, moss, an uncanny face and knit, ruffled and layered references, with four Pantone chips and her labels."
+  },
+  {
+   "name": "inspiration",
+   "page": 2,
+   "poly": [
+    [
+     40,
+     100
+    ],
+    [
+     400,
+     100
+    ],
+    [
+     405,
+     80
+    ],
+    [
+     560,
+     80
+    ],
+    [
+     565,
+     100
+    ],
+    [
+     760,
+     100
+    ],
+    [
+     760,
+     143
+    ],
+    [
+     888,
+     143
+    ],
+    [
+     888,
+     205
+    ],
+    [
+     745,
+     205
+    ],
+    [
+     745,
+     470
+    ],
+    [
+     762,
+     470
+    ],
+    [
+     762,
+     512
+    ],
+    [
+     700,
+     512
+    ],
+    [
+     700,
+     566
+    ],
+    [
+     600,
+     566
+    ],
+    [
+     600,
+     546
+    ],
+    [
+     490,
+     546
+    ],
+    [
+     470,
+     560
+    ],
+    [
+     430,
+     584
+    ],
+    [
+     382,
+     584
+    ],
+    [
+     370,
+     566
+    ],
+    [
+     330,
+     556
+    ],
+    [
+     40,
+     556
+    ]
+   ],
+   "alt": "The INSPIRATION half of her board: a giant leaf, mushrooms, Venus flytraps, moss, curling green tendrils, dark hair and an uncanny face, labelled ominous, raw, textures, earthy and uncanny, with four Pantone chips."
+  },
+  {
+   "name": "silhouette",
+   "page": 2,
+   "poly": [
+    [
+     40,
+     556
+    ],
+    [
+     330,
+     556
+    ],
+    [
+     370,
+     566
+    ],
+    [
+     382,
+     584
+    ],
+    [
+     430,
+     584
+    ],
+    [
+     470,
+     560
+    ],
+    [
+     490,
+     546
+    ],
+    [
+     600,
+     546
+    ],
+    [
+     600,
+     566
+    ],
+    [
+     700,
+     566
+    ],
+    [
+     768,
+     566
+    ],
+    [
+     768,
+     530
+    ],
+    [
+     744,
+     530
+    ],
+    [
+     744,
+     594
+    ],
+    [
+     768,
+     594
+    ],
+    [
+     768,
+     666
+    ],
+    [
+     744,
+     666
+    ],
+    [
+     744,
+     728
+    ],
+    [
+     768,
+     728
+    ],
+    [
+     768,
+     810
+    ],
+    [
+     744,
+     810
+    ],
+    [
+     744,
+     872
+    ],
+    [
+     768,
+     872
+    ],
+    [
+     768,
+     870
+    ],
+    [
+     768,
+     870
+    ],
+    [
+     832,
+     870
+    ],
+    [
+     832,
+     934
+    ],
+    [
+     768,
+     934
+    ],
+    [
+     768,
+     998
+    ],
+    [
+     640,
+     998
+    ],
+    [
+     640,
+     1020
+    ],
+    [
+     555,
+     1020
+    ],
+    [
+     555,
+     1010
+    ],
+    [
+     390,
+     1010
+    ],
+    [
+     388,
+     1052
+    ],
+    [
+     325,
+     1056
+    ],
+    [
+     196,
+     1056
+    ],
+    [
+     192,
+     998
+    ],
+    [
+     40,
+     998
+    ]
+   ],
+   "alt": "The SILHOUTTE half of her board: a strapless pink bodycon gown, an oversized ribbed turtleneck, a flared gown, layered rough-edged fabric, pink ruffles, a patchwork knit and two flytrap embellishments, each labelled."
+  },
+  {
+   "name": "heading-inspiration",
+   "page": 2,
+   "poly": [
+    [
+     614,
+     149
+    ],
+    [
+     882,
+     146
+    ],
+    [
+     883,
+     198
+    ],
+    [
+     614,
+     201
+    ]
+   ],
+   "alt": "INSPIRATION, her lettering in red on a white paper strip."
+  },
+  {
+   "name": "heading-silhouette",
+   "page": 2,
+   "poly": [
+    [
+     623,
+     885
+    ],
+    [
+     829,
+     872
+    ],
+    [
+     830,
+     921
+    ],
+    [
+     623,
+     931
+    ]
+   ],
+   "alt": "SILHOUTTE, her lettering in red on a white paper strip."
+  },
+  {
+   "name": "chip-yellow",
+   "page": 2,
+   "box": [
+    44,
+    206,
+    174,
+    265
+   ],
+   "alt": "Pantone chip 13-0544 TCX, a warm yellow."
+  },
+  {
+   "name": "chip-green",
+   "page": 2,
+   "box": [
+    44,
+    286,
+    152,
+    351
+   ],
+   "alt": "Pantone chip 16-0299 TCX, a dark moss green."
+  },
+  {
+   "name": "chip-olive",
+   "page": 2,
+   "box": [
+    44,
+    379,
+    148,
+    438
+   ],
+   "alt": "Pantone chip 19-0220 TCX, an olive yellow."
+  },
+  {
+   "name": "chip-pink",
+   "page": 2,
+   "poly": [
+    [
+     44,
+     459
+    ],
+    [
+     147,
+     459
+    ],
+    [
+     152,
+     474
+    ],
+    [
+     165,
+     488
+    ],
+    [
+     205,
+     492
+    ],
+    [
+     222,
+     488
+    ],
+    [
+     226,
+     500
+    ],
+    [
+     236,
+     504
+    ],
+    [
+     236,
+     526
+    ],
+    [
+     44,
+     526
+    ]
+   ],
+   "alt": "Pantone chip 13-2120 TCX, a soft pink."
+  },
+  {
+   "name": "leaf",
+   "page": 2,
+   "poly": [
+    [
+     177,
+     111
+    ],
+    [
+     398,
+     111
+    ],
+    [
+     398,
+     165
+    ],
+    [
+     424,
+     165
+    ],
+    [
+     424,
+     204
+    ],
+    [
+     398,
+     204
+    ],
+    [
+     398,
+     222
+    ],
+    [
+     383,
+     232
+    ],
+    [
+     383,
+     252
+    ],
+    [
+     177,
+     252
+    ]
+   ],
+   "alt": "A giant leaf seen from above, grey-green cells between pale yellow veins, labelled ominous."
+  },
+  {
+   "name": "mushrooms",
+   "page": 2,
+   "poly": [
+    [
+     404,
+     94
+    ],
+    [
+     440,
+     81
+    ],
+    [
+     530,
+     81
+    ],
+    [
+     560,
+     98
+    ],
+    [
+     562,
+     200
+    ],
+    [
+     558,
+     282
+    ],
+    [
+     480,
+     294
+    ],
+    [
+     470,
+     330
+    ],
+    [
+     440,
+     350
+    ],
+    [
+     404,
+     345
+    ],
+    [
+     386,
+     322
+    ],
+    [
+     384,
+     232
+    ],
+    [
+     398,
+     222
+    ],
+    [
+     398,
+     206
+    ],
+    [
+     426,
+     206
+    ],
+    [
+     426,
+     163
+    ],
+    [
+     402,
+     150
+    ]
+   ],
+   "alt": "Pale mushroom caps seen from below, their fine gills fanning out."
+  },
+  {
+   "name": "lineup",
+   "page": 2,
+   "box": [
+    929,
+    176,
+    1509,
+    587
+   ],
+   "alt": "Her line-up of eleven illustrated looks in pink and lime green: ribbed stripes, ruffled edges, long sleeves, wide trousers, draped skirts and column dresses, with small flower embellishments."
+  },
+  {
+   "name": "lineup-1",
+   "page": 2,
+   "box": [
+    994,
+    179,
+    1072,
+    386
+   ],
+   "alt": "Look 1 of her line-up: a cropped turtleneck with pink ruffled sleeves over a long lime skirt with pink side panels."
+  },
+  {
+   "name": "lineup-2",
+   "page": 2,
+   "box": [
+    1083,
+    179,
+    1166,
+    386
+   ],
+   "alt": "Look 2: a one-shoulder column gown in pink and green stripes with ruffled seams and small flowers."
+  },
+  {
+   "name": "lineup-3",
+   "page": 2,
+   "box": [
+    1173,
+    179,
+    1265,
+    386
+   ],
+   "alt": "Look 3: a cropped green turtleneck with pink sleeves and wide lime trousers with ruffled green seams and flowers."
+  },
+  {
+   "name": "lineup-4",
+   "page": 2,
+   "box": [
+    1265,
+    179,
+    1355,
+    386
+   ],
+   "alt": "Look 4: a striped pink top with one long sleeve and a green and pink draped wrap skirt knotted with a flower."
+  },
+  {
+   "name": "lineup-5",
+   "page": 2,
+   "box": [
+    1358,
+    179,
+    1451,
+    386
+   ],
+   "alt": "Look 5: a striped cropped turtleneck with long sleeves and wide pink and green striped trousers with flowers."
+  },
+  {
+   "name": "lineup-6",
+   "page": 2,
+   "box": [
+    955,
+    386,
+    1045,
+    585
+   ],
+   "alt": "Look 6: a pink ruffled turtleneck top, belted with a flower, over an asymmetric pink and green ruffled skirt."
+  },
+  {
+   "name": "lineup-7",
+   "page": 2,
+   "box": [
+    1046,
+    386,
+    1132,
+    585
+   ],
+   "alt": "Look 7: a pink one-shoulder crop top with a long green drape and a green wrapped skirt with a high slit."
+  },
+  {
+   "name": "lineup-8",
+   "page": 2,
+   "box": [
+    1147,
+    386,
+    1230,
+    585
+   ],
+   "alt": "Look 8: a pink ruffled cropped turtleneck with full sleeves and wide lime trousers with ruffled edges and flowers."
+  },
+  {
+   "name": "lineup-9",
+   "page": 2,
+   "box": [
+    1230,
+    386,
+    1322,
+    585
+   ],
+   "alt": "Look 9: a striped strapless top and a tiered pink and green ruffled wrap skirt with flowers."
+  },
+  {
+   "name": "lineup-10",
+   "page": 2,
+   "box": [
+    1326,
+    386,
+    1416,
+    585
+   ],
+   "alt": "Look 10: a striped cropped turtleneck with ruffled sleeves and a long pink skirt with green ruffled stripes."
+  },
+  {
+   "name": "lineup-11",
+   "page": 2,
+   "box": [
+    1423,
+    386,
+    1486,
+    585
+   ],
+   "alt": "Look 11: a sleeveless high-neck column dress in pink and green vertical stripes."
+  },
+  {
+   "name": "tab-projects",
+   "page": 2,
+   "box": [
+    1593,
+    421,
+    1620,
+    551
+   ],
+   "alt": "PROJECTS, her lettering on a yellow tab."
+  },
+  {
+   "name": "flap-project-01",
+   "page": 2,
+   "poly": [
+    [
+     1476,
+     913
+    ],
+    [
+     1583,
+     905
+    ],
+    [
+     1583,
+     930
+    ],
+    [
+     1505,
+     1001
+    ],
+    [
+     1476,
+     1001
+    ]
+   ],
+   "alt": "PROJECT 01, her lettering on a yellow corner flap."
+  },
+  {
+   "name": "look-1",
+   "page": 3,
+   "box": [
+    68,
+    96,
+    503,
+    752
+   ],
+   "alt": "Final look, front and back: a mustard and olive cropped turtleneck in waffle and rib knit with long ruffled sleeves, over a long skirt of olive, green and pink ribbed stripes."
+  },
+  {
+   "name": "look-1-front",
+   "page": 3,
+   "box": [
+    100,
+    128,
+    290,
+    705
+   ],
+   "alt": "Final look from the front: cropped knit turtleneck with ruffled sleeves and a long striped rib-knit skirt."
+  },
+  {
+   "name": "look-1-back",
+   "page": 3,
+   "box": [
+    290,
+    128,
+    478,
+    705
+   ],
+   "alt": "Final look from the back: the cropped turtleneck opens at the back above the long striped skirt."
+  },
+  {
+   "name": "look-2",
+   "page": 3,
+   "poly": [
+    [
+     530,
+     342
+    ],
+    [
+     938,
+     342
+    ],
+    [
+     938,
+     1036
+    ],
+    [
+     596,
+     1036
+    ],
+    [
+     600,
+     990
+    ],
+    [
+     600,
+     930
+    ],
+    [
+     590,
+     880
+    ],
+    [
+     575,
+     840
+    ],
+    [
+     555,
+     812
+    ],
+    [
+     530,
+     800
+    ]
+   ],
+   "alt": "Final look, front and back: a strapless column dress in olive, green and pink ribbed stripes with ruffled seams and small flower embellishments."
+  },
+  {
+   "name": "look-2-front",
+   "page": 3,
+   "box": [
+    586,
+    386,
+    773,
+    966
+   ],
+   "alt": "Strapless striped column dress from the front."
+  },
+  {
+   "name": "look-2-back",
+   "page": 3,
+   "box": [
+    773,
+    392,
+    936,
+    950
+   ],
+   "alt": "Strapless striped column dress from the back."
+  },
+  {
+   "name": "makeup-eyes",
+   "page": 3,
+   "box": [
+    542,
+    0,
+    936,
+    305
+   ],
+   "alt": "Makeup reference: eyes lined in red with lime-green brows and lashes."
+  },
+  {
+   "name": "makeup-face",
+   "page": 3,
+   "poly": [
+    [
+     978,
+     58
+    ],
+    [
+     1150,
+     58
+    ],
+    [
+     1160,
+     30
+    ],
+    [
+     1420,
+     30
+    ],
+    [
+     1440,
+     0
+    ],
+    [
+     1619,
+     0
+    ],
+    [
+     1619,
+     1079
+    ],
+    [
+     1104,
+     1079
+    ],
+    [
+     1104,
+     690
+    ],
+    [
+     946,
+     690
+    ],
+    [
+     946,
+     340
+    ],
+    [
+     940,
+     300
+    ],
+    [
+     938,
+     220
+    ],
+    [
+     948,
+     140
+    ]
+   ],
+   "alt": "Makeup reference: a face with red-lined eyes, lime brows, glossy red and gold lips, and Venus flytraps worn in the hair like ears."
+  },
+  {
+   "name": "makeup-hair",
+   "page": 3,
+   "poly": [
+    [
+     0,
+     756
+    ],
+    [
+     505,
+     756
+    ],
+    [
+     530,
+     800
+    ],
+    [
+     555,
+     812
+    ],
+    [
+     575,
+     840
+    ],
+    [
+     590,
+     880
+    ],
+    [
+     598,
+     930
+    ],
+    [
+     598,
+     990
+    ],
+    [
+     592,
+     1079
+    ],
+    [
+     0,
+     1079
+    ]
+   ],
+   "alt": "Hair reference: dark hair seen from above with Venus flytraps tucked in at the sides."
+  },
+  {
+   "name": "photo-1",
+   "page": 4,
+   "box": [
+    239,
+    14,
+    622,
+    690
+   ],
+   "alt": "Night shoot: the strapless striped rib-knit dress with ruffled seams, worn in tall grass."
+  },
+  {
+   "name": "photo-2",
+   "page": 4,
+   "box": [
+    647,
+    0,
+    1004,
+    298
+   ],
+   "alt": "Night shoot: close-up of the striped skirt and a ruffled knit sleeve."
+  },
+  {
+   "name": "photo-3",
+   "page": 4,
+   "box": [
+    640,
+    333,
+    1000,
+    1012
+   ],
+   "alt": "Night shoot: looking back over her shoulder in the ribbed turtleneck with ruffled, overlocked edges."
+  },
+  {
+   "name": "photo-4",
+   "page": 4,
+   "box": [
+    1030,
+    60,
+    1449,
+    721
+   ],
+   "alt": "Night shoot: the cropped waffle-knit turtleneck with ruffled sleeves and striped trousers."
+  },
+  {
+   "name": "photo-5",
+   "page": 4,
+   "box": [
+    325,
+    720,
+    607,
+    1037
+   ],
+   "alt": "Night shoot: close-up of the makeup, lime eyeshadow and red-lined eyes, chin tucked into the green turtleneck."
+  },
+  {
+   "name": "photo-6",
+   "page": 4,
+   "box": [
+    1033,
+    748,
+    1527,
+    1080
+   ],
+   "alt": "Night shoot: portrait in the turtleneck, lower right of a dark frame."
+  },
+  {
+   "name": "backdrop-left",
+   "page": 4,
+   "box": [
+    0,
+    0,
+    238,
+    1080
+   ],
+   "alt": "A blown-up, cool-toned print from the night shoot behind the photos: the cropped turtleneck and striped trousers."
+  },
+  {
+   "name": "backdrop-right",
+   "page": 4,
+   "poly": [
+    [
+     1450,
+     0
+    ],
+    [
+     1619,
+     0
+    ],
+    [
+     1619,
+     1079
+    ],
+    [
+     1528,
+     1079
+    ],
+    [
+     1528,
+     748
+    ],
+    [
+     1450,
+     748
+    ]
+   ],
+   "alt": "A blown-up print from the night shoot behind the photos: the striped rib knit with a flower embellishment."
+  },
+  {
+   "name": "fabric-waffle",
+   "page": 4,
+   "box": [
+    1154,
+    266,
+    1290,
+    404
+   ],
+   "alt": "Close-up of the waffle knit in mustard and yellow-green, with a green rib-knit band and pink overlocked edge.",
+   "kind": "texture"
+  },
+  {
+   "name": "fabric-stripes",
+   "page": 4,
+   "box": [
+    1462,
+    140,
+    1604,
+    430
+   ],
+   "alt": "Close-up of the striped knit: mustard, olive green and pink rib panels joined with raw ruffled seams, with a flower embellishment.",
+   "kind": "texture"
+  },
+  {
+   "name": "fabric-rib",
+   "page": 4,
+   "box": [
+    684,
+    770,
+    800,
+    995
+   ],
+   "alt": "Close-up of the turtleneck: green rib knit beside mustard and yellow-green knit, edged with pink overlocking.",
+   "kind": "texture"
+  }
+ ]
+}
