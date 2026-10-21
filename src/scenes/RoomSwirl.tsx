@@ -330,7 +330,7 @@ export function RoomSwirl({ src, active }: { src: string; active: boolean }) {
 
   return (
     <>
-      {mode !== 'img' && <canvas ref={canvas} width={FRAME.w} height={FRAME.h} style={{ ...box, visibility: mode === 'gl' ? 'visible' : 'hidden' }} />}
+      {mode !== 'img' && <canvas ref={canvas} width={FRAME.w} height={FRAME.h} style={{ ...box, visibility: mode === 'gl' ? 'inherit' : 'hidden' }} />}
       {mode !== 'gl' && <img src={src} alt="" draggable={false} style={box} />}
     </>
   )

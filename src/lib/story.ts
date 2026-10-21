@@ -24,6 +24,8 @@ export function replayIntro() {
 export function openBookAt(target: string, { fly = false } = {}) {
   const s = useStory.getState()
   s.setBookTarget(target)
+  // already open: the scrapbook turns to it
+  if (s.stage === 'book' && s.bookLanded) return
   s.setBookLanded(false)
   if (s.stage === 'intro' || s.stage === 'loading') scrollToProgress(1, true)
   s.setStage('book')

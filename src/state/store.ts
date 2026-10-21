@@ -14,10 +14,15 @@ type State = {
   reducedMotion: boolean
   /** Which face of the scrapbook to open on (set by #book, #index, #p/<slug> links). */
   bookTarget: string | null
+  /** Counts requests for bookTarget, so following the same link twice still turns to it. */
+  bookNav: number
   /** The book has flown out of the almirah; the scrapbook may take over. */
   bookLanded: boolean
+  /** The scrapbook layer is fully opaque, so the scenes under it can stop drawing. */
+  bookShown: boolean
   setStage: (s: Stage) => void
   setBookLanded: (v: boolean) => void
+  setBookShown: (v: boolean) => void
   setSound: (on: boolean) => void
   setBookTarget: (t: string | null) => void
 }
@@ -27,11 +32,14 @@ export const useStory = create<State>((set) => ({
   sound: false,
   reducedMotion: false,
   bookTarget: null,
+  bookNav: 0,
   bookLanded: false,
+  bookShown: false,
   setStage: (stage) => set({ stage }),
-  setBookLanded: (bookLanded) => set({ bookLanded }),
+  setBookLanded: (bookLanded) => set(bookLanded ? { bookLanded } : { bookLanded, bookShown: false }),
+  setBookShown: (bookShown) => set({ bookShown }),
   setSound: (sound) => set({ sound }),
-  setBookTarget: (bookTarget) => set({ bookTarget }),
+  setBookTarget: (bookTarget) => set((s) => ({ bookTarget, bookNav: s.bookNav + 1 })),
 }))
 
 /**

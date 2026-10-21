@@ -4,9 +4,9 @@ import { onFrame } from '../lib/frame'
 import { gsap, prefersReducedMotion } from '../lib/gsap'
 import { sound } from '../lib/audio'
 import { openBookAt } from '../lib/story'
-import { easeInOut, live, useStory } from '../state/store'
-import { coverRect } from '../ui/scrapbook/size'
-import { doorwayOnScreen, INSIDE_VIEW, insideCam } from './cams'
+import { easeInOut, live, smoothstep, span, useStory } from '../state/store'
+import { COVER, coverRect, FACE } from '../ui/scrapbook/size'
+import { doorwayOnScreen, INSIDE_BACK, INSIDE_VIEW, insideCam } from './cams'
 
 /**
  * Frame 4: inside the almirah. Folded clothes, the floral tin, and the scrapbook she made as a
@@ -20,15 +20,24 @@ const BOOK_BOX = polyBox(BOOK)
 const SHELVES = regions.inside.shelves
 /** The middle of her drawing, which every placement of it is measured from. */
 const ANCHOR: [number, number] = [850, 540]
-/** Her cover inside the scrapbook cut-out: its centre, and its height (the mean of its two sides), in cut-out pixels. */
-const CUTOUT_COVER = { cx: 146, cy: 208, h: 360 }
+type Pt = [number, number]
+/** Her cover's corners inside the scrapbook cut-out (top left, top right, bottom right, bottom left), in cut-out pixels. */
+const COVER_CORNERS = regions.inside.cover.map(([x, y]) => [x - BOOK_BOX[0], y - BOOK_BOX[1]] as Pt)
+/** The same corners on the straightened cover the closed book is made of. */
+const FLAT_CORNERS: Pt[] = [
+  [0, 0],
+  [COVER.w, 0],
+  [COVER.w, COVER.h],
+  [0, COVER.h],
+]
 
 type Mote = { x: number; y: number; r: number; vx: number; vy: number; ph: number }
 
 /** Scale and screen position of ANCHOR for the inside drawing right now. */
 function place(vw: number, vh: number) {
   const fit = fitFrame(vw, vh, regions.inside.safe)
-  const sF = fit.s
+  // a little over the cover fit, so the pointer's parallax never shows an edge
+  const sF = fit.s * (1 + 24 / Math.min(vw, vh))
   const pF: [number, number] = [fit.x + ANCHOR[0] * sF - live.pointer.x * 8, fit.y + ANCHOR[1] * sF + live.pointer.y * 5]
   const k = insideCam.k
   if (k >= 1) return { s: sF, p: pF }
@@ -37,7 +46,44 @@ function place(vw: number, vh: number) {
   const sM = dw / (INSIDE_VIEW[2] - INSIDE_VIEW[0])
   const pM: [number, number] = [dx + (ANCHOR[0] - INSIDE_VIEW[0]) * sM, dy + (ANCHOR[1] - INSIDE_VIEW[1]) * sM]
   const e = easeInOut(k)
-  return { s: sM * Math.pow(sF / sM, k), p: [pM[0] + (pF[0] - pM[0]) * e, pM[1] + (pF[1] - pM[1]) * e] as [number, number] }
+  return { s: sM * Math.pow(sF / sM, e), p: [pM[0] + (pF[0] - pM[0]) * e, pM[1] + (pF[1] - pM[1]) * e] as [number, number] }
+}
+
+/** Solve A x = b (small and dense) by Gaussian elimination with partial pivoting. */
+function solve(A: number[][], b: number[]) {
+  const n = b.length
+  const M = A.map((row, i) => [...row, b[i]])
+  for (let c = 0; c < n; c++) {
+    let p = c
+    for (let r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[p][c])) p = r
+    ;[M[c], M[p]] = [M[p], M[c]]
+    for (let r = c + 1; r < n; r++) {
+      const f = M[r][c] / M[c][c]
+      for (let j = c; j <= n; j++) M[r][j] -= f * M[c][j]
+    }
+  }
+  const x: number[] = Array(n).fill(0)
+  for (let r = n - 1; r >= 0; r--) {
+    let v = M[r][n]
+    for (let j = r + 1; j < n; j++) v -= M[r][j] * x[j]
+    x[r] = v / M[r][r]
+  }
+  return x
+}
+
+/** The CSS transform that puts four points of an element (in its own pixels) on four points of the screen. */
+function quadMatrix(from: Pt[], to: Pt[]) {
+  const A: number[][] = []
+  const b: number[] = []
+  from.forEach(([x, y], i) => {
+    const [u, v] = to[i]
+    A.push([x, y, 1, 0, 0, 0, -u * x, -u * y])
+    b.push(u)
+    A.push([0, 0, 0, x, y, 1, -v * x, -v * y])
+    b.push(v)
+  })
+  const [a, c, tx, d, e, ty, g, h] = solve(A, b)
+  return `matrix3d(${a},${d},0,${g},${c},${e},0,${h},0,0,1,0,${tx},${ty},0,1)`
 }
 
 export function Inside() {
@@ -46,12 +92,15 @@ export function Inside() {
   const dust = useRef<HTMLCanvasElement>(null)
   const book = useRef<HTMLImageElement>(null)
   const flyer = useRef<HTMLImageElement>(null)
+  const flat = useRef<HTMLDivElement>(null)
   const dim = useRef<HTMLDivElement>(null)
   const stage = useStory((s) => s.stage)
-  const landed = useStory((s) => s.bookLanded)
+  const shown = useStory((s) => s.bookShown)
+  /** Going back out through the doorway as the almirah closes. */
+  const leaving = useRef(false)
 
-  // take over in the doorway as the room's zoom ends, then grow to the whole screen; fade out when
-  // the doors close again
+  // take over in the doorway as the room's zoom ends, then grow to the whole screen; on the way
+  // out, shrink back into the doorway before the doors close
   useEffect(() => {
     const el = root.current
     if (!el) return
@@ -71,11 +120,27 @@ export function Inside() {
       if (stage === 'open' && dim.current) gsap.to(dim.current, { opacity: 0, duration: 0.4 })
       return
     }
+    if (stage === 'room' && insideCam.k > 0 && Number(gsap.getProperty(el, 'opacity')) > 0) {
+      leaving.current = true
+      const tl = gsap.timeline({ onComplete: () => void (leaving.current = false) })
+      tl.to(insideCam, { k: 0, duration: INSIDE_BACK, ease: 'none' })
+      // back in the doorway it matches the room's own copy of the drawing, so it can go
+      tl.to(el, { autoAlpha: 0, duration: 0.15 })
+      return () => {
+        tl.kill()
+        leaving.current = false
+      }
+    }
     const tw = gsap.to(el, { autoAlpha: 0, duration: 0.45, ease: 'power2.in' })
     return () => {
       tw.kill()
     }
   }, [stage])
+
+  // the book in your hands has taken over the screen: the one in flight can go
+  useEffect(() => {
+    if (shown) gsap.set([flyer.current, flat.current], { display: 'none' })
+  }, [shown])
 
   useEffect(() => {
     const canvas = dust.current!
@@ -91,26 +156,35 @@ export function Inside() {
     const still = prefersReducedMotion()
 
     return onFrame((_p, dt, time) => {
-      const st = useStory.getState().stage
-      const covered = st === 'book' && useStory.getState().bookLanded
-      if (!(st === 'opening' || st === 'open' || st === 'book') || covered) return
+      const { stage: st, bookShown } = useStory.getState()
+      if (!(st === 'opening' || st === 'open' || st === 'book' || leaving.current) || (st === 'book' && bookShown)) return
       const vw = window.innerWidth
       const vh = window.innerHeight
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
       const { s, p } = place(vw, vh)
       if (frame.current) frame.current.style.transform = `translate3d(${p[0] - ANCHOR[0] * s}px, ${p[1] - ANCHOR[1] * s}px, 0) scale(${s})`
-      // seen only through the doorway at first; the opening widens to the whole screen as we go in
+      // seen only through the doorway at first; the opening widens to the whole screen as we go in,
+      // its edge softening as it goes, so the room fades out around it instead of being wiped away
       if (root.current) {
         const k = insideCam.k
-        if (k >= 1) root.current.style.clipPath = ''
-        else {
+        const css = root.current.style
+        if (k >= 1) {
+          css.removeProperty('mask-image')
+          css.removeProperty('-webkit-mask-image')
+        } else {
           const [dx, dy, dw, dh] = doorwayOnScreen(vw, vh, live.pointer)
           const e = easeInOut(k)
-          const t = dy * (1 - e)
+          const f = e * Math.max(vw, vh) * 0.22
           const l = dx * (1 - e)
-          const r = (vw - dx - dw) * (1 - e)
-          const b = (vh - dy - dh) * (1 - e)
-          root.current.style.clipPath = `inset(${t.toFixed(1)}px ${r.toFixed(1)}px ${b.toFixed(1)}px ${l.toFixed(1)}px)`
+          const t = dy * (1 - e)
+          const r = vw - (vw - dx - dw) * (1 - e)
+          const b = vh - (vh - dy - dh) * (1 - e)
+          const px = (v: number) => `${v.toFixed(1)}px`
+          const m = `linear-gradient(to right, transparent ${px(l - f)}, #000 ${px(l)}, #000 ${px(r)}, transparent ${px(r + f)}), linear-gradient(to bottom, transparent ${px(t - f)}, #000 ${px(t)}, #000 ${px(b)}, transparent ${px(b + f)})`
+          css.setProperty('mask-image', m)
+          css.setProperty('-webkit-mask-image', m)
+          css.setProperty('mask-composite', 'intersect')
+          css.setProperty('-webkit-mask-composite', 'source-in')
         }
       }
 
@@ -142,36 +216,51 @@ export function Inside() {
   }, [])
 
   /**
-   * The scrapbook leaves the shelf and comes to you as she drew it, straightening a little on the
-   * way, and lands exactly where the closed book appears (same proportions, so it keeps its shape).
+   * The scrapbook leaves the shelf and comes to you as she drew it, tilting as it lifts off and
+   * straightening out of her perspective on the way, and its cover lands corner for corner on the
+   * closed book's cover (same proportions, so it keeps its shape). Her cut-out turns into the
+   * straightened cover on the way in (the two ride the same corners), so it lands as exactly the
+   * book that then takes over on top.
    */
   const take = () => {
     const el = book.current
     const fly = flyer.current
-    if (!el || !fly) return openBookAt('cover')
+    const straight = flat.current
+    if (!el || !fly || !straight) return openBookAt('cover')
     const from = el.getBoundingClientRect()
     sound.click()
     const to = coverRect()
     const W = BOOK_BOX[2] - BOOK_BOX[0]
     const H = BOOK_BOX[3] - BOOK_BOX[1]
-    const k = to.h / CUTOUT_COVER.h
-    gsap.set(fly, {
-      display: 'block',
-      left: from.left,
-      top: from.top,
-      width: from.width,
-      height: from.height,
-      rotation: 0,
-      opacity: 1,
-      transformOrigin: `${(CUTOUT_COVER.cx / W) * 100}% ${(CUTOUT_COVER.cy / H) * 100}%`,
-    })
+    const start = COVER_CORNERS.map(([x, y]) => [from.left + (x * from.width) / W, from.top + (y * from.height) / H] as Pt)
+    const end: Pt[] = [
+      [to.x, to.y],
+      [to.x + to.w, to.y],
+      [to.x + to.w, to.y + to.h],
+      [to.x, to.y + to.h],
+    ]
+    const o = { t: 0 }
+    const draw = () => {
+      const q = start.map(([x, y], i) => [x + (end[i][0] - x) * o.t, y + (end[i][1] - y) * o.t] as Pt)
+      const cx = q.reduce((v, p) => v + p[0], 0) / 4
+      const cy = q.reduce((v, p) => v + p[1], 0) / 4
+      const a = -0.12 * Math.sin(Math.PI * o.t)
+      const [c, s] = [Math.cos(a), Math.sin(a)]
+      const turned = q.map(([x, y]) => [cx + (x - cx) * c - (y - cy) * s, cy + (x - cx) * s + (y - cy) * c] as Pt)
+      fly.style.transform = quadMatrix(COVER_CORNERS, turned)
+      straight.style.transform = quadMatrix(FLAT_CORNERS, turned)
+      const morph = smoothstep(span(o.t, 0.45, 0.85))
+      straight.style.opacity = String(morph)
+      fly.style.opacity = String(1 - smoothstep(span(o.t, 0.55, 0.95)))
+    }
+    gsap.set(fly, { display: 'block', left: 0, top: 0, width: W, height: H, transformOrigin: '0 0' })
+    gsap.set(straight, { display: 'block', left: 0, top: 0, transformOrigin: '0 0' })
+    draw()
     openBookAt('cover', { fly: true })
     const tl = gsap.timeline()
-    tl.to(fly, { left: to.x + to.w / 2 - CUTOUT_COVER.cx * k, top: to.y + to.h / 2 - CUTOUT_COVER.cy * k, width: W * k, height: H * k, rotation: 9, duration: 0.9, ease: 'power3.inOut' }, 0)
+    tl.to(o, { t: 1, duration: 0.9, ease: 'power3.inOut', onUpdate: draw }, 0)
     if (dim.current) tl.to(dim.current, { opacity: 1, duration: 0.75, ease: 'power1.in' }, 0)
     tl.call(() => useStory.getState().setBookLanded(true), [], 0.8)
-    tl.to(fly, { opacity: 0, duration: 0.32 }, 0.86)
-    tl.set(fly, { display: 'none' })
   }
 
   const clickable = stage === 'open'
@@ -179,7 +268,7 @@ export function Inside() {
   return (
     <div
       ref={root}
-      className={`inside ${clickable ? 'is-ready' : ''} ${stage === 'book' && landed ? 'is-covered' : ''}`}
+      className={`inside ${clickable ? 'is-ready' : ''} ${stage === 'book' && shown ? 'is-covered' : ''}`}
       style={{ visibility: 'hidden', opacity: 0 }}
     >
       <div ref={frame} className="art-frame" style={{ width: FRAME.w, height: FRAME.h }}>
@@ -211,6 +300,10 @@ export function Inside() {
       <canvas ref={dust} className="inside__dust" />
       <div ref={dim} className="inside__dim" />
       <img ref={flyer} className="inside__flyer" src={art.insideBook} alt="" draggable={false} />
+      <div ref={flat} className="inside__flyer" style={{ width: COVER.w + COVER.edgesW, height: COVER.h }}>
+        <img className="inside__flat" src={art.book.cover} alt="" draggable={false} style={{ left: -COVER.x, top: -COVER.y, width: FACE.w, height: FACE.h }} />
+        <img className="inside__flat" src={art.book.coverEdges} alt="" draggable={false} style={{ left: COVER.w, top: 0, width: COVER.edgesW, height: COVER.h }} />
+      </div>
     </div>
   )
 }

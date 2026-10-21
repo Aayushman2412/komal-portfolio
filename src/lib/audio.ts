@@ -5,7 +5,7 @@
  * the bulb, the almirah's latch and creak, pages turning. (No clothes rustle: she asked for it gone.)
  */
 import { voiceDrop, voiceSpark, voiceSwitch, voiceThunk, voiceTicks } from './bulbSound'
-import { voiceBookOpen, voicePageTurn } from './paperSound'
+import { voiceBookClose, voiceBookOpen, voicePageTurn } from './paperSound'
 
 let ctx: AudioContext | null = null
 let master: GainNode | null = null
@@ -197,6 +197,10 @@ export const sound = {
   bookOpen() {
     if (!ctx || !this.enabled) return
     voiceBookOpen({ c: ctx, out: master! }, ctx.currentTime + 0.005)
+  },
+  bookClose() {
+    if (!ctx || !this.enabled) return
+    voiceBookClose({ c: ctx, out: master! }, ctx.currentTime + 0.005)
   },
 
   burst(len: number, freq: number, vol: number, q = 0.8) {

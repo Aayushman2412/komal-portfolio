@@ -359,3 +359,16 @@ export async function renderPaperPreview(sampleRate = 44100) {
   for (let i = 0; i < 4; i++) voicePageTurn(o, 4.0 + i * 0.09, { quick: true })
   return c.startRendering()
 }
+
+/**
+ * The card cover shut again, about 1.1 s: a slow whoosh as it swings back over, and the board
+ * landing flat on the pages. No spine creak: that only gives once, on the way open.
+ */
+export function voiceBookClose(o: Out, t: number) {
+  const { c } = o
+  const lvl = rand(1, 1.12)
+  const swDur = rand(1.05, 1.15)
+  swish(o, t, swDur, { peakAt: rand(0.66, 0.74), lo: 300, hi: rand(800, 1000), level: 0.3 * lvl, flutter: 0.15, rate: 5, air: 0.9 })
+  bendCrackle(o, t + 0.04, swDur * 0.6, pick(c, 'page', () => pageCrackle(c)), 0.14 * lvl)
+  flop(o, t + swDur * 0.95, { level: 0.85 * lvl, slap: rand(600, 760), crisp: 0.75, body: rand(90, 110), size: 1.8 })
+}

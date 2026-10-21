@@ -273,7 +273,7 @@ def cover() -> None:
     page edges and tabs that stick out on its right, which stay put while the cover opens.
     """
     f = Image.open(SRC / "frame-4.webp").convert("RGB")
-    flat = warp(f, [(831, 236), (1097, 178), (1101, 566), (873, 564)], COVER_W, COVER_H)
+    flat = warp(f, [tuple(p) for p in REGIONS["inside"]["cover"]], COVER_W, COVER_H)
     # her grain gets smeared by the stretch; put fresh grain back at the same strength
     flat += rng.normal(0, 9, (COVER_H, COVER_W, 1))
     face = np.zeros((1080, 1620 - SPINE, 3), np.float32)

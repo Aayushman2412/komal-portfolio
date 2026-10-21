@@ -9,8 +9,14 @@ import { fitFrame, regions } from '../lib/art'
 export const roomCam = { z: 1, k: 0, door: 0 }
 export const insideCam = { k: 0 }
 
-/** How far the room zooms toward the doors before the inside drawing takes over. */
-export const OPEN_ZOOM = 2
+/**
+ * How far the room zooms toward the doors as the view goes in. It keeps zooming while the inside
+ * drawing takes over, so the camera never stops at the doorway (past about 2.3 the drawing in the
+ * doorway would be bigger than it is once it fills the screen, and would have to shrink back).
+ */
+export const OPEN_ZOOM = 2.2
+/** Seconds the inside drawing takes to shrink back into the doorway when the almirah is closed. */
+export const INSIDE_BACK = 0.9
 
 const [DL, DR] = [regions.room.doors.left, regions.room.doors.right]
 export const DOORWAY = [DL[0], DL[1], DR[2], DR[3]]

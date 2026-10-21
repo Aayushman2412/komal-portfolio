@@ -319,6 +319,12 @@
   filter: drop-shadow(0 24px 30px rgba(0, 0, 0, 0.5));
 }
 
+.inside__flat {
+  position: absolute;
+  display: block;
+  max-width: none;
+}
+
 /* phones: the skip/index tabs own the bottom row, so her originality pill and the hint sit above it */
 @media (max-width: 767px) {
   .pill--orig {

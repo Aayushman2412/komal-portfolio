@@ -68,15 +68,22 @@
     calc(var(--t) * var(--ply) * 3) calc(var(--t) * var(--ply) * 2.55) 0 #0d4f57;
 }
 
-.book--single .book__stack {
+/* one page at a time: only the pages still to come, under the page, where its board is */
+.book--single .book__stack--l {
+  display: none;
+}
+
+.book--single .book__stack--r {
+  left: calc(var(--pw) * var(--stack-x) / 810);
+  width: calc(var(--pw) * var(--stack-w) / 810);
+}
+
+/* the boards already turned show on the left only once the cover has swung over to that side */
+.book__stage:not([data-cover='over']) .book__stack--l {
   display: none;
 }
 
 /* closed: only her cover and the page edges and tabs beside it */
-.book.is-closed .book__stack--l {
-  display: none;
-}
-
 .book.is-closed .book__stack--r {
   width: calc(var(--pw) * 640 / 810);
 }
@@ -91,7 +98,7 @@
   width: calc(var(--pw) * 640 / 810);
 }
 
-.book--spread:not(.is-turning) .leaf:not(.is-near) {
+.book--spread .leaf:not(.is-near) {
   visibility: hidden;
 }
 
@@ -216,6 +223,38 @@
   z-index: 0;
   /* waits unseen underneath, so nothing stuck past its edge (her About sticker) peeks out */
   opacity: 0;
+}
+
+/* the cover is card, not a page: it swings right over, slower and heavier, and never fades */
+.single__page--cover {
+  transform-style: preserve-3d;
+  transition: transform 1.15s cubic-bezier(0.6, 0, 0.25, 1);
+}
+
+.single__page--cover > * {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.single__page--cover.is-before {
+  transform: rotateY(-180deg);
+  opacity: 1;
+}
+
+.single__cover-back {
+  position: absolute;
+  inset: 0;
+  background: 0 0 / 100% 100% no-repeat;
+  transform: rotateY(180deg);
+}
+
+/* the first page is there as soon as the cover lifts, and stays until the cover has shut over it */
+.single__page--cover.is-before ~ .single__page.is-current {
+  transition: opacity 0.15s;
+}
+
+.single__page--cover.is-current ~ .single__page.is-after {
+  transition: opacity 0s 1.1s;
 }
 
 /* her tabs, her "turn" flap and her index rows: a highlighter stroke when the needle is over them */

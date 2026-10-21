@@ -5,7 +5,7 @@ import { gsap } from '../lib/gsap'
 import { sound } from '../lib/audio'
 import { openAlmirah } from '../lib/story'
 import { beats, easeInOut, live, span, useStory } from '../state/store'
-import { DOORS_CENTRE, DOORWAY, doorsTarget, INSIDE_VIEW, insideCam, OPEN_ZOOM, roomCam } from './cams'
+import { DOORS_CENTRE, DOORWAY, doorsTarget, INSIDE_BACK, INSIDE_VIEW, insideCam, OPEN_ZOOM, roomCam } from './cams'
 import { RoomSwirl } from './RoomSwirl'
 
 /**
@@ -57,31 +57,47 @@ export function Room() {
   const doorR = useRef<HTMLImageElement>(null)
   const behind = useRef<HTMLSpanElement>(null)
   const stage = useStory((s) => s.stage)
-  // her swirls only move while the room is on screen
-  const [onScreen, setOnScreen] = useState(false)
-  const shown = useRef(false)
+  // her swirls only move while the room is lit and on screen
+  const [swirling, setSwirling] = useState(false)
+  const swirls = useRef(false)
+  // the doors are shut and still: only then does the almirah answer the needle
+  const [shut, setShut] = useState(true)
 
   // open the doors and go in (the inside scene takes over in the doorway and finishes the stage);
   // close them on the way back out
   useEffect(() => {
     if (stage === 'opening') {
       sound.creak(1.2)
+      setShut(false)
       const tl = gsap.timeline()
       tl.to(roomCam, { door: 1, duration: 1.15, ease: 'door' }, 0.12)
-      tl.to(roomCam, { z: OPEN_ZOOM, k: 1, duration: 1.3, ease: 'power2.inOut' }, 0.3)
+      tl.to(roomCam, { k: 1, duration: 1.3, ease: 'power2.inOut' }, 0.3)
+      // still moving in while the inside drawing takes over in the doorway (Inside: 1.45 to 2.5 s)
+      tl.to(roomCam, { z: OPEN_ZOOM, duration: 2.2, ease: 'power2.inOut' }, 0.3)
       return () => {
         tl.kill()
       }
     }
     if (stage === 'room' && (roomCam.z !== 1 || roomCam.door !== 0)) {
-      const tl = gsap.timeline()
-      tl.to(roomCam, { z: 1, k: 0, duration: 1.1, ease: 'power2.inOut' }, 0)
-      tl.to(roomCam, { door: 0, duration: 0.9, ease: 'power2.inOut', onComplete: () => sound.click() }, 0.35)
+      setShut(false)
+      // first the inside drawing shrinks back into the doorway (see Inside), then the camera backs off and the doors close
+      const after = insideCam.k > 0 ? INSIDE_BACK + 0.15 : 0
+      const tl = gsap.timeline({ onComplete: () => setShut(true) })
+      tl.to(roomCam, { z: 1, k: 0, duration: 1.1, ease: 'power2.inOut' }, after)
+      tl.to(roomCam, { door: 0, duration: 0.9, ease: 'power2.inOut', onComplete: () => sound.click() }, after + 0.35)
       return () => {
         tl.kill()
       }
     }
     if (stage === 'open' || stage === 'book') Object.assign(roomCam, { z: OPEN_ZOOM, k: 1, door: 1 })
+    if (stage === 'intro') {
+      // replaying the intro: the bulb pulls back onto a closed almirah
+      gsap.killTweensOf(roomCam)
+      gsap.killTweensOf(insideCam)
+      Object.assign(roomCam, { z: 1, k: 0, door: 0 })
+      insideCam.k = 0
+      setShut(true)
+    }
   }, [stage])
 
   useEffect(
@@ -93,9 +109,10 @@ export function Room() {
         const intro = st === 'intro' || st === 'loading'
         const visible = intro ? p >= beats.tear[0] : st === 'room' || st === 'opening' || (st === 'open' && insideCam.k < 1)
         el.style.visibility = visible ? 'visible' : 'hidden'
-        if (visible !== shown.current) {
-          shown.current = visible
-          setOnScreen(visible)
+        const swirl = visible && (!intro || p >= beats.bulb[0])
+        if (swirl !== swirls.current) {
+          swirls.current = swirl
+          setSwirling(swirl)
         }
         if (!visible) return
 
@@ -150,12 +167,12 @@ export function Room() {
     [],
   )
 
-  const clickable = stage === 'room'
+  const clickable = stage === 'room' && shut
 
   return (
     <div ref={root} className={`room ${clickable ? 'is-ready' : ''}`}>
       <div ref={frame} className="art-frame" style={{ width: FRAME.w, height: FRAME.h }}>
-        <RoomSwirl src={art.room} active={onScreen} />
+        <RoomSwirl src={art.room} active={swirling} />
         {regions.room.stars.map(([x, y], i) => (
           <span key={i} className="room__star" style={{ left: x, top: y, animationDelay: `${(i * 0.77) % 3}s` }} />
         ))}

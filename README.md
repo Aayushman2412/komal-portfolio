@@ -20,7 +20,8 @@ layers and animates them ("I will draw this frame and give it to you; you add an
    school-notebook index. Her tabs, her "turn" flap and her index rows are clickable. Project pages
    are made of her pieces (her index paper and PROJECT lettering, her red paper, tape, stickers and
    corner flap): a polaroid that lifts to show a note, an envelope with the concept note, a paper tab
-   that pulls out the spec sheet, fabric swatches that zoom in. Paper sounds for every page.
+   that pulls out the spec sheet, fabric swatches that zoom in. Paper sounds for every page. Phones
+   and portrait tablets show one page at a time.
 
 The cursor is a needle with thread, everywhere.
 
@@ -74,7 +75,7 @@ starts in the room. `?motion=force` overrides that for testing.
 | Her swirls flowing behind the almirah | WebGL, a slow flow over her frame 3 | `src/scenes/RoomSwirl.tsx` |
 | The feed and its glitch | one canvas 2D: her cards, her header pieces, her band textures | `src/scenes/Feed.tsx` |
 | Dark, bulb, pull-back, doors | CSS transforms and a radial mask over her frame 3 | `src/scenes/Room.tsx` |
-| Inside, dust, the book's flight | DOM + a small dust canvas, GSAP | `src/scenes/Inside.tsx` |
+| Inside, dust, the book's flight | DOM + a small dust canvas, GSAP; the flight is a perspective (`matrix3d`) map from her drawn cover's corners onto the closed book's | `src/scenes/Inside.tsx` |
 | The scrapbook | DOM + CSS 3D page turns over her page images | `src/ui/scrapbook/` |
 | Needle and thread | canvas, a verlet rope | `src/ui/Cursor.tsx` |
 | Scroll scrubbing | Lenis + GSAP ScrollTrigger | `src/lib/scroll.ts` |
