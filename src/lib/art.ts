@@ -11,6 +11,8 @@ export { regions }
 // absolute URLs, so the site also works from a sub-path (and inside CSS variables, which resolve
 // relative URLs against the stylesheet that uses them, not the page)
 const a = (p: string) => new URL(`${import.meta.env.BASE_URL}art/${p}`, document.baseURI).href
+/** Any file under public/ (her project pages and the pieces cut from them, see scripts/slice-projects.py). */
+export const publicUrl = (p: string) => new URL(`${import.meta.env.BASE_URL}${p}`, document.baseURI).href
 
 export const art = {
   feed: {
