@@ -1,11 +1,11 @@
-import type { Swatch } from '../../content/site'
+import type { SwatchKind } from '../../content/site'
 import { canvas, grain, mottle, rng, withAlpha } from './util'
 
 /**
- * Hand-drawn-looking Indian textiles. The same drawings dress the 3D clothes in the almirah and
- * the fabric swatches taped into the scrapbook, so the two worlds share one material language.
+ * Hand-drawn-looking Indian textiles for the fabric swatches on the project pages, standing in
+ * until Komal photographs the real fabrics (a swatch's `src` replaces its drawing).
  */
-type Kind = Swatch['kind']
+type Kind = SwatchKind
 
 function gingham(ctx: CanvasRenderingContext2D, s: number, a: string, b: string) {
   ctx.fillStyle = b
@@ -161,119 +161,8 @@ export function drawFabric(kind: Kind, size = 256, seed = 7): HTMLCanvasElement 
 
 const urlCache = new Map<string, string>()
 /** Data URL for CSS backgrounds (scrapbook swatches). */
-export function fabricUrl(kind: Kind) {
-  if (!urlCache.has(kind)) urlCache.set(kind, drawFabric(kind, 256).toDataURL('image/jpeg', 0.85))
-  return urlCache.get(kind)!
-}
-
-export type GarmentCut = 'dress' | 'kurta' | 'shirt' | 'skirt' | 'dupatta' | 'jacket'
-
-/**
- * A garment = fabric clipped to a cut. Top edge is the hanger line. Transparent outside the cut,
- * so a rectangular cloth grid reads as a real garment (material uses alphaTest).
- */
-export function drawGarment(cut: GarmentCut, kind: Kind, seed: number): HTMLCanvasElement {
-  const W = 256
-  const H = 384
-  const { c, ctx } = canvas(W, H)
-  const fab = drawFabric(kind, 256, seed)
-  const cx = W / 2
-  ctx.beginPath()
-  switch (cut) {
-    case 'dress':
-      ctx.moveTo(cx - 60, 0)
-      ctx.lineTo(cx - 92, 40)
-      ctx.lineTo(cx - 70, 70)
-      ctx.lineTo(cx - 52, 150)
-      ctx.quadraticCurveTo(cx - 120, 300, cx - 124, H)
-      ctx.lineTo(cx + 124, H)
-      ctx.quadraticCurveTo(cx + 120, 300, cx + 52, 150)
-      ctx.lineTo(cx + 70, 70)
-      ctx.lineTo(cx + 92, 40)
-      ctx.lineTo(cx + 60, 0)
-      ctx.quadraticCurveTo(cx, 42, cx - 60, 0)
-      break
-    case 'kurta':
-      ctx.moveTo(cx - 62, 0)
-      ctx.lineTo(cx - 120, 36)
-      ctx.lineTo(cx - 108, 150)
-      ctx.lineTo(cx - 78, 132)
-      ctx.lineTo(cx - 80, H)
-      ctx.lineTo(cx + 80, H)
-      ctx.lineTo(cx + 78, 132)
-      ctx.lineTo(cx + 108, 150)
-      ctx.lineTo(cx + 120, 36)
-      ctx.lineTo(cx + 62, 0)
-      ctx.lineTo(cx + 10, 0)
-      ctx.lineTo(cx, 56)
-      ctx.lineTo(cx - 10, 0)
-      break
-    case 'shirt':
-      ctx.moveTo(cx - 64, 0)
-      ctx.lineTo(cx - 122, 40)
-      ctx.lineTo(cx - 116, 210)
-      ctx.lineTo(cx - 84, 200)
-      ctx.lineTo(cx - 84, 290)
-      ctx.quadraticCurveTo(cx, 312, cx + 84, 290)
-      ctx.lineTo(cx + 84, 200)
-      ctx.lineTo(cx + 116, 210)
-      ctx.lineTo(cx + 122, 40)
-      ctx.lineTo(cx + 64, 0)
-      ctx.quadraticCurveTo(cx, 26, cx - 64, 0)
-      break
-    case 'skirt':
-      ctx.moveTo(cx - 70, 0)
-      ctx.lineTo(cx + 70, 0)
-      ctx.quadraticCurveTo(cx + 116, 200, cx + 124, 330)
-      ctx.lineTo(cx - 124, 330)
-      ctx.quadraticCurveTo(cx - 116, 200, cx - 70, 0)
-      break
-    case 'dupatta':
-      ctx.rect(cx - 70, 0, 140, H)
-      break
-    case 'jacket':
-      ctx.moveTo(cx - 64, 0)
-      ctx.lineTo(cx - 124, 44)
-      ctx.lineTo(cx - 118, 230)
-      ctx.lineTo(cx - 88, 226)
-      ctx.lineTo(cx - 86, 250)
-      ctx.lineTo(cx + 86, 250)
-      ctx.lineTo(cx + 88, 226)
-      ctx.lineTo(cx + 118, 230)
-      ctx.lineTo(cx + 124, 44)
-      ctx.lineTo(cx + 64, 0)
-      ctx.quadraticCurveTo(cx, 30, cx - 64, 0)
-      break
-  }
-  ctx.closePath()
-  ctx.save()
-  ctx.clip()
-  for (let y = 0; y < H; y += 256) ctx.drawImage(fab, 0, y)
-  // seams and shading so the flat drawing reads as a garment
-  ctx.strokeStyle = 'rgba(0,0,0,0.18)'
-  ctx.lineWidth = 2
-  ctx.setLineDash([5, 4])
-  ctx.stroke()
-  ctx.setLineDash([])
-  const shade = ctx.createLinearGradient(0, 0, W, 0)
-  shade.addColorStop(0, 'rgba(0,0,0,0.25)')
-  shade.addColorStop(0.5, 'rgba(255,255,255,0.05)')
-  shade.addColorStop(1, 'rgba(0,0,0,0.25)')
-  ctx.fillStyle = shade
-  ctx.fillRect(0, 0, W, H)
-  if (cut === 'dupatta') {
-    // tassels along the bottom edge
-    ctx.fillStyle = '#e8b64c'
-    for (let x = cx - 66; x < cx + 66; x += 10) ctx.fillRect(x, H - 14, 3, 14)
-  }
-  if (cut === 'shirt' || cut === 'jacket') {
-    ctx.fillStyle = 'rgba(240,235,220,0.9)'
-    for (let y = 60; y < 240; y += 40) {
-      ctx.beginPath()
-      ctx.arc(cx, y, 4, 0, Math.PI * 2)
-      ctx.fill()
-    }
-  }
-  ctx.restore()
-  return c
+export function fabricUrl(kind: Kind, size = 256) {
+  const key = `${kind}:${size}`
+  if (!urlCache.has(key)) urlCache.set(key, drawFabric(kind, size).toDataURL('image/jpeg', 0.86))
+  return urlCache.get(key)!
 }

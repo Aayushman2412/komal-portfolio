@@ -1,46 +1,24 @@
-import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
+import { Feed } from './scenes/Feed'
+import { Inside } from './scenes/Inside'
+import { Room } from './scenes/Room'
 import { useStory } from './state/store'
 import { Controls } from './ui/Controls'
+import { Cursor } from './ui/Cursor'
 import { Director } from './ui/Director'
-import { IntroHud } from './ui/IntroHud'
 import { Preloader } from './ui/Preloader'
-import { StoryText } from './ui/StoryText'
 import { Scrapbook } from './ui/scrapbook/Scrapbook'
 
-const Experience = lazy(() => import('./three/Experience').then((m) => ({ default: m.Experience })))
-
 /**
- * Layers, back to front: the WebGL story (fixed), the tall scroll track that drives it, the AI
- * app's HUD, narration, controls, the scrapbook, and the preloader.
+ * Layers, back to front: the room (her frame 3), the feed (frames 1 and 2) over it until the power
+ * cut, the inside of the almirah (frame 4), the tall scroll track that drives the intro, controls,
+ * the scrapbook (frames 5 and 6 and the project pages), the black first page, and the needle.
  */
 export function App() {
   const track = useRef<HTMLDivElement>(null)
   const [ready, setReady] = useState(false)
-  const [painted, setPainted] = useState(false)
   const stage = useStory((s) => s.stage)
   const onReady = useCallback(() => setReady(true), [])
-
-  // give the scene a few frames to compile shaders before the preloader lifts
-  // (with a timeout, because a background tab never gets those frames)
-  useEffect(() => {
-    if (!ready) return
-    let n = 0
-    let id = 0
-    const done = () => {
-      performance.mark('scene:painted')
-      setPainted(true)
-    }
-    const tick = () => {
-      if (++n > 8) done()
-      else id = requestAnimationFrame(tick)
-    }
-    id = requestAnimationFrame(tick)
-    const fallback = window.setTimeout(done, 2500)
-    return () => {
-      cancelAnimationFrame(id)
-      window.clearTimeout(fallback)
-    }
-  }, [ready])
 
   return (
     <>
@@ -48,21 +26,19 @@ export function App() {
         Skip the intro and open the index
       </a>
       <p className="sr-only">
-        An interactive story. A feed of AI-generated fashion overloads and an old television switches off. A bulb
-        comes on over a steel almirah; inside it, among the clothes, is the scrapbook that holds this portfolio.
+        An interactive story drawn by Komal Singh. A feed of identical AI-made dresses speeds up, glitches and cuts to
+        black. A bulb comes on over her nani's carved wooden almirah; inside it, among folded clothes and a tin box, is
+        the scrapbook she made as a child, which holds this portfolio.
       </p>
-      {ready && (
-        <Suspense fallback={null}>
-          <Experience />
-        </Suspense>
-      )}
+      <Room />
+      <Feed />
+      <Inside />
       <div ref={track} className="scroll-track" aria-hidden />
-      <Director track={track} ready={painted} />
-      <IntroHud />
-      <StoryText />
+      <Director track={track} ready={ready} />
       <Controls />
       {stage === 'book' && <Scrapbook />}
-      <Preloader onReady={onReady} canHide={painted} />
+      <Preloader onReady={onReady} />
+      <Cursor />
     </>
   )
 }

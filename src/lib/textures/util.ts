@@ -1,5 +1,3 @@
-import * as THREE from 'three'
-
 /** Small seeded PRNG so every visit draws the same textures. */
 export function rng(seed: number) {
   let a = seed >>> 0
@@ -18,18 +16,6 @@ export function canvas(w: number, h: number) {
   c.height = h
   const ctx = c.getContext('2d', { willReadFrequently: false })!
   return { c, ctx }
-}
-
-export function toTexture(c: HTMLCanvasElement, opts: { repeat?: number; srgb?: boolean; aniso?: number } = {}) {
-  const t = new THREE.CanvasTexture(c)
-  if (opts.srgb !== false) t.colorSpace = THREE.SRGBColorSpace
-  if (opts.repeat) {
-    t.wrapS = t.wrapT = THREE.RepeatWrapping
-    t.repeat.set(opts.repeat, opts.repeat)
-  }
-  t.anisotropy = opts.aniso ?? 8
-  t.needsUpdate = true
-  return t
 }
 
 /** Soft mottling: many faint blotches. Cheap stand-in for value noise on a 2D canvas. */
@@ -93,16 +79,6 @@ export function withAlpha(hex: string, a: number) {
   const h = hex.replace('#', '')
   const n = parseInt(h.length === 3 ? h.split('').map((c) => c + c).join('') : h, 16)
   return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`
-}
-
-export function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
-  ctx.beginPath()
-  ctx.moveTo(x + r, y)
-  ctx.arcTo(x + w, y, x + w, y + h, r)
-  ctx.arcTo(x + w, y + h, x, y + h, r)
-  ctx.arcTo(x, y + h, x, y, r)
-  ctx.arcTo(x, y, x + w, y, r)
-  ctx.closePath()
 }
 
 /** Wait for the fonts the canvases draw with, so text never renders in a fallback face. */

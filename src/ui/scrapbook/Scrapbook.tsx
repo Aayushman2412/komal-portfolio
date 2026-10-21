@@ -1,37 +1,47 @@
 import { ArrowLeft, ArrowRight, BookOpen, X } from '@phosphor-icons/react'
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as RPointerEvent } from 'react'
 import { site } from '../../content/site'
-import { getAssets } from '../../lib/assets'
+import { art } from '../../lib/art'
 import { sound } from '../../lib/audio'
 import { gsap, prefersReducedMotion } from '../../lib/gsap'
 import { closeBook } from '../../lib/story'
 import { useStory } from '../../state/store'
-import { buildFaces, type Face } from './pages'
+import { Spot } from './bits'
+import { buildFaces, type Face, type Go } from './pages'
 import { pageSize } from './size'
 
 /**
- * The scrapbook, in the DOM so it is crisp, selectable and accessible.
- * Desktop: a two-page spread with real 3D page turns (click a page, drag its edge, or use the
- * arrow keys; jumping from the index riffles through the pages in between).
- * Phones: one page at a time, swipe or tap the arrows.
- * It appears exactly over the 3D book that flew out of the almirah, closed, then opens.
+ * The scrapbook. Desktop: a two-page spread with real 3D page turns (click a page, drag its edge,
+ * use the arrow keys, or click her tabs and index rows; jumping riffles through the pages in
+ * between). Phones: one page at a time, swipe or tap the arrows.
+ * It appears where the book from the almirah landed, closed, and opens itself on "who is she?".
  */
 function faceToSpread(f: number) {
   return f % 2 ? (f + 1) / 2 : f / 2
 }
 
 function hashFor(face: Face | undefined) {
-  if (!face || face.id === 'cover' || face.id === 'about' || face.id === 'back' || face.id === 'blank') return '#book'
+  if (!face) return '#book'
   if (face.id === 'index') return '#index'
   const slug = face.id.replace(/:r$/, '')
   if (site.projects.some((p) => p.slug === slug)) return `#p/${slug}`
   return '#book'
 }
 
+function FaceView({ face, go }: { face: Face; go: Go }) {
+  return (
+    <>
+      <img className="page__art" src={face.src} alt="" draggable={false} />
+      {face.render && <div className="page__content">{face.render(go)}</div>}
+      {face.spots?.map((s, i) => <Spot key={i} box={s.box} label={s.label} onGo={() => go(s.to)} />)}
+    </>
+  )
+}
+
 export function Scrapbook() {
   const bookLanded = useStory((s) => s.bookLanded)
   const bookTarget = useStory((s) => s.bookTarget)
-  const faces = useMemo(() => buildFaces(getAssets().coverCanvas), [])
+  const faces = useMemo(buildFaces, [])
   const N = faces.length / 2
   const [size, setSize] = useState(pageSize)
   const [spread, setSpread] = useState(0)
@@ -82,7 +92,7 @@ export function Scrapbook() {
           o,
           {
             a: forward ? 180 : 0,
-            duration: reduced ? 0.01 : fast || ids.length > 1 ? 0.55 : 0.85,
+            duration: reduced ? 0.01 : fast || ids.length > 1 ? 0.55 : 0.9,
             ease: 'power2.inOut',
             onStart: () => sound.page(),
             onUpdate: () => {
@@ -123,20 +133,18 @@ export function Scrapbook() {
     [faces, goFace],
   )
 
-  // appear over the 3D book, then open to wherever the visit asked for
+  // appear where the book landed, closed, then open on wherever the visit asked for
   useEffect(() => {
     if (!bookLanded || !layer.current) return
     gsap.fromTo(layer.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: reduced ? 0.01 : 0.35, ease: 'power1.out' })
     closeBtn.current?.focus({ preventScroll: true })
-    const t = bookTarget && bookTarget !== 'cover' ? bookTarget : null
-    if (t) {
-      const id = window.setTimeout(() => goTarget(t), 450)
-      return () => window.clearTimeout(id)
-    }
+    const t = !bookTarget || bookTarget === 'cover' ? 'who' : bookTarget
+    const id = window.setTimeout(() => goTarget(t), reduced ? 0 : bookTarget === 'cover' ? 750 : 420)
+    return () => window.clearTimeout(id)
   }, [bookLanded]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // the page that names where you are: the right-hand page of a spread, or the single page
-  const current = single ? faces[face] : faces[Math.min(faces.length - 1, spread * 2)] ?? faces[spread * 2 - 1]
+  const current = single ? faces[face] : (faces[Math.min(faces.length - 1, spread * 2)] ?? faces[spread * 2 - 1])
   useEffect(() => {
     if (!bookLanded) return
     history.replaceState(null, '', location.pathname + location.search + hashFor(current))
@@ -146,7 +154,7 @@ export function Scrapbook() {
     if (busy.current) return
     if (!single && spread > 0) await goSpread(0, true)
     if (single) setFace(0)
-    if (layer.current) await gsap.to(layer.current, { autoAlpha: 0, duration: reduced ? 0.01 : 0.25 })
+    if (layer.current) await gsap.to(layer.current, { autoAlpha: 0, duration: reduced ? 0.01 : 0.3 })
     closeBook()
   }, [single, spread, goSpread, reduced])
 
@@ -155,7 +163,7 @@ export function Scrapbook() {
 
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
-      if (!bookLanded) return
+      if (!bookLanded || document.querySelector('.zoom')) return
       if (e.key === 'ArrowRight') next()
       else if (e.key === 'ArrowLeft') prev()
       else if (e.key === 'Escape') close()
@@ -165,18 +173,18 @@ export function Scrapbook() {
   }, [bookLanded, next, prev, close])
 
   // drag a page by its edge (desktop) or swipe (phone)
-  const drag = useRef<{ x: number; leaf: number; dir: 1 | -1; moved: boolean; id: number } | null>(null)
+  const drag = useRef<{ x: number; leaf: number; dir: 1 | -1; moved: boolean } | null>(null)
   const onDown = (e: RPointerEvent) => {
     if ((e.target as HTMLElement).closest('[data-interactive]') || busy.current) return
     const rect = stageEl.current!.getBoundingClientRect()
     if (single) {
-      drag.current = { x: e.clientX, leaf: -1, dir: 1, moved: false, id: e.pointerId }
+      drag.current = { x: e.clientX, leaf: -1, dir: 1, moved: false }
       return
     }
     const spine = rect.left + rect.width / 2
     const right = e.clientX > spine
-    if (right && spread < N) drag.current = { x: e.clientX, leaf: spread, dir: 1, moved: false, id: e.pointerId }
-    else if (!right && spread > 0) drag.current = { x: e.clientX, leaf: spread - 1, dir: -1, moved: false, id: e.pointerId }
+    if (right && spread < N) drag.current = { x: e.clientX, leaf: spread, dir: 1, moved: false }
+    else if (!right && spread > 0) drag.current = { x: e.clientX, leaf: spread - 1, dir: -1, moved: false }
     else return
     stageEl.current!.setPointerCapture(e.pointerId)
   }
@@ -231,6 +239,7 @@ export function Scrapbook() {
 
   const shift = single ? 0 : spread === 0 ? -0.5 : spread === N ? 0.5 : 0
   const visibleFace = (f: number) => (single ? f === face : f === spread * 2 || f === spread * 2 - 1)
+  const faceStyle = (f: Face) => ({ ['--face' as string]: `url(${f.src})` }) as CSSProperties
 
   return (
     <div
@@ -239,12 +248,9 @@ export function Scrapbook() {
       role="dialog"
       aria-modal="true"
       aria-label={`${site.name}'s scrapbook`}
-      style={{ visibility: 'hidden', opacity: 0 }}
+      style={{ visibility: 'hidden', opacity: 0, backgroundImage: `url(${art.table})` }}
     >
-      <div
-        className={`book ${single ? 'book--single' : 'book--spread'}`}
-        style={{ ['--pw' as string]: `${size.w}px`, ['--ph' as string]: `${size.h}px` }}
-      >
+      <div className={`book ${single ? 'book--single' : 'book--spread'}`} style={{ ['--pw' as string]: `${size.w}px`, ['--ph' as string]: `${size.h}px` }}>
         <div
           ref={stageEl}
           className="book__stage"
@@ -258,8 +264,8 @@ export function Scrapbook() {
             <div className="single">
               {faces.map((f, i) =>
                 Math.abs(i - face) <= 1 ? (
-                  <div key={f.id} className={`page paper-${f.paper} single__page ${i === face ? 'is-current' : i < face ? 'is-before' : 'is-after'}`} inert={i !== face}>
-                    {f.render(goTarget)}
+                  <div key={f.id} className={`page single__page ${i === face ? 'is-current' : i < face ? 'is-before' : 'is-after'}`} inert={i !== face} style={faceStyle(f)}>
+                    <FaceView face={f} go={goTarget} />
                   </div>
                 ) : null,
               )}
@@ -267,12 +273,12 @@ export function Scrapbook() {
           ) : (
             Array.from({ length: N }, (_, i) => (
               <div key={i} ref={(el) => void (leaves.current[i] = el)} className="leaf">
-                <div className={`page leaf__front paper-${faces[i * 2].paper}`} inert={!visibleFace(i * 2)}>
-                  {faces[i * 2].render(goTarget)}
+                <div className="page leaf__front" inert={!visibleFace(i * 2)} style={faceStyle(faces[i * 2])}>
+                  <FaceView face={faces[i * 2]} go={goTarget} />
                   <span className="leaf__shade" />
                 </div>
-                <div className={`page leaf__back paper-${faces[i * 2 + 1].paper}`} inert={!visibleFace(i * 2 + 1)}>
-                  {faces[i * 2 + 1].render(goTarget)}
+                <div className="page leaf__back" inert={!visibleFace(i * 2 + 1)} style={faceStyle(faces[i * 2 + 1])}>
+                  <FaceView face={faces[i * 2 + 1]} go={goTarget} />
                   <span className="leaf__shade" />
                 </div>
               </div>
@@ -291,7 +297,7 @@ export function Scrapbook() {
         </button>
         <button onClick={() => goTarget('index')} className="book-nav__index">
           <BookOpen size={18} weight="bold" />
-          Index
+          index
         </button>
         <button ref={closeBtn} onClick={close} aria-label="Close the scrapbook">
           <X size={18} weight="bold" />

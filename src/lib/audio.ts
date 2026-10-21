@@ -1,6 +1,8 @@
 /**
  * All sound is synthesised with the Web Audio API: no files to load, and every sound can follow
  * the scroll. Off by default; the toggle in the corner unlocks the AudioContext on a user gesture.
+ * After the feed it is all old-house sound, as nostalgic as Komal asked for: the wall switch and
+ * the bulb, the almirah's latch and creak, pages turning. (No clothes rustle: she asked for it gone.)
  */
 import { voiceDrop, voiceSpark, voiceSwitch, voiceThunk, voiceTicks } from './bulbSound'
 
@@ -59,7 +61,7 @@ function build() {
     return o
   })
 
-  // CRT static and whine
+  // the glitch: static and a whine
   staticGain = c.createGain()
   staticGain.gain.value = 0
   staticFilter = c.createBiquadFilter()
@@ -188,10 +190,6 @@ export const sound = {
 
   page() {
     this.burst(0.18, 3000, 0.28, 0.9)
-  },
-
-  rustle() {
-    this.burst(0.35, 1800, 0.08, 0.5)
   },
 
   burst(len: number, freq: number, vol: number, q = 0.8) {

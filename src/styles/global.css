@@ -1,31 +1,23 @@
 :root {
-  --night: #070605;
-  --warm: #f4e6cf;
-  --warm-dim: rgba(244, 230, 207, 0.62);
-  --ai-bg: #efeeea;
-  --ai-ink: #141418;
-  --ai-mute: #6b6b75;
-  --ai-accent: #3d5afe;
-  --paper: #f3ecdc;
-  --kraft: #b98d5f;
-  --ink: #1f1a17;
-  --thread: #b3261e;
+  --black: #0c0c0c;
+  --table: #291c16;
+  --ink: #1b1b22;
+  --navy: #1e2a52;
+  --periwinkle: #8ea2ee;
+  --tab-yellow: #f5c443;
+  --pink: #e9508e;
+  --thread: #d42b45;
 
-  --f-ai: 'Instrument Sans Variable', system-ui, sans-serif;
-  --f-mono: 'IBM Plex Mono', ui-monospace, monospace;
-  --f-hand: 'Caveat Variable', 'Gochi Hand', cursive;
-  --f-kid: 'Gochi Hand', cursive;
-  --f-type: 'Special Elite', 'IBM Plex Mono', monospace;
-  --f-bodoni: 'Bodoni Moda Variable', serif;
-  --f-marker: 'Permanent Marker', cursive;
-  --f-osd: 'VT323', monospace;
+  /* her lettering: handwriting for labels, a looser hand for notes, a typewriter for the TV-style message */
+  --f-hand: 'Gochi Hand', 'Comic Sans MS', cursive;
+  --f-note: 'Caveat Variable', 'Gochi Hand', cursive;
+  --f-osd: 'Special Elite', ui-monospace, monospace;
 
-  /* layers: canvas < hud < story < controls < book < preloader */
-  --z-hud: 10;
-  --z-story: 20;
+  /* layers: room < feed < inside < controls < book < black page < needle */
   --z-controls: 30;
   --z-book: 40;
-  --z-pre: 50;
+  --z-pre: 60;
+  --z-needle: 1000;
 
   color-scheme: dark;
 }
@@ -39,9 +31,9 @@
 html,
 body {
   margin: 0;
-  background: var(--night);
-  color: var(--warm);
-  font-family: var(--f-ai);
+  background: var(--black);
+  color: #f6efe6;
+  font-family: var(--f-hand);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: none;
 }
@@ -55,10 +47,23 @@ button {
   color: inherit;
 }
 
-.stage-canvas {
+img {
+  -webkit-user-drag: none;
+}
+
+/* the needle replaces the arrow everywhere (mouse and pen only; see Cursor.tsx) */
+.has-needle,
+.has-needle * {
+  cursor: none !important;
+}
+
+.needle {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-needle);
+  pointer-events: none;
 }
 
 .scroll-track {
@@ -95,17 +100,40 @@ button {
   z-index: 100;
   padding: 10px 16px;
   border-radius: 999px;
-  background: var(--warm);
+  background: var(--periwinkle);
   color: var(--ink);
-  font-weight: 600;
 }
 
 :focus-visible {
-  outline: 2px solid #ffcf7a;
+  outline: 2px dashed #ffd76a;
   outline-offset: 3px;
 }
 
-/* ---------- controls ---------- */
+/* ---------- the black first page ---------- */
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-pre);
+  background: var(--black) url(/art/black.webp);
+  display: grid;
+  place-items: end center;
+  padding-bottom: 7vh;
+}
+
+.preloader__label {
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.4);
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.preloader__label.is-on {
+  opacity: 1;
+  animation: blink 1.4s steps(2) infinite;
+}
+
+/* ---------- controls: tabs like the ones in her feed ---------- */
 
 .controls {
   position: fixed;
@@ -119,28 +147,55 @@ button {
   pointer-events: auto;
 }
 
-.namemark {
-  position: absolute;
-  left: clamp(16px, 3vw, 32px);
-  top: clamp(16px, 3vw, 28px);
-  display: grid;
-  gap: 2px;
-  opacity: 0;
-  color: var(--warm);
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 16px 2px;
+  border: 0;
+  border-radius: 999px;
+  background-color: var(--periwinkle);
+  background-image: url(/art/feed-bg.webp);
+  background-size: 256px;
+  background-blend-mode: multiply;
+  color: var(--ink);
+  font-family: var(--f-hand);
+  font-size: 17px;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.45) inset, 0 4px 14px rgba(0, 0, 0, 0.22);
+  transition: transform 0.15s, filter 0.2s;
 }
 
-.namemark strong {
-  font-family: var(--f-hand);
-  font-size: clamp(24px, 2.4vw, 32px);
-  font-weight: 600;
-  line-height: 1;
+.tab:hover {
+  filter: brightness(1.07);
+}
+
+.tab:active {
+  transform: scale(0.96);
+}
+
+.tab--dark {
+  background-color: var(--navy);
+  color: #fff;
+  background-blend-mode: soft-light;
+}
+
+.namemark {
+  position: absolute;
+  left: clamp(16px, 3vw, 28px);
+  top: clamp(14px, 2.6vw, 24px);
+  margin: 0;
+  font-size: clamp(20px, 2vw, 26px);
+  color: #fff;
+  text-shadow: 0 1px 10px rgba(60, 10, 30, 0.55);
 }
 
 .namemark span {
-  font-family: var(--f-type);
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  color: var(--warm-dim);
+  display: block;
+  font-size: 0.68em;
+  opacity: 0.8;
 }
 
 .controls__top {
@@ -151,56 +206,20 @@ button {
   gap: 8px;
 }
 
-.chip,
-.sound {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 999px;
-  border: 1px solid rgba(244, 230, 207, 0.22);
-  background: rgba(14, 11, 9, 0.55);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: var(--warm);
-  font-size: 14px;
-  font-weight: 500;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: background 0.25s, transform 0.15s, border-color 0.25s;
+/* in the feed the controls sit low, out of the way of her app bar */
+.controls--intro .controls__top {
+  bottom: clamp(16px, 3vw, 28px);
 }
 
-.chip:hover,
-.sound:hover {
-  background: rgba(40, 30, 22, 0.75);
-  border-color: rgba(244, 230, 207, 0.45);
-}
-
-.chip:active,
-.sound:active {
-  transform: scale(0.97);
-}
-
-.chip--loud {
-  background: var(--warm);
-  color: var(--ink);
-  border-color: var(--warm);
-}
-
-.chip--loud:hover {
-  background: #fff3df;
-}
-
-.chip--close {
+.tab--close {
   position: absolute;
   left: 50%;
   bottom: clamp(16px, 3vw, 28px);
   transform: translateX(-50%);
 }
 
-.chip--close:active {
-  transform: translateX(-50%) scale(0.97);
+.tab--close:active {
+  transform: translateX(-50%) scale(0.96);
 }
 
 .sound {
@@ -210,113 +229,41 @@ button {
   z-index: 45;
 }
 
+/* in the feed, her originality pill owns the bottom left */
+body:has(.controls--intro) .sound,
+body:has(.controls--loading) .sound {
+  left: auto;
+  right: clamp(16px, 3vw, 28px);
+  bottom: calc(clamp(16px, 3vw, 28px) + 46px);
+}
+
 @media (max-width: 767px) {
   .controls__top {
-    left: 16px;
-    right: auto;
-    bottom: 64px;
+    right: 12px;
+    bottom: 12px;
     flex-wrap: wrap;
+    justify-content: flex-end;
   }
   .sound span {
     display: none;
   }
   .sound {
-    width: 40px;
+    width: 38px;
     padding: 0;
     justify-content: center;
+    left: 12px;
+    bottom: 12px;
   }
-  /* the book's page controls own the bottom row on phones */
   body:has(.book-layer) .sound {
     bottom: 78px;
   }
-  .chip--close {
-    bottom: 112px;
+  .tab--close {
+    bottom: 60px;
   }
 }
 
-/* ---------- hints anchored in 3D ---------- */
-
-.hint {
-  font-family: var(--f-hand);
-  font-size: clamp(26px, 2.4vw, 34px);
-  font-weight: 600;
-  color: #fff4dd;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
-  white-space: nowrap;
-  user-select: none;
-  animation: hint-bob 2.4s ease-in-out infinite;
-}
-
-.hint::after {
-  content: '';
-  display: block;
-  width: 46px;
-  height: 26px;
-  margin: 2px auto 0;
-  border-bottom: 3px solid #fff4dd;
-  border-left: 3px solid transparent;
-  border-radius: 0 0 40px 40px;
-  transform: rotate(-12deg);
-  opacity: 0.85;
-}
-
-.hint--book {
-  transform: rotate(-6deg);
-}
-
-@keyframes hint-bob {
-  0%,
-  100% {
-    translate: 0 0;
-  }
+@keyframes blink {
   50% {
-    translate: 0 -6px;
-  }
-}
-
-/* ---------- narration ---------- */
-
-.story {
-  position: fixed;
-  inset: 0;
-  z-index: var(--z-story);
-  pointer-events: none;
-  display: grid;
-  place-items: center;
-}
-
-.story p {
-  grid-area: 1 / 1;
-  margin: 0;
-  opacity: 0;
-  padding: 0 24px;
-  text-align: center;
-}
-
-.story__off {
-  align-self: end;
-  margin-bottom: 18vh !important;
-  font-family: var(--f-osd);
-  font-size: clamp(28px, 4vw, 52px);
-  color: #e9e3cf;
-  text-transform: uppercase;
-  text-shadow: 0 0 18px rgba(255, 240, 200, 0.45);
-}
-
-.story__room {
-  align-self: end;
-  margin-bottom: 14vh !important;
-  font-family: var(--f-hand);
-  font-size: clamp(28px, 3.2vw, 46px);
-  font-weight: 500;
-  color: #fff1d9;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
-  max-width: 22ch;
-  line-height: 1.1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hint {
-    animation: none;
+    opacity: 0;
   }
 }
