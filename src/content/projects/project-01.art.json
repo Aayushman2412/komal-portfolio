@@ -37,40 +37,40 @@
   },
   "moodboard": {
    "src": "projects/project-01/moodboard.webp",
-   "w": 865,
-   "h": 981,
+   "w": 870,
+   "h": 976,
    "page": 2,
    "box": [
-    25,
-    78,
-    890,
+    22,
+    83,
+    892,
     1059
    ],
    "alt": "Her inspiration and silhouette board: a collage of a giant leaf, mushrooms, Venus flytraps, moss, an uncanny face and knit, ruffled and layered references, with four Pantone chips and her labels."
   },
   "inspiration": {
    "src": "projects/project-01/inspiration.webp",
-   "w": 849,
-   "h": 505,
+   "w": 852,
+   "h": 502,
    "page": 2,
    "box": [
     40,
-    80,
-    889,
+    83,
+    892,
     585
    ],
    "alt": "The INSPIRATION half of her board: a giant leaf, mushrooms, Venus flytraps, moss, curling green tendrils, dark hair and an uncanny face, labelled ominous, raw, textures, earthy and uncanny, with four Pantone chips."
   },
   "silhouette": {
    "src": "projects/project-01/silhouette.webp",
-   "w": 793,
-   "h": 527,
+   "w": 797,
+   "h": 513,
    "page": 2,
    "box": [
     40,
-    530,
-    833,
-    1057
+    546,
+    837,
+    1059
    ],
    "alt": "The SILHOUTTE half of her board: a strapless pink bodycon gown, an oversized ribbed turtleneck, a flared gown, layered rough-edged fabric, pink ruffles, a patchwork knit and two flytrap embellishments, each labelled."
   },
@@ -90,11 +90,11 @@
   "heading-silhouette": {
    "src": "projects/project-01/heading-silhouette.webp",
    "w": 208,
-   "h": 60,
+   "h": 59,
    "page": 2,
    "box": [
     623,
-    872,
+    873,
     831,
     932
    ],
@@ -167,12 +167,12 @@
   },
   "mushrooms": {
    "src": "projects/project-01/mushrooms.webp",
-   "w": 179,
-   "h": 270,
+   "w": 174,
+   "h": 268,
    "page": 2,
    "box": [
-    384,
-    81,
+    389,
+    83,
     563,
     351
    ],
@@ -453,14 +453,14 @@
   },
   "makeup-face": {
    "src": "projects/project-01/makeup-face.webp",
-   "w": 682,
-   "h": 1080,
+   "w": 680,
+   "h": 1076,
    "page": 3,
    "box": [
     938,
-    0,
-    1620,
-    1080
+    2,
+    1618,
+    1078
    ],
    "alt": "Makeup reference: a face with red-lined eyes, lime brows, glossy red and gold lips, and Venus flytraps worn in the hair like ears."
   },
