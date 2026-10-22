@@ -24,79 +24,79 @@
  "cuts": {
   "cover": {
    "src": "projects/project-01/cover.webp",
-   "w": 1399,
+   "w": 1397,
    "h": 826,
    "page": 1,
    "box": [
-    126,
+    128,
     0,
     1525,
     826
    ],
-   "alt": "Her project cover: a glitched close-up of leaf veins, pink-red leaf flesh between dark green veins, with pixel blocks and colour bands breaking up the bottom."
+   "alt": "Her project cover: a glitched close-up of leaf veins, pink-red leaf between dark green veins, with grey pixel blocks and a band of colour noise along the bottom."
   },
   "moodboard": {
    "src": "projects/project-01/moodboard.webp",
-   "w": 870,
+   "w": 864,
    "h": 976,
    "page": 2,
    "box": [
     22,
     83,
-    892,
+    886,
     1059
    ],
-   "alt": "Her inspiration and silhouette board: a collage of a giant leaf, mushrooms, Venus flytraps, moss, an uncanny face and knit, ruffled and layered references, with four Pantone chips and her labels."
+   "alt": "Her inspiration and silhouette board: a collage of a giant leaf, mushrooms, Venus flytraps, moss, an uncanny face, gowns, an oversized knit and ruffled, layered fabrics, with four Pantone chips and her labels."
   },
   "inspiration": {
    "src": "projects/project-01/inspiration.webp",
-   "w": 852,
+   "w": 846,
    "h": 502,
    "page": 2,
    "box": [
     40,
     83,
-    892,
+    886,
     585
    ],
-   "alt": "The INSPIRATION half of her board: a giant leaf, mushrooms, Venus flytraps, moss, curling green tendrils, dark hair and an uncanny face, labelled ominous, raw, textures, earthy and uncanny, with four Pantone chips."
+   "alt": "The INSPIRATION half of her board: a giant leaf, mushrooms, Venus flytraps, moss, curling green tendrils, pink and brown organic textures and an uncanny face, labelled ominous, raw, textures, earthy and uncanny, with four Pantone chips."
   },
   "silhouette": {
    "src": "projects/project-01/silhouette.webp",
-   "w": 797,
+   "w": 787,
    "h": 513,
    "page": 2,
    "box": [
     40,
     546,
-    837,
+    827,
     1059
    ],
-   "alt": "The SILHOUTTE half of her board: a strapless pink bodycon gown, an oversized ribbed turtleneck, a flared gown, layered rough-edged fabric, pink ruffles, a patchwork knit and two flytrap embellishments, each labelled."
+   "alt": "The SILHOUTTE half of her board: a strapless pink bodycon gown, an oversized ribbed turtleneck, a pink gown seen from the back, layered rough-edged fabric, pink ruffles, green wavy patchwork and two flytrap embellishments, each labelled."
   },
   "heading-inspiration": {
    "src": "projects/project-01/heading-inspiration.webp",
-   "w": 270,
-   "h": 56,
+   "w": 286,
+   "h": 54,
    "page": 2,
    "box": [
-    614,
-    146,
-    884,
-    202
+    600,
+    147,
+    886,
+    201
    ],
    "alt": "INSPIRATION, her lettering in red on a white paper strip."
   },
   "heading-silhouette": {
    "src": "projects/project-01/heading-silhouette.webp",
-   "w": 208,
-   "h": 59,
+   "w": 206,
+   "h": 55,
    "page": 2,
    "box": [
-    623,
+    622,
     873,
-    831,
-    932
+    828,
+    928
    ],
    "alt": "SILHOUTTE, her lettering in red on a white paper strip."
   },
@@ -115,13 +115,13 @@
   },
   "chip-green": {
    "src": "projects/project-01/chip-green.webp",
-   "w": 108,
+   "w": 106,
    "h": 65,
    "page": 2,
    "box": [
     44,
     286,
-    152,
+    150,
     351
    ],
    "alt": "Pantone chip 16-0299 TCX, a dark moss green."
@@ -178,6 +178,32 @@
    ],
    "alt": "Pale mushroom caps seen from below, their fine gills fanning out."
   },
+  "face": {
+   "src": "projects/project-01/face.webp",
+   "w": 155,
+   "h": 177,
+   "page": 2,
+   "box": [
+    146,
+    300,
+    301,
+    477
+   ],
+   "alt": "A pale, uncanny face tucked inside a green pod, pink tendrils curling over it."
+  },
+  "embellishment": {
+   "src": "projects/project-01/embellishment.webp",
+   "w": 164,
+   "h": 102,
+   "page": 2,
+   "box": [
+    217,
+    912,
+    381,
+    1014
+   ],
+   "alt": "Two Venus flytraps used as embellishments: green, spiky-edged, with dark red centres."
+  },
   "lineup": {
    "src": "projects/project-01/lineup.webp",
    "w": 580,
@@ -189,7 +215,7 @@
     1509,
     587
    ],
-   "alt": "Her line-up of eleven illustrated looks in pink and lime green: ribbed stripes, ruffled edges, long sleeves, wide trousers, draped skirts and column dresses, with small flower embellishments."
+   "alt": "Her line-up of eleven illustrated looks in pink and lime green: ruffled seams, stripes, cropped turtlenecks, long sleeves, wide trousers, draped and wrap skirts and column dresses, with small flower embellishments."
   },
   "lineup-1": {
    "src": "projects/project-01/lineup-1.webp",
@@ -202,7 +228,7 @@
     1072,
     386
    ],
-   "alt": "Look 1 of her line-up: a cropped turtleneck with pink ruffled sleeves over a long lime skirt with pink side panels."
+   "alt": "Look 1 of her line-up: a lime cropped turtleneck with pink ruffled sleeves over a long lime skirt with pink side panels."
   },
   "lineup-2": {
    "src": "projects/project-01/lineup-2.webp",
@@ -228,7 +254,7 @@
     1265,
     386
    ],
-   "alt": "Look 3: a cropped green turtleneck with pink sleeves and wide lime trousers with ruffled green seams and flowers."
+   "alt": "Look 3: a lime cropped turtleneck with pink sleeves and wide lime trousers with ruffled green seams and flowers."
   },
   "lineup-4": {
    "src": "projects/project-01/lineup-4.webp",
@@ -254,7 +280,7 @@
     1451,
     386
    ],
-   "alt": "Look 5: a striped cropped turtleneck with long sleeves and wide pink and green striped trousers with flowers."
+   "alt": "Look 5: a striped cropped turtleneck with long sleeves and a long pink and green striped skirt with flowers."
   },
   "lineup-6": {
    "src": "projects/project-01/lineup-6.webp",
@@ -336,120 +362,120 @@
   },
   "tab-projects": {
    "src": "projects/project-01/tab-projects.webp",
-   "w": 27,
-   "h": 130,
+   "w": 21,
+   "h": 124,
    "page": 2,
    "box": [
-    1593,
-    421,
+    1599,
+    424,
     1620,
-    551
+    548
    ],
    "alt": "PROJECTS, her lettering on a yellow tab."
   },
   "flap-project-01": {
    "src": "projects/project-01/flap-project-01.webp",
-   "w": 108,
-   "h": 97,
+   "w": 106,
+   "h": 92,
    "page": 2,
    "box": [
-    1476,
-    905,
-    1584,
-    1002
+    1477,
+    907,
+    1583,
+    999
    ],
    "alt": "PROJECT 01, her lettering on a yellow corner flap."
   },
   "look-1": {
    "src": "projects/project-01/look-1.webp",
-   "w": 435,
-   "h": 656,
+   "w": 429,
+   "h": 651,
    "page": 3,
    "box": [
-    68,
-    96,
-    503,
-    752
+    73,
+    98,
+    502,
+    749
    ],
-   "alt": "Final look, front and back: a mustard and olive cropped turtleneck in waffle and rib knit with long ruffled sleeves, over a long skirt of olive, green and pink ribbed stripes."
+   "alt": "Final look, front and back: a cropped turtleneck in mustard and olive knit with long ruffled sleeves, over a long skirt of olive, green and pink ribbed stripes."
   },
   "look-1-front": {
    "src": "projects/project-01/look-1-front.webp",
-   "w": 190,
+   "w": 192,
    "h": 577,
    "page": 3,
    "box": [
-    100,
+    88,
     128,
-    290,
+    280,
     705
    ],
-   "alt": "Final look from the front: cropped knit turtleneck with ruffled sleeves and a long striped rib-knit skirt."
+   "alt": "Final look from the front: a cropped knit turtleneck with ruffled sleeves and a long striped rib-knit skirt with small flowers."
   },
   "look-1-back": {
    "src": "projects/project-01/look-1-back.webp",
-   "w": 188,
+   "w": 205,
    "h": 577,
    "page": 3,
    "box": [
-    290,
+    280,
     128,
-    478,
+    485,
     705
    ],
-   "alt": "Final look from the back: the cropped turtleneck opens at the back above the long striped skirt."
+   "alt": "Final look from the back: the cropped turtleneck leaves the waist bare above the long striped skirt."
   },
   "look-2": {
    "src": "projects/project-01/look-2.webp",
-   "w": 409,
-   "h": 695,
+   "w": 394,
+   "h": 689,
    "page": 3,
    "box": [
-    530,
-    342,
-    939,
-    1037
+    531,
+    346,
+    925,
+    1035
    ],
    "alt": "Final look, front and back: a strapless column dress in olive, green and pink ribbed stripes with ruffled seams and small flower embellishments."
   },
   "look-2-front": {
    "src": "projects/project-01/look-2-front.webp",
-   "w": 187,
-   "h": 580,
+   "w": 181,
+   "h": 581,
    "page": 3,
    "box": [
-    586,
+    588,
     386,
-    773,
-    966
+    769,
+    967
    ],
-   "alt": "Strapless striped column dress from the front."
+   "alt": "Strapless striped column dress from the front, with small flowers."
   },
   "look-2-back": {
    "src": "projects/project-01/look-2-back.webp",
-   "w": 163,
-   "h": 558,
+   "w": 183,
+   "h": 559,
    "page": 3,
    "box": [
-    773,
+    740,
     392,
-    936,
-    950
+    923,
+    951
    ],
    "alt": "Strapless striped column dress from the back."
   },
   "makeup-eyes": {
    "src": "projects/project-01/makeup-eyes.webp",
-   "w": 394,
-   "h": 305,
+   "w": 380,
+   "h": 278,
    "page": 3,
    "box": [
     542,
     0,
-    936,
-    305
+    922,
+    278
    ],
-   "alt": "Makeup reference: eyes lined in red with lime-green brows and lashes."
+   "alt": "Makeup reference: eyes rimmed in red with lime-green brows and streaks."
   },
   "makeup-face": {
    "src": "projects/project-01/makeup-face.webp",
@@ -462,18 +488,18 @@
     1618,
     1078
    ],
-   "alt": "Makeup reference: a face with red-lined eyes, lime brows, glossy red and gold lips, and Venus flytraps worn in the hair like ears."
+   "alt": "Makeup reference: a face with red-rimmed eyes, lime brows, glossy red and gold lips, and Venus flytraps worn in the hair like ears."
   },
   "makeup-hair": {
    "src": "projects/project-01/makeup-hair.webp",
    "w": 599,
-   "h": 324,
+   "h": 326,
    "page": 3,
    "box": [
-    0,
-    756,
-    599,
-    1080
+    1,
+    753,
+    600,
+    1079
    ],
    "alt": "Hair reference: dark hair seen from above with Venus flytraps tucked in at the sides."
   },
@@ -488,7 +514,7 @@
     622,
     690
    ],
-   "alt": "Night shoot: the strapless striped rib-knit dress with ruffled seams, worn in tall grass."
+   "alt": "Night shoot: the strapless striped rib-knit dress with ruffled seams and small flowers, worn in tall grass."
   },
   "photo-2": {
    "src": "projects/project-01/photo-2.webp",
@@ -501,7 +527,7 @@
     1004,
     298
    ],
-   "alt": "Night shoot: close-up of the striped skirt and a ruffled knit sleeve."
+   "alt": "Night shoot: close-up of the striped knit and a ruffled sleeve."
   },
   "photo-3": {
    "src": "projects/project-01/photo-3.webp",
@@ -514,7 +540,7 @@
     1000,
     1012
    ],
-   "alt": "Night shoot: looking back over her shoulder in the ribbed turtleneck with ruffled, overlocked edges."
+   "alt": "Night shoot: looking back over the shoulder in the ribbed turtleneck, its waffle-knit and rib panels edged with pink stitching and ruffles."
   },
   "photo-4": {
    "src": "projects/project-01/photo-4.webp",
@@ -527,7 +553,7 @@
     1449,
     721
    ],
-   "alt": "Night shoot: the cropped waffle-knit turtleneck with ruffled sleeves and striped trousers."
+   "alt": "Night shoot: the cropped waffle-knit turtleneck with ruffled sleeves over the striped rib-knit skirt with flowers."
   },
   "photo-5": {
    "src": "projects/project-01/photo-5.webp",
@@ -540,7 +566,7 @@
     607,
     1037
    ],
-   "alt": "Night shoot: close-up of the makeup, lime eyeshadow and red-lined eyes, chin tucked into the green turtleneck."
+   "alt": "Night shoot: close-up of the makeup, lime eyeshadow and red-rimmed eyes, chin tucked into the green turtleneck."
   },
   "photo-6": {
    "src": "projects/project-01/photo-6.webp",
@@ -553,7 +579,7 @@
     1527,
     1080
    ],
-   "alt": "Night shoot: portrait in the turtleneck, lower right of a dark frame."
+   "alt": "Night shoot: portrait in the turtleneck, small in the lower right of a dark frame."
   },
   "backdrop-left": {
    "src": "projects/project-01/backdrop-left.webp",
@@ -566,7 +592,7 @@
     238,
     1080
    ],
-   "alt": "A blown-up, cool-toned print from the night shoot behind the photos: the cropped turtleneck and striped trousers."
+   "alt": "A blown-up, cool-toned print from the night shoot behind the photos: the cropped turtleneck and striped skirt."
   },
   "backdrop-right": {
    "src": "projects/project-01/backdrop-right.webp",
@@ -592,21 +618,21 @@
     1290,
     404
    ],
-   "alt": "Close-up of the waffle knit in mustard and yellow-green, with a green rib-knit band and pink overlocked edge.",
+   "alt": "Close-up of the waffle knit in mustard and yellow-green, with a green rib-knit band and pink stitched edge.",
    "kind": "texture"
   },
   "fabric-stripes": {
    "src": "projects/project-01/fabric-stripes.webp",
-   "w": 142,
-   "h": 290,
+   "w": 158,
+   "h": 324,
    "page": 4,
    "box": [
-    1462,
-    140,
-    1604,
-    430
+    1458,
+    128,
+    1616,
+    452
    ],
-   "alt": "Close-up of the striped knit: mustard, olive green and pink rib panels joined with raw ruffled seams, with a flower embellishment.",
+   "alt": "Close-up of the striped knit: mustard, olive green and pink rib panels joined with raw, ruffled seams, with a flower embellishment.",
    "kind": "texture"
   },
   "fabric-rib": {
@@ -620,7 +646,7 @@
     800,
     995
    ],
-   "alt": "Close-up of the turtleneck: green rib knit beside mustard and yellow-green knit, edged with pink overlocking.",
+   "alt": "Close-up of the turtleneck: green rib knit beside mustard and yellow-green knit, edged with pink stitching.",
    "kind": "texture"
   }
  }

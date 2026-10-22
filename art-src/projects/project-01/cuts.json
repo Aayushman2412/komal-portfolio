@@ -4,12 +4,12 @@
    "name": "cover",
    "page": 1,
    "box": [
-    126,
+    128,
     0,
     1525,
     826
    ],
-   "alt": "Her project cover: a glitched close-up of leaf veins, pink-red leaf flesh between dark green veins, with pixel blocks and colour bands breaking up the bottom."
+   "alt": "Her project cover: a glitched close-up of leaf veins, pink-red leaf between dark green veins, with grey pixel blocks and a band of colour noise along the bottom."
   },
   {
    "name": "moodboard",
@@ -20,8 +20,8 @@
      83
     ],
     [
-     466,
-     86
+     467,
+     87
     ],
     [
      480,
@@ -32,11 +32,7 @@
      89
     ],
     [
-     495,
-     101
-    ],
-    [
-     504,
+     496,
      102
     ],
     [
@@ -56,7 +52,7 @@
      97
     ],
     [
-     635,
+     637,
      98
     ],
     [
@@ -64,7 +60,7 @@
      96
     ],
     [
-     666,
+     671,
      96
     ],
     [
@@ -72,7 +68,11 @@
      94
     ],
     [
-     688,
+     683,
+     96
+    ],
+    [
+     689,
      96
     ],
     [
@@ -80,7 +80,11 @@
      94
     ],
     [
-     705,
+     699,
+     96
+    ],
+    [
+     707,
      96
     ],
     [
@@ -96,100 +100,92 @@
      96
     ],
     [
-     795,
-     102
+     800,
+     109
     ],
     [
-     801,
-     111
-    ],
-    [
-     801,
-     141
-    ],
-    [
-     806,
+     800,
      146
     ],
     [
-     811,
-     143
+     802,
+     148
     ],
     [
-     889,
-     143
+     821,
+     150
     ],
     [
-     891,
-     145
+     834,
+     148
     ],
     [
-     891,
-     206
+     880,
+     147
     ],
     [
-     889,
-     208
+     883,
+     150
     ],
     [
-     805,
-     208
+     885,
+     166
     ],
     [
-     801,
-     212
+     884,
+     181
     ],
     [
-     801,
-     727
+     883,
+     192
+    ],
+    [
+     879,
+     196
+    ],
+    [
+     846,
+     199
+    ],
+    [
+     806,
+     198
+    ],
+    [
+     800,
+     201
     ],
     [
      799,
      849
     ],
     [
-     801,
-     851
+     800,
+     871
     ],
     [
-     801,
-     862
+     802,
+     873
     ],
     [
-     805,
-     866
+     821,
+     874
     ],
     [
-     834,
-     866
+     826,
+     878
     ],
     [
-     836,
-     868
+     827,
+     920
     ],
     [
-     836,
-     936
+     823,
+     926
     ],
     [
-     834,
-     938
-    ],
-    [
-     815,
-     938
-    ],
-    [
-     813,
-     933
-    ],
-    [
-     807,
-     928
-    ],
-    [
-     801,
-     928
+     802,
+     926
     ],
     [
      797,
@@ -197,7 +193,7 @@
     ],
     [
      799,
-     1010
+     991
     ],
     [
      798,
@@ -212,7 +208,7 @@
      1022
     ],
     [
-     764,
+     739,
      1021
     ],
     [
@@ -224,8 +220,8 @@
      1024
     ],
     [
-     568,
-     1017
+     570,
+     1018
     ],
     [
      563,
@@ -320,7 +316,7 @@
      1023
     ],
     [
-     475,
+     473,
      1021
     ],
     [
@@ -332,7 +328,7 @@
      1025
     ],
     [
-     426,
+     430,
      1021
     ],
     [
@@ -344,7 +340,7 @@
      1023
     ],
     [
-     414,
+     413,
      1021
     ],
     [
@@ -376,12 +372,12 @@
      1050
     ],
     [
-     325,
+     323,
      1047
     ],
     [
-     313,
-     1051
+     314,
+     1050
     ],
     [
      306,
@@ -416,12 +412,12 @@
      1046
     ],
     [
-     283,
+     282,
      1042
     ],
     [
-     272,
-     1047
+     273,
+     1046
     ],
     [
      265,
@@ -448,8 +444,8 @@
      1058
     ],
     [
-     228,
-     1044
+     227,
+     1043
     ],
     [
      224,
@@ -464,8 +460,8 @@
      1034
     ],
     [
-     215,
-     1030
+     214,
+     1029
     ],
     [
      192,
@@ -480,7 +476,7 @@
      1022
     ],
     [
-     122,
+     125,
      1020
     ],
     [
@@ -488,7 +484,7 @@
      1021
     ],
     [
-     70,
+     77,
      1018
     ],
     [
@@ -509,23 +505,27 @@
     ],
     [
      25,
-     971
+     979
     ],
     [
      26,
-     952
+     950
     ],
     [
      24,
-     942
+     944
     ],
     [
      26,
-     913
+     920
+    ],
+    [
+     26,
+     912
     ],
     [
      24,
-     908
+     909
     ],
     [
      24,
@@ -533,7 +533,7 @@
     ],
     [
      26,
-     871
+     870
     ],
     [
      24,
@@ -541,23 +541,23 @@
     ],
     [
      25,
-     823
+     821
     ],
     [
      23,
-     813
+     815
     ],
     [
      25,
-     809
+     810
     ],
     [
      25,
-     776
+     772
     ],
     [
      23,
-     760
+     763
     ],
     [
      23,
@@ -569,19 +569,19 @@
     ],
     [
      23,
-     744
+     745
     ],
     [
      25,
-     740
+     741
     ],
     [
      23,
-     729
+     731
     ],
     [
      25,
-     721
+     723
     ],
     [
      25,
@@ -593,11 +593,11 @@
     ],
     [
      25,
-     695
+     699
     ],
     [
      23,
-     688
+     689
     ],
     [
      23,
@@ -609,71 +609,71 @@
     ],
     [
      23,
-     642
+     648
     ],
     [
      23,
-     622
+     621
     ],
     [
      25,
-     616
+     617
     ],
     [
      23,
-     599
+     603
     ],
     [
      23,
-     528
+     526
     ],
     [
      25,
-     516
+     519
     ],
     [
      23,
-     510
+     511
     ],
     [
      23,
-     485
+     484
     ],
     [
      25,
-     480
+     481
     ],
     [
      23,
-     471
+     473
     ],
     [
      23,
-     425
+     424
     ],
     [
      25,
-     420
+     421
     ],
     [
      25,
-     230
+     225
     ],
     [
      29,
-     186
+     184
     ],
     [
      24,
-     166
+     167
     ],
     [
      25,
-     140
+     139
     ],
     [
      22,
-     132
+     133
     ],
     [
      23,
@@ -684,8 +684,8 @@
      111
     ],
     [
-     38,
-     109
+     37,
+     110
     ],
     [
      47,
@@ -700,7 +700,7 @@
      97
     ],
     [
-     224,
+     218,
      99
     ],
     [
@@ -708,7 +708,7 @@
      98
     ],
     [
-     294,
+     289,
      100
     ],
     [
@@ -716,12 +716,8 @@
      99
     ],
     [
-     371,
+     364,
      101
-    ],
-    [
-     375,
-     99
     ],
     [
      384,
@@ -736,7 +732,7 @@
      89
     ]
    ],
-   "alt": "Her inspiration and silhouette board: a collage of a giant leaf, mushrooms, Venus flytraps, moss, an uncanny face and knit, ruffled and layered references, with four Pantone chips and her labels."
+   "alt": "Her inspiration and silhouette board: a collage of a giant leaf, mushrooms, Venus flytraps, moss, an uncanny face, gowns, an oversized knit and ruffled, layered fabrics, with four Pantone chips and her labels."
   },
   {
    "name": "inspiration",
@@ -747,7 +743,7 @@
      83
     ],
     [
-     466,
+     463,
      86
     ],
     [
@@ -771,8 +767,8 @@
      110
     ],
     [
-     510,
-     108
+     509,
+     109
     ],
     [
      513,
@@ -783,15 +779,15 @@
      106
     ],
     [
-     523,
-     108
+     524,
+     109
     ],
     [
-     538,
+     535,
      112
     ],
     [
-     656,
+     667,
      112
     ],
     [
@@ -799,15 +795,15 @@
      110
     ],
     [
-     694,
+     688,
+     112
+    ],
+    [
+     698,
      112
     ],
     [
      704,
-     110
-    ],
-    [
-     750,
      110
     ],
     [
@@ -831,68 +827,52 @@
      143
     ],
     [
-     793,
-     148
-    ],
-    [
-     800,
-     148
+     794,
+     149
     ],
     [
      804,
-     144
+     148
     ],
     [
-     808,
-     146
+     821,
+     150
     ],
     [
-     811,
-     143
+     834,
+     148
     ],
     [
-     889,
-     143
+     880,
+     147
     ],
     [
-     891,
-     145
+     883,
+     150
     ],
     [
-     891,
-     206
+     885,
+     166
     ],
     [
-     889,
-     208
+     884,
+     181
     ],
     [
-     814,
-     208
+     883,
+     192
     ],
     [
-     810,
+     879,
+     196
+    ],
+    [
+     846,
      199
     ],
     [
-     808,
-     201
-    ],
-    [
-     808,
-     206
-    ],
-    [
-     804,
-     208
-    ],
-    [
-     800,
-     199
-    ],
-    [
-     790,
-     199
+     791,
+     198
     ],
     [
      782,
@@ -967,8 +947,8 @@
      546
     ],
     [
-     467,
-     562
+     464,
+     564
     ],
     [
      430,
@@ -979,11 +959,11 @@
      584
     ],
     [
-     369,
-     565
+     368,
+     564
     ],
     [
-     333,
+     336,
      556
     ],
     [
@@ -1003,7 +983,7 @@
      115
     ],
     [
-     53,
+     55,
      115
     ],
     [
@@ -1011,7 +991,7 @@
      112
     ],
     [
-     73,
+     68,
      114
     ],
     [
@@ -1019,7 +999,7 @@
      113
     ],
     [
-     120,
+     106,
      115
     ],
     [
@@ -1031,7 +1011,11 @@
      111
     ],
     [
-     190,
+     184,
+     113
+    ],
+    [
+     195,
      113
     ],
     [
@@ -1039,7 +1023,7 @@
      111
     ],
     [
-     395,
+     397,
      113
     ],
     [
@@ -1051,8 +1035,8 @@
      111
     ],
     [
-     416,
-     106
+     414,
+     108
     ],
     [
      418,
@@ -1067,7 +1051,7 @@
      89
     ]
    ],
-   "alt": "The INSPIRATION half of her board: a giant leaf, mushrooms, Venus flytraps, moss, curling green tendrils, dark hair and an uncanny face, labelled ominous, raw, textures, earthy and uncanny, with four Pantone chips."
+   "alt": "The INSPIRATION half of her board: a giant leaf, mushrooms, Venus flytraps, moss, curling green tendrils, pink and brown organic textures and an uncanny face, labelled ominous, raw, textures, earthy and uncanny, with four Pantone chips."
   },
   {
    "name": "silhouette",
@@ -1170,52 +1154,44 @@
      871
     ],
     [
-     746,
-     873
-    ],
-    [
-     786,
+     747,
      874
     ],
     [
-     834,
-     873
-    ],
-    [
-     836,
+     794,
      875
     ],
     [
-     836,
-     936
+     798,
+     873
     ],
     [
-     834,
-     938
+     812,
+     873
     ],
     [
-     815,
-     938
+     823,
+     875
+    ],
+    [
+     826,
+     878
+    ],
+    [
+     826,
+     923
+    ],
+    [
+     823,
+     926
     ],
     [
      813,
-     933
-    ],
-    [
-     807,
-     928
-    ],
-    [
-     801,
-     928
+     927
     ],
     [
      798,
-     931
-    ],
-    [
-     794,
-     925
+     924
     ],
     [
      786,
@@ -1258,7 +1234,11 @@
      1001
     ],
     [
-     733,
+     736,
+     999
+    ],
+    [
+     732,
      999
     ],
     [
@@ -1266,7 +1246,7 @@
      1001
     ],
     [
-     725,
+     727,
      999
     ],
     [
@@ -1282,7 +1262,7 @@
      999
     ],
     [
-     701,
+     700,
      999
     ],
     [
@@ -1298,7 +1278,7 @@
      1000
     ],
     [
-     685,
+     687,
      998
     ],
     [
@@ -1310,7 +1290,7 @@
      1000
     ],
     [
-     658,
+     659,
      998
     ],
     [
@@ -1354,7 +1334,7 @@
      1012
     ],
     [
-     622,
+     621,
      1017
     ],
     [
@@ -1362,7 +1342,7 @@
      1020
     ],
     [
-     588,
+     592,
      1017
     ],
     [
@@ -1466,7 +1446,7 @@
      1023
     ],
     [
-     475,
+     473,
      1021
     ],
     [
@@ -1478,7 +1458,7 @@
      1025
     ],
     [
-     426,
+     430,
      1021
     ],
     [
@@ -1490,7 +1470,7 @@
      1023
     ],
     [
-     414,
+     413,
      1021
     ],
     [
@@ -1514,12 +1494,8 @@
      1038
     ],
     [
-     351,
+     350,
      1037
-    ],
-    [
-     344,
-     1041
     ],
     [
      336,
@@ -1530,12 +1506,12 @@
      1050
     ],
     [
-     325,
+     323,
      1047
     ],
     [
-     313,
-     1051
+     314,
+     1050
     ],
     [
      308,
@@ -1570,12 +1546,12 @@
      1046
     ],
     [
-     283,
+     282,
      1042
     ],
     [
-     272,
-     1047
+     273,
+     1046
     ],
     [
      265,
@@ -1602,8 +1578,8 @@
      1058
     ],
     [
-     228,
-     1044
+     227,
+     1043
     ],
     [
      224,
@@ -1618,16 +1594,16 @@
      1034
     ],
     [
-     215,
-     1030
+     214,
+     1029
     ],
     [
      192,
      1029
     ],
     [
-     190,
-     1027
+     188,
+     1025
     ],
     [
      186,
@@ -1639,14 +1615,14 @@
     ],
     [
      189,
-     1011
+     1012
     ],
     [
      191,
-     1005
+     1004
     ],
     [
-     188,
+     187,
      998
     ],
     [
@@ -1659,7 +1635,7 @@
     ],
     [
      40,
-     982
+     988
     ],
     [
      41,
@@ -1682,31 +1658,107 @@
      584
     ],
     [
-     431,
+     432,
      584
     ]
    ],
-   "alt": "The SILHOUTTE half of her board: a strapless pink bodycon gown, an oversized ribbed turtleneck, a flared gown, layered rough-edged fabric, pink ruffles, a patchwork knit and two flytrap embellishments, each labelled."
+   "alt": "The SILHOUTTE half of her board: a strapless pink bodycon gown, an oversized ribbed turtleneck, a pink gown seen from the back, layered rough-edged fabric, pink ruffles, green wavy patchwork and two flytrap embellishments, each labelled."
   },
   {
    "name": "heading-inspiration",
    "page": 2,
    "poly": [
     [
-     614,
-     149
+     872,
+     147
     ],
     [
-     882,
-     146
+     880,
+     147
+    ],
+    [
+     884,
+     153
+    ],
+    [
+     885,
+     167
     ],
     [
      883,
+     192
+    ],
+    [
+     879,
+     196
+    ],
+    [
+     874,
+     197
+    ],
+    [
+     856,
+     197
+    ],
+    [
+     846,
+     199
+    ],
+    [
+     776,
      198
     ],
     [
-     614,
-     201
+     620,
+     200
+    ],
+    [
+     617,
+     197
+    ],
+    [
+     612,
+     185
+    ],
+    [
+     612,
+     165
+    ],
+    [
+     604,
+     157
+    ],
+    [
+     600,
+     155
+    ],
+    [
+     600,
+     152
+    ],
+    [
+     602,
+     150
+    ],
+    [
+     693,
+     150
+    ],
+    [
+     741,
+     148
+    ],
+    [
+     804,
+     148
+    ],
+    [
+     821,
+     150
+    ],
+    [
+     834,
+     148
     ]
    ],
    "alt": "INSPIRATION, her lettering in red on a white paper strip."
@@ -1716,28 +1768,104 @@
    "page": 2,
    "poly": [
     [
-     623,
-     887
-    ],
-    [
-     722,
-     887
-    ],
-    [
-     724,
-     875
-    ],
-    [
-     829,
+     798,
      873
     ],
     [
-     830,
-     921
+     821,
+     874
     ],
     [
-     623,
-     931
+     826,
+     878
+    ],
+    [
+     827,
+     920
+    ],
+    [
+     823,
+     926
+    ],
+    [
+     810,
+     927
+    ],
+    [
+     798,
+     924
+    ],
+    [
+     624,
+     926
+    ],
+    [
+     622,
+     924
+    ],
+    [
+     625,
+     889
+    ],
+    [
+     627,
+     887
+    ],
+    [
+     636,
+     887
+    ],
+    [
+     646,
+     890
+    ],
+    [
+     653,
+     890
+    ],
+    [
+     658,
+     885
+    ],
+    [
+     662,
+     885
+    ],
+    [
+     667,
+     889
+    ],
+    [
+     674,
+     890
+    ],
+    [
+     680,
+     884
+    ],
+    [
+     682,
+     884
+    ],
+    [
+     689,
+     888
+    ],
+    [
+     703,
+     888
+    ],
+    [
+     709,
+     882
+    ],
+    [
+     718,
+     880
+    ],
+    [
+     725,
+     875
     ]
    ],
    "alt": "SILHOUTTE, her lettering in red on a white paper strip."
@@ -1759,7 +1887,7 @@
    "box": [
     44,
     286,
-    152,
+    150,
     351
    ],
    "alt": "Pantone chip 16-0299 TCX, a dark moss green."
@@ -2061,6 +2189,452 @@
    "alt": "Pale mushroom caps seen from below, their fine gills fanning out."
   },
   {
+   "name": "face",
+   "page": 2,
+   "poly": [
+    [
+     150,
+     352
+    ],
+    [
+     158,
+     338
+    ],
+    [
+     172,
+     328
+    ],
+    [
+     195,
+     320
+    ],
+    [
+     215,
+     309
+    ],
+    [
+     238,
+     302
+    ],
+    [
+     262,
+     300
+    ],
+    [
+     284,
+     310
+    ],
+    [
+     296,
+     330
+    ],
+    [
+     300,
+     370
+    ],
+    [
+     297,
+     410
+    ],
+    [
+     286,
+     440
+    ],
+    [
+     268,
+     462
+    ],
+    [
+     240,
+     474
+    ],
+    [
+     205,
+     476
+    ],
+    [
+     176,
+     470
+    ],
+    [
+     156,
+     456
+    ],
+    [
+     147,
+     430
+    ],
+    [
+     146,
+     390
+    ]
+   ],
+   "alt": "A pale, uncanny face tucked inside a green pod, pink tendrils curling over it."
+  },
+  {
+   "name": "embellishment",
+   "page": 2,
+   "poly": [
+    [
+     338,
+     912
+    ],
+    [
+     339,
+     921
+    ],
+    [
+     345,
+     928
+    ],
+    [
+     354,
+     923
+    ],
+    [
+     355,
+     928
+    ],
+    [
+     360,
+     933
+    ],
+    [
+     368,
+     930
+    ],
+    [
+     369,
+     935
+    ],
+    [
+     367,
+     938
+    ],
+    [
+     372,
+     943
+    ],
+    [
+     376,
+     943
+    ],
+    [
+     378,
+     945
+    ],
+    [
+     377,
+     948
+    ],
+    [
+     380,
+     951
+    ],
+    [
+     375,
+     955
+    ],
+    [
+     368,
+     957
+    ],
+    [
+     363,
+     962
+    ],
+    [
+     368,
+     968
+    ],
+    [
+     362,
+     974
+    ],
+    [
+     366,
+     978
+    ],
+    [
+     364,
+     980
+    ],
+    [
+     361,
+     979
+    ],
+    [
+     354,
+     986
+    ],
+    [
+     356,
+     992
+    ],
+    [
+     345,
+     993
+    ],
+    [
+     338,
+     1001
+    ],
+    [
+     332,
+     997
+    ],
+    [
+     324,
+     1005
+    ],
+    [
+     324,
+     1010
+    ],
+    [
+     322,
+     1013
+    ],
+    [
+     319,
+     1010
+    ],
+    [
+     321,
+     1006
+    ],
+    [
+     316,
+     1001
+    ],
+    [
+     301,
+     1001
+    ],
+    [
+     294,
+     995
+    ],
+    [
+     289,
+     995
+    ],
+    [
+     284,
+     998
+    ],
+    [
+     283,
+     992
+    ],
+    [
+     277,
+     986
+    ],
+    [
+     273,
+     986
+    ],
+    [
+     270,
+     984
+    ],
+    [
+     260,
+     989
+    ],
+    [
+     259,
+     983
+    ],
+    [
+     260,
+     982
+    ],
+    [
+     263,
+     985
+    ],
+    [
+     269,
+     978
+    ],
+    [
+     258,
+     968
+    ],
+    [
+     250,
+     973
+    ],
+    [
+     243,
+     980
+    ],
+    [
+     243,
+     984
+    ],
+    [
+     238,
+     980
+    ],
+    [
+     236,
+     981
+    ],
+    [
+     229,
+     973
+    ],
+    [
+     224,
+     973
+    ],
+    [
+     224,
+     969
+    ],
+    [
+     217,
+     960
+    ],
+    [
+     223,
+     960
+    ],
+    [
+     228,
+     955
+    ],
+    [
+     225,
+     949
+    ],
+    [
+     225,
+     945
+    ],
+    [
+     232,
+     945
+    ],
+    [
+     237,
+     940
+    ],
+    [
+     235,
+     936
+    ],
+    [
+     236,
+     932
+    ],
+    [
+     231,
+     926
+    ],
+    [
+     232,
+     925
+    ],
+    [
+     236,
+     929
+    ],
+    [
+     239,
+     926
+    ],
+    [
+     242,
+     929
+    ],
+    [
+     248,
+     923
+    ],
+    [
+     256,
+     928
+    ],
+    [
+     261,
+     923
+    ],
+    [
+     261,
+     921
+    ],
+    [
+     256,
+     915
+    ],
+    [
+     257,
+     913
+    ],
+    [
+     269,
+     925
+    ],
+    [
+     273,
+     921
+    ],
+    [
+     279,
+     928
+    ],
+    [
+     289,
+     923
+    ],
+    [
+     292,
+     923
+    ],
+    [
+     292,
+     928
+    ],
+    [
+     298,
+     934
+    ],
+    [
+     304,
+     929
+    ],
+    [
+     306,
+     921
+    ],
+    [
+     312,
+     927
+    ],
+    [
+     318,
+     919
+    ],
+    [
+     326,
+     927
+    ],
+    [
+     331,
+     926
+    ],
+    [
+     337,
+     920
+    ]
+   ],
+   "alt": "Two Venus flytraps used as embellishments: green, spiky-edged, with dark red centres."
+  },
+  {
    "name": "lineup",
    "page": 2,
    "box": [
@@ -2069,7 +2643,7 @@
     1509,
     587
    ],
-   "alt": "Her line-up of eleven illustrated looks in pink and lime green: ribbed stripes, ruffled edges, long sleeves, wide trousers, draped skirts and column dresses, with small flower embellishments."
+   "alt": "Her line-up of eleven illustrated looks in pink and lime green: ruffled seams, stripes, cropped turtlenecks, long sleeves, wide trousers, draped and wrap skirts and column dresses, with small flower embellishments."
   },
   {
    "name": "lineup-1",
@@ -2080,7 +2654,7 @@
     1072,
     386
    ],
-   "alt": "Look 1 of her line-up: a cropped turtleneck with pink ruffled sleeves over a long lime skirt with pink side panels."
+   "alt": "Look 1 of her line-up: a lime cropped turtleneck with pink ruffled sleeves over a long lime skirt with pink side panels."
   },
   {
    "name": "lineup-2",
@@ -2102,7 +2676,7 @@
     1265,
     386
    ],
-   "alt": "Look 3: a cropped green turtleneck with pink sleeves and wide lime trousers with ruffled green seams and flowers."
+   "alt": "Look 3: a lime cropped turtleneck with pink sleeves and wide lime trousers with ruffled green seams and flowers."
   },
   {
    "name": "lineup-4",
@@ -2124,7 +2698,7 @@
     1451,
     386
    ],
-   "alt": "Look 5: a striped cropped turtleneck with long sleeves and wide pink and green striped trousers with flowers."
+   "alt": "Look 5: a striped cropped turtleneck with long sleeves and a long pink and green striped skirt with flowers."
   },
   {
    "name": "lineup-6",
@@ -2196,10 +2770,10 @@
    "name": "tab-projects",
    "page": 2,
    "box": [
-    1593,
-    421,
+    1599,
+    424,
     1620,
-    551
+    548
    ],
    "alt": "PROJECTS, her lettering on a yellow tab."
   },
@@ -2208,24 +2782,24 @@
    "page": 2,
    "poly": [
     [
-     1476,
-     913
+     1477,
+     914
     ],
     [
-     1583,
-     905
+     1580,
+     907
     ],
     [
-     1583,
-     930
+     1582,
+     928
     ],
     [
-     1505,
-     1001
+     1508,
+     998
     ],
     [
-     1476,
-     1001
+     1477,
+     998
     ]
    ],
    "alt": "PROJECT 01, her lettering on a yellow corner flap."
@@ -2234,78 +2808,78 @@
    "name": "look-1",
    "page": 3,
    "box": [
-    68,
-    96,
-    503,
-    752
+    73,
+    98,
+    502,
+    749
    ],
-   "alt": "Final look, front and back: a mustard and olive cropped turtleneck in waffle and rib knit with long ruffled sleeves, over a long skirt of olive, green and pink ribbed stripes."
+   "alt": "Final look, front and back: a cropped turtleneck in mustard and olive knit with long ruffled sleeves, over a long skirt of olive, green and pink ribbed stripes."
   },
   {
    "name": "look-1-front",
    "page": 3,
    "box": [
-    100,
+    88,
     128,
-    290,
+    280,
     705
    ],
-   "alt": "Final look from the front: cropped knit turtleneck with ruffled sleeves and a long striped rib-knit skirt."
+   "alt": "Final look from the front: a cropped knit turtleneck with ruffled sleeves and a long striped rib-knit skirt with small flowers."
   },
   {
    "name": "look-1-back",
    "page": 3,
    "box": [
-    290,
+    280,
     128,
-    478,
+    485,
     705
    ],
-   "alt": "Final look from the back: the cropped turtleneck opens at the back above the long striped skirt."
+   "alt": "Final look from the back: the cropped turtleneck leaves the waist bare above the long striped skirt."
   },
   {
    "name": "look-2",
    "page": 3,
    "poly": [
     [
-     530,
-     342
+     531,
+     346
     ],
     [
-     938,
-     342
+     924,
+     346
     ],
     [
-     938,
-     1036
+     924,
+     1034
+    ],
+    [
+     599,
+     1034
+    ],
+    [
+     599,
+     900
     ],
     [
      596,
-     1036
+     870
     ],
     [
-     600,
-     990
-    ],
-    [
-     600,
-     930
-    ],
-    [
-     590,
-     880
-    ],
-    [
-     575,
+     588,
      840
     ],
     [
-     555,
-     812
+     572,
+     815
     ],
     [
-     530,
+     552,
      800
+    ],
+    [
+     531,
+     790
     ]
    ],
    "alt": "Final look, front and back: a strapless column dress in olive, green and pink ribbed stripes with ruffled seams and small flower embellishments."
@@ -2313,22 +2887,70 @@
   {
    "name": "look-2-front",
    "page": 3,
-   "box": [
-    586,
-    386,
-    773,
-    966
+   "poly": [
+    [
+     588,
+     386
+    ],
+    [
+     768,
+     386
+    ],
+    [
+     768,
+     820
+    ],
+    [
+     742,
+     915
+    ],
+    [
+     742,
+     966
+    ],
+    [
+     599,
+     966
+    ],
+    [
+     599,
+     880
+    ],
+    [
+     588,
+     845
+    ]
    ],
-   "alt": "Strapless striped column dress from the front."
+   "alt": "Strapless striped column dress from the front, with small flowers."
   },
   {
    "name": "look-2-back",
    "page": 3,
-   "box": [
-    773,
-    392,
-    936,
-    950
+   "poly": [
+    [
+     770,
+     392
+    ],
+    [
+     922,
+     392
+    ],
+    [
+     922,
+     950
+    ],
+    [
+     740,
+     950
+    ],
+    [
+     740,
+     915
+    ],
+    [
+     770,
+     820
+    ]
    ],
    "alt": "Strapless striped column dress from the back."
   },
@@ -2338,10 +2960,10 @@
    "box": [
     542,
     0,
-    936,
-    305
+    922,
+    278
    ],
-   "alt": "Makeup reference: eyes lined in red with lime-green brows and lashes."
+   "alt": "Makeup reference: eyes rimmed in red with lime-green brows and streaks."
   },
   {
    "name": "makeup-face",
@@ -3892,51 +4514,391 @@
      47
     ]
    ],
-   "alt": "Makeup reference: a face with red-lined eyes, lime brows, glossy red and gold lips, and Venus flytraps worn in the hair like ears."
+   "alt": "Makeup reference: a face with red-rimmed eyes, lime brows, glossy red and gold lips, and Venus flytraps worn in the hair like ears."
   },
   {
    "name": "makeup-hair",
    "page": 3,
    "poly": [
     [
-     0,
+     5,
+     753
+    ],
+    [
+     59,
+     753
+    ],
+    [
+     64,
+     758
+    ],
+    [
+     69,
+     753
+    ],
+    [
+     71,
+     755
+    ],
+    [
+     88,
      756
     ],
     [
-     505,
+     95,
+     764
+    ],
+    [
+     103,
+     757
+    ],
+    [
+     108,
      756
     ],
     [
-     530,
-     800
+     110,
+     758
     ],
     [
-     555,
+     109,
+     763
+    ],
+    [
+     104,
+     768
+    ],
+    [
+     103,
+     774
+    ],
+    [
+     109,
+     780
+    ],
+    [
+     140,
+     761
+    ],
+    [
+     150,
+     762
+    ],
+    [
+     156,
+     760
+    ],
+    [
+     161,
+     763
+    ],
+    [
+     175,
+     764
+    ],
+    [
+     181,
+     758
+    ],
+    [
+     224,
+     756
+    ],
+    [
+     233,
+     763
+    ],
+    [
+     257,
+     775
+    ],
+    [
+     262,
+     774
+    ],
+    [
+     280,
+     785
+    ],
+    [
+     294,
+     785
+    ],
+    [
+     311,
+     773
+    ],
+    [
+     317,
+     773
+    ],
+    [
+     328,
+     785
+    ],
+    [
+     342,
+     788
+    ],
+    [
+     348,
+     793
+    ],
+    [
+     354,
+     787
+    ],
+    [
+     359,
+     786
+    ],
+    [
+     361,
+     793
+    ],
+    [
+     367,
+     799
+    ],
+    [
+     371,
+     796
+    ],
+    [
+     375,
+     798
+    ],
+    [
+     380,
+     793
+    ],
+    [
+     379,
+     789
+    ],
+    [
+     381,
+     787
+    ],
+    [
+     386,
+     788
+    ],
+    [
+     390,
+     784
+    ],
+    [
+     394,
+     788
+    ],
+    [
+     393,
+     792
+    ],
+    [
+     398,
+     797
+    ],
+    [
+     408,
+     787
+    ],
+    [
+     410,
+     781
+    ],
+    [
+     414,
+     791
+    ],
+    [
+     419,
+     796
+    ],
+    [
+     425,
+     790
+    ],
+    [
+     427,
+     791
+    ],
+    [
+     435,
+     781
+    ],
+    [
+     439,
+     789
+    ],
+    [
+     438,
+     796
+    ],
+    [
+     443,
+     801
+    ],
+    [
+     448,
+     796
+    ],
+    [
+     447,
+     793
+    ],
+    [
+     454,
+     786
+    ],
+    [
+     459,
+     773
+    ],
+    [
+     461,
+     775
+    ],
+    [
+     459,
+     784
+    ],
+    [
+     466,
+     793
+    ],
+    [
+     477,
+     784
+    ],
+    [
+     482,
+     774
+    ],
+    [
+     484,
+     776
+    ],
+    [
+     482,
+     786
+    ],
+    [
+     488,
+     792
+    ],
+    [
+     492,
+     789
+    ],
+    [
+     497,
+     789
+    ],
+    [
+     502,
+     784
+    ],
+    [
+     525,
+     789
+    ],
+    [
+     528,
+     799
+    ],
+    [
+     533,
+     804
+    ],
+    [
+     537,
+     801
+    ],
+    [
+     539,
+     803
+    ],
+    [
+     536,
      812
     ],
     [
-     575,
-     840
+     541,
+     817
     ],
     [
-     590,
-     880
+     545,
+     816
     ],
     [
-     598,
-     930
+     552,
+     820
     ],
     [
-     598,
-     990
+     550,
+     825
     ],
     [
-     592,
-     1079
+     556,
+     831
     ],
     [
-     0,
-     1079
+     560,
+     830
+    ],
+    [
+     562,
+     832
+    ],
+    [
+     562,
+     839
+    ],
+    [
+     564,
+     841
+    ],
+    [
+     588,
+     841
+    ],
+    [
+     593,
+     857
+    ],
+    [
+     599,
+     896
+    ],
+    [
+     599,
+     1077
+    ],
+    [
+     2,
+     1078
+    ],
+    [
+     1,
+     842
+    ],
+    [
+     4,
+     839
+    ],
+    [
+     4,
+     785
+    ],
+    [
+     8,
+     781
+    ],
+    [
+     4,
+     776
     ]
    ],
    "alt": "Hair reference: dark hair seen from above with Venus flytraps tucked in at the sides."
@@ -3950,7 +4912,7 @@
     622,
     690
    ],
-   "alt": "Night shoot: the strapless striped rib-knit dress with ruffled seams, worn in tall grass."
+   "alt": "Night shoot: the strapless striped rib-knit dress with ruffled seams and small flowers, worn in tall grass."
   },
   {
    "name": "photo-2",
@@ -3961,7 +4923,7 @@
     1004,
     298
    ],
-   "alt": "Night shoot: close-up of the striped skirt and a ruffled knit sleeve."
+   "alt": "Night shoot: close-up of the striped knit and a ruffled sleeve."
   },
   {
    "name": "photo-3",
@@ -3972,7 +4934,7 @@
     1000,
     1012
    ],
-   "alt": "Night shoot: looking back over her shoulder in the ribbed turtleneck with ruffled, overlocked edges."
+   "alt": "Night shoot: looking back over the shoulder in the ribbed turtleneck, its waffle-knit and rib panels edged with pink stitching and ruffles."
   },
   {
    "name": "photo-4",
@@ -3983,7 +4945,7 @@
     1449,
     721
    ],
-   "alt": "Night shoot: the cropped waffle-knit turtleneck with ruffled sleeves and striped trousers."
+   "alt": "Night shoot: the cropped waffle-knit turtleneck with ruffled sleeves over the striped rib-knit skirt with flowers."
   },
   {
    "name": "photo-5",
@@ -3994,7 +4956,7 @@
     607,
     1037
    ],
-   "alt": "Night shoot: close-up of the makeup, lime eyeshadow and red-lined eyes, chin tucked into the green turtleneck."
+   "alt": "Night shoot: close-up of the makeup, lime eyeshadow and red-rimmed eyes, chin tucked into the green turtleneck."
   },
   {
    "name": "photo-6",
@@ -4005,7 +4967,7 @@
     1527,
     1080
    ],
-   "alt": "Night shoot: portrait in the turtleneck, lower right of a dark frame."
+   "alt": "Night shoot: portrait in the turtleneck, small in the lower right of a dark frame."
   },
   {
    "name": "backdrop-left",
@@ -4016,7 +4978,7 @@
     238,
     1080
    ],
-   "alt": "A blown-up, cool-toned print from the night shoot behind the photos: the cropped turtleneck and striped trousers."
+   "alt": "A blown-up, cool-toned print from the night shoot behind the photos: the cropped turtleneck and striped skirt."
   },
   {
    "name": "backdrop-right",
@@ -4058,19 +5020,19 @@
     1290,
     404
    ],
-   "alt": "Close-up of the waffle knit in mustard and yellow-green, with a green rib-knit band and pink overlocked edge.",
+   "alt": "Close-up of the waffle knit in mustard and yellow-green, with a green rib-knit band and pink stitched edge.",
    "kind": "texture"
   },
   {
    "name": "fabric-stripes",
    "page": 4,
    "box": [
-    1462,
-    140,
-    1604,
-    430
+    1458,
+    128,
+    1616,
+    452
    ],
-   "alt": "Close-up of the striped knit: mustard, olive green and pink rib panels joined with raw ruffled seams, with a flower embellishment.",
+   "alt": "Close-up of the striped knit: mustard, olive green and pink rib panels joined with raw, ruffled seams, with a flower embellishment.",
    "kind": "texture"
   },
   {
@@ -4082,7 +5044,7 @@
     800,
     995
    ],
-   "alt": "Close-up of the turtleneck: green rib knit beside mustard and yellow-green knit, edged with pink overlocking.",
+   "alt": "Close-up of the turtleneck: green rib knit beside mustard and yellow-green knit, edged with pink stitching.",
    "kind": "texture"
   }
  ]
