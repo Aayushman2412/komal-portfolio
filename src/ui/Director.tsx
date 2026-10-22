@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { sound } from '../lib/audio'
+import { listenForPages } from '../lib/bookChannel'
 import { onFrame } from '../lib/frame'
 import { prefersReducedMotion } from '../lib/gsap'
 import { initScroll, lockScroll } from '../lib/scroll'
@@ -42,6 +43,9 @@ export function Director({ track, ready }: { track: React.RefObject<HTMLDivEleme
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
   }, [ready])
+
+  // a project's own page, opened from the book in another tab, sends the book to its project or the index
+  useEffect(() => listenForPages((target) => openBookAt(target)), [])
 
   useEffect(() => {
     lockScroll(stage === 'opening' || stage === 'open' || stage === 'book')

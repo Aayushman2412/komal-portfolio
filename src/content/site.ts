@@ -1,3 +1,7 @@
+import { publicUrl } from '../lib/art'
+import project01Art from './projects/project-01.art.json'
+import project02Art from './projects/project-02.art.json'
+
 /**
  * Every word on the site that is not already in Komal's drawings lives here. Components only render it.
  * Anything marked TODO(komal) is a placeholder until she sends her own projects and details.
@@ -8,17 +12,144 @@ export type SwatchKind = 'gingham' | 'denim' | 'block' | 'bandhani' | 'ikat' | '
 export type Project = {
   slug: string
   title: string
-  year: string
+  /** Left out when her pages give no year (nothing is shown in its place). */
+  year?: string
+  /** One line saying what the project is, for its own page. */
+  subtitle?: string
   /** A few sentences in her voice, on the lined note. */
   story: string
   /** Inside the envelope. */
   concept: string
   /** On the spec sheet that slides out from behind the paper tab. */
   specs: [string, string][]
-  /** Polaroids; `note` is written on the page underneath each one. Put photos in /public/projects/<slug>/. */
-  photos: { src?: string; caption: string; note: string }[]
-  /** Click to zoom into the fabric. `src` is a photo of the real fabric; without one a drawn swatch stands in. */
-  swatches: { name: string; kind: SwatchKind; src?: string }[]
+  /**
+   * Polaroids; `note` is written on the page underneath each one. Put photos in /public/projects/<slug>/.
+   * `focus` is where the square print is centred on a photo of another shape (CSS object-position).
+   */
+  photos: { src?: string; alt?: string; focus?: string; caption: string; note: string }[]
+  /**
+   * Click to zoom into the fabric. `src` is a photo of the real fabric (`w`, `h` its size, so the zoom
+   * never blows it up past what it holds); without one a drawn swatch of `kind` stands in.
+   */
+  swatches: { name: string; kind: SwatchKind; src?: string; w?: number; h?: number }[]
+  /** Written on her red paper behind the first polaroid (without it, the polaroid's caption is). */
+  redNote?: string
+  /**
+   * Her Pantone chips, as she painted and labelled them; `hex` is sampled from her paint, `src` is the chip
+   * cut from her page. `label` names the colour in words: ours, unless her chip prints one (Faded Denim), so
+   * the site writes it by hand, apart from the code.
+   */
+  palette?: { code: string; hex: string; label: string; src: string }[]
+  /** Her project cover, the first of her pages for it. */
+  cover?: string
+  /** It has its own page (project.html#<slug>), which the spread links to: "click to see more". */
+  more?: boolean
+}
+
+type Cut = { src: string; w: number; h: number; page: number; box: number[]; alt: string; kind?: string }
+type ProjectArt = { pages: { src: string; w: number; h: number }[]; cuts: Record<string, Cut> }
+
+/** Her project pages and the pieces cut from them (scripts/slice-projects.py writes these manifests). */
+export const projectArt: Record<string, ProjectArt> = { 'project-01': project01Art, 'project-02': project02Art }
+
+/** One piece cut from her project pages: its URL, size and alt text. */
+export function piece(slug: string, name: string) {
+  const c = projectArt[slug]?.cuts[name]
+  if (!c) throw new Error(`no piece ${name} in ${slug}`)
+  return { ...c, url: publicUrl(c.src) }
+}
+
+const photo = (slug: string, name: string, caption: string, note: string, focus?: string) => {
+  const c = piece(slug, name)
+  return { src: c.url, alt: c.alt, caption, note, focus }
+}
+
+const fabric = (slug: string, name: string, label: string, kind: SwatchKind) => {
+  const c = piece(slug, name)
+  return { name: label, kind, src: c.url, w: c.w, h: c.h }
+}
+
+const chip = (slug: string, name: string, code: string, hex: string, label: string) => ({ code, hex, label, src: piece(slug, name).url })
+
+/**
+ * Project 01, from her pages of 22 Oct (PDF pages 7-10). TODO(komal): every sentence here is ours,
+ * written in her voice from what is on her pages, and waits for her OK. "Flytrap" is our name for it;
+ * her pages only say PROJECT 01.
+ */
+const flytrap: Project = {
+  slug: 'project-01',
+  title: 'Flytrap',
+  subtitle: 'A knitwear collection grown from leaves, moss, mushrooms and Venus flytraps.',
+  story:
+    'A Venus flytrap, a giant leaf, moss and mushrooms. I turned them into knitwear: rib and waffle knits in moss, mustard and pink, with rough, ruffled edges. Even the makeup is a flytrap.',
+  concept:
+    'Nature, but not the pretty kind. I gathered a giant leaf, mushroom gills, moss, Venus flytraps and an uncanny face, and took my four colours from them: a warm yellow, a dark moss green, olive and a soft pink. The trap gave me the shapes: bodycon and oversized, layered and flared, with rough edges, patchwork and wavy lines, all in rib and waffle knits. I shot the looks at night, in tall grass, so they glow out of the dark.',
+  specs: [
+    ['line-up', '11 looks'],
+    ['final looks', '2, front & back'],
+    ['knits', 'rib & waffle'],
+    ['palette', '4 Pantone chips'],
+    ['details', 'ruffled edges, flowers'],
+    ['shoot', 'at night, in tall grass'],
+  ],
+  photos: [
+    photo('project-01', 'photo-4', 'the cropped turtleneck', 'Waffle knit, a ribbed collar, and sleeves that ruffle at the edges.', '50% 4%'),
+    photo('project-01', 'photo-1', 'the striped dress', 'Rib-knit stripes, raw ruffled seams and little flowers.', '50% 3%'),
+  ],
+  swatches: [
+    fabric('project-01', 'fabric-waffle', 'waffle knit', 'khadi'),
+    fabric('project-01', 'fabric-rib', 'rib knit', 'khadi'),
+    fabric('project-01', 'fabric-stripes', 'striped rib', 'khadi'),
+  ],
+  redNote: 'ominous, raw, earthy, uncanny',
+  // TODO(komal): 16-0299 is hard to read on her chip, and 19-0220 looks lighter than Pantone's 19- range.
+  // The colour names are ours (her chips carry only the codes), so the site writes them by hand, never beside a code.
+  palette: [
+    chip('project-01', 'chip-yellow', '13-0544 TCX', '#dfcb58', 'warm yellow'),
+    chip('project-01', 'chip-green', '16-0299 TCX', '#3d4933', 'dark moss green'),
+    chip('project-01', 'chip-olive', '19-0220 TCX', '#b79f3b', 'olive yellow'),
+    chip('project-01', 'chip-pink', '13-2120 TCX', '#e3a7c0', 'soft pink'),
+  ],
+  cover: piece('project-01', 'cover').url,
+  more: true,
+}
+
+/**
+ * Project 02, from her pages of 22 Oct (PDF pages 11-14). The title is hers, lettered in the mouth on
+ * her cover. TODO(komal): the rest of the words are ours, in her voice, and wait for her OK.
+ */
+const muse: Project = {
+  slug: 'project-02',
+  title: 'I Am My Own Muse',
+  subtitle: 'A racing-inspired collection in denim and red leather-look, with an e-commerce shoot and an AI shoot.',
+  story:
+    'I am my own muse. Racing and the street at night started it: a helmet, street signs, bikes and fire. Then I took LOOK 3 further, into 3D and out into the night.',
+  concept:
+    'The idea is in the mouth on my cover: I am my own muse. The mood comes from racing and the street: a white racing helmet, street signs, a wheelie at night, fire, a giant safety pin and a zip. The colours are two crumpled Pantone chips, a deep red and Faded Denim, so the looks live in red leather-look and dark denim, with bows, laces and studs, and red lips, gold teeth and stars for attitude.',
+  specs: [
+    ['mood', 'racing, the street at night'],
+    ['colours', 'deep red, faded denim'],
+    ['materials', 'denim, red leather-look'],
+    ['looks', '3'],
+    ['details', 'bows, laces, studs'],
+    ['shoots', '3D e-commerce, AI'],
+  ],
+  // her own LOOK 3 first; the AI shoot says so on the front of its polaroid
+  photos: [
+    photo('project-02', 'render-2', 'look 3 in 3D', 'From my e-commerce shoot: LOOK 3 as a 3D render, from the front.', '50% 0%'),
+    photo('project-02', 'ai-5', 'AI shoot: full speed', 'The tunnel shot: the racing feeling I wanted for the whole collection.'),
+  ],
+  // TODO(komal): these are cut from her cover collage and her drawing of the collection; photos of the real fabrics would be better
+  swatches: [
+    fabric('project-02', 'fabric-indigo-denim', 'indigo denim', 'denim'),
+    fabric('project-02', 'fabric-panel', 'red panel', 'denim'),
+    fabric('project-02', 'fabric-leather', 'red leather-look', 'block'),
+  ],
+  redNote: 'racing, edgy, raw, urban',
+  // TODO(komal): confirm the codes; only "199" and "…-4021 Faded Denim" show past the crumples (Faded Denim is 17-4021 TCX)
+  palette: [chip('project-02', 'chip-red', 'PANTONE 199', '#9e3336', 'deep red'), chip('project-02', 'chip-denim', 'PANTONE 17-4021 TCX', '#3d5770', 'Faded Denim')],
+  cover: piece('project-02', 'cover').url,
+  more: true,
 }
 
 const placeholder = (n: number, swatches: Project['swatches']): Project => ({
@@ -51,16 +182,10 @@ export const site = {
     signal: 'SIGNAL LOST',
   },
 
-  /** TODO(komal): replace with real projects. Her index (frame 6) lists five. */
+  /** Her index (frame 6) lists five. TODO(komal): projects 03-05 are placeholders until she sends them. */
   projects: [
-    placeholder(1, [
-      { name: 'cotton gingham', kind: 'gingham' },
-      { name: 'indigo denim', kind: 'denim' },
-    ]),
-    placeholder(2, [
-      { name: 'block print', kind: 'block' },
-      { name: 'bandhani', kind: 'bandhani' },
-    ]),
+    flytrap,
+    muse,
     placeholder(3, [
       { name: 'ikat', kind: 'ikat' },
       { name: 'khadi', kind: 'khadi' },

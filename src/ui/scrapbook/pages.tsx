@@ -1,14 +1,17 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { site, type Project } from '../../content/site'
 import { art, regions } from '../../lib/art'
-import { Envelope, Flap, IndexCard, Note, Polaroid, RedPaper, SpecTab, Sticker, Swatch, Tape } from './bits'
+import { Envelope, Flap, IndexCard, More, Note, Polaroid, RedPaper, SpecTab, Sticker, Swatch, Tape } from './bits'
+import { Pieces } from './pieces'
 
 /**
  * The faces of the scrapbook, in reading order. A face is one side of one leaf; on desktop two
  * faces show as a spread. The first ones are her drawn pages exactly as she drew them, with
  * clickable spots over her tabs, her "turn" flap and her index rows. Project pages are built from
  * her own pieces (a blank page cut from her spread, her index paper and lettering, her red paper,
- * tape, stickers, corner flap and "turn") until she draws or sends them.
+ * tape, stickers, corner flap and "turn"). A project she has sent is filled from her pages: her
+ * photos in the polaroids, her fabrics in the swatches, more of her pieces around them (pieces.tsx),
+ * and "click to see more", which opens the whole project on its own page in a new tab.
  */
 export type Go = (target: string) => void
 export type Spot = { box: number[]; to: string; label: string }
@@ -24,40 +27,86 @@ const tabs = (): Spot[] => [
   { box: R.tabs.project, to: first, label: 'Projects' },
 ]
 
+/** The project's own page, beside index.html, so it works from any base path. */
+const moreHref = (p: Project) => `project.html#${p.slug}`
+
 function ProjectLeft({ p, n }: { p: Project; n: number }) {
+  const title = (
+    <p className="proj__title">
+      {p.title} {p.year && <span>{p.year}</span>}
+    </p>
+  )
   return (
     <>
-      <IndexCard x={10} y={13} w={50} h={13.5} r={-2} className="proj__card">
+      {p.more && <Pieces slug={p.slug} side="left" under />}
+      <IndexCard x={10} y={p.more ? 11.5 : 13} w={50} h={13.5} r={-2} className="proj__card">
         <img className="proj__lettering" src={art.projectTitles[n] ?? art.projectTitles[0]} alt={`Project ${num(n)}`} draggable={false} />
       </IndexCard>
-      <Sticker src={art.book.smiley} x={66} y={14} w={9} r={10} />
-      <Sticker src={art.book.sparkle} x={80} y={20} w={6} r={-6} />
-      <p className="proj__title">
-        {p.title} <span>{p.year}</span>
-      </p>
+      {p.more ? (
+        <>
+          <Pieces slug={p.slug} side="left" />
+          <div className="proj__head">
+            {title}
+            <More href={moreHref(p)} title={p.title} />
+          </div>
+        </>
+      ) : (
+        <>
+          <Sticker src={art.book.smiley} x={66} y={14} w={9} r={10} />
+          <Sticker src={art.book.sparkle} x={80} y={20} w={6} r={-6} />
+          {title}
+        </>
+      )}
       <Tape kind={2} x={3} y={32.5} r={-8} w={18} />
-      <Note x={9} y={34} w={82} h={29} r={-1.2}>
+      <Note x={9} y={p.more ? 33 : 34} w={82} h={p.more ? 31 : 29} r={-1.2}>
         <p>{p.story}</p>
       </Note>
-      <Envelope x={9} y={67.5} w={40} h={19} r={-4} text={p.concept} />
-      <SpecTab x={57} y={66} w={34} h={23} r={3} specs={p.specs} />
+      {p.more ? (
+        <>
+          <Envelope x={7.5} y={68} w={39} h={18.5} r={-4} text={p.concept} out={{ x: 6, y: 23, w: 86, h: 58 }} />
+          <SpecTab x={52} y={67.5} w={40} h={23} r={3} specs={p.specs} sheet={1.35} />
+        </>
+      ) : (
+        <>
+          <Envelope x={9} y={67.5} w={40} h={19} r={-4} text={p.concept} />
+          <SpecTab x={57} y={66} w={34} h={23} r={3} specs={p.specs} />
+        </>
+      )}
     </>
   )
 }
 
 function ProjectRight({ p, next, go }: { p: Project; next: { to: string; label: string }; go: Go }) {
+  // three swatches sit a little closer and smaller than two, the last one clear of her "turn"
+  const three = p.swatches.length > 2
+  // one polaroid up at a time: lifting one puts the other back, so neither hides the other's note
+  const [up, setUp] = useState<number | null>(null)
+  const lifting = (k: number) => ({ lifted: up === k, onLift: (on: boolean) => setUp(on ? k : null) })
   return (
     <>
-      <RedPaper x={7} y={13} w={56} h={50} r={-3}>
-        <span className="red-paper__note">{p.photos[0].caption}</span>
+      {p.more && <Pieces slug={p.slug} side="right" under />}
+      <RedPaper x={7} y={13} w={56} h={p.more ? 52.5 : 50} r={-3}>
+        <span className={`red-paper__note ${p.redNote ? 'red-paper__note--words' : ''}`}>{p.redNote ?? p.photos[0].caption}</span>
       </RedPaper>
-      <Polaroid x={12} y={17} w={44} r={-5} photo={p.photos[0]} tape={1} />
-      <Polaroid x={55} y={33} w={37} r={6} photo={p.photos[1]} tape={1} lift="right" />
-      <Sticker src={art.book.sparkle} x={78} y={15} w={8} r={-8} />
-      <Sticker src={art.book.heart} x={46} y={64} w={8} r={-14} />
-      {p.swatches.map((s, i) => (
-        <Swatch key={s.name + i} x={10 + i * 25} y={68 + (i % 2) * 3} w={19} r={i % 2 ? 6 : -7} swatch={s} />
-      ))}
+      <Polaroid x={12} y={p.more ? 16 : 17} w={44} r={-5} photo={p.photos[0]} tape={1} onRed {...lifting(0)} />
+      <Polaroid x={55} y={p.more ? 31 : 33} w={37} r={6} photo={p.photos[1]} tape={1} lift="right" {...lifting(1)} />
+      {p.more ? (
+        <Pieces slug={p.slug} side="right" />
+      ) : (
+        <>
+          <Sticker src={art.book.sparkle} x={78} y={15} w={8} r={-8} />
+          <Sticker src={art.book.heart} x={46} y={64} w={8} r={-14} />
+        </>
+      )}
+      {p.swatches.map((s, i) =>
+        three ? (
+          <Swatch key={s.name + i} x={6 + i * 18.5} y={68.5 + (i % 2) * 3} w={16.5} r={i % 2 ? 6 : -7} swatch={s} />
+        ) : (
+          <Swatch key={s.name + i} x={10 + i * 25} y={68 + (i % 2) * 3} w={19} r={i % 2 ? 6 : -7} swatch={s} />
+        ),
+      )}
+      {/* one page at a time, the right-hand page says it too */}
+      {p.more && <More href={moreHref(p)} title={p.title} className="more--single" x={7} y={88} r={-1.5} />}
       <Flap label={next.label} onGo={() => go(next.to)} />
     </>
   )

@@ -131,6 +131,13 @@ export function Room() {
           const u = easeInOut(span(p, beats.pullBack[0], beats.pullBack[1]))
           const z = Math.pow(ZOOM_FROM, 1 - u)
           at = [vw / 2 + (bulbAt[0] - vw / 2) * u, vh * 0.45 + (bulbAt[1] - vh * 0.45) * u]
+          // her drawing always covers the screen: where a narrow screen crops the bulb off it, the frame
+          // stops at its edge on the way back instead of pulling past it (the bulb point stays where the
+          // frame puts it, so the light keeps to the bulb)
+          const s = fit.s * z
+          const tx = Math.min(0, Math.max(vw - FRAME.w * s, at[0] - BULB[0] * s))
+          const ty = Math.min(0, Math.max(vh - FRAME.h * s, at[1] - BULB[1] * s))
+          at = [tx + BULB[0] * s, ty + BULB[1] * s]
           transform = frameTransform(fit, z, BULB, at)
           light = bulbLevel(p)
           reveal = u

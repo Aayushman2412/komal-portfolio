@@ -78,7 +78,8 @@
   width: calc(var(--pw) * var(--stack-w) / 810);
 }
 
-/* the boards already turned show on the left only once the cover has swung over to that side */
+/* the boards already turned show on the left only once the cover lies on that side: while it swings
+   over (or is held up by hand) there is no page there yet, and they would show as one bare board */
 .book__stage:not([data-cover='over']) .book__stack--l {
   display: none;
 }
@@ -99,6 +100,16 @@
 }
 
 .book--spread .leaf:not(.is-near) {
+  visibility: hidden;
+}
+
+/* another page has come over this one while pages turn: its top edge (her ABOUT ME star) is
+   clipped, and once that page lies flat on it, it is hidden (see paintLeaf) */
+.book--spread .leaf[data-under='edge'] > .page {
+  clip-path: inset(calc(95 / 1080 * 100%) 0 0 0);
+}
+
+.book--spread .leaf[data-under='all'] {
   visibility: hidden;
 }
 
@@ -248,9 +259,10 @@
   transform: rotateY(180deg);
 }
 
-/* the first page is there as soon as the cover lifts, and stays until the cover has shut over it */
+/* the first page is there as soon as the cover lifts (the cover still hides it, and the boards under
+   it have already widened), and stays until the cover has shut over it */
 .single__page--cover.is-before ~ .single__page.is-current {
-  transition: opacity 0.15s;
+  transition: none;
 }
 
 .single__page--cover.is-current ~ .single__page.is-after {
@@ -339,6 +351,11 @@
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18));
 }
 
+/* tucked under the note and the polaroids */
+.sticker--under {
+  z-index: 0;
+}
+
 /* her index paper: speckled grey with a pink loop border */
 .index-card {
   position: absolute;
@@ -380,6 +397,24 @@
   font-size: 0.85em;
 }
 
+/* a project she has sent: its name, a little bigger, and "click to see more" after it */
+.proj__head {
+  position: absolute;
+  left: 12%;
+  right: 6%;
+  top: 25.6%;
+  display: flex;
+  align-items: center;
+  gap: 4cqw;
+  transform: rotate(-1.5deg);
+}
+
+.proj__head .proj__title {
+  position: static;
+  font-size: 3.8cqh;
+  transform: none;
+}
+
 /* her red paper, pinned with her tape, cut a little unevenly by hand */
 .red-paper {
   position: absolute;
@@ -406,6 +441,14 @@
   font-size: 3.4cqh;
   color: #fff8f2;
   transform: rotate(-4deg);
+}
+
+/* her own words for the project, in the strip of red under the polaroid */
+.red-paper__note--words {
+  bottom: 2.5%;
+  right: 22%;
+  font-size: 3cqh;
+  line-height: 1;
 }
 
 /* her corner flap and her "turn": the next page */
@@ -515,6 +558,15 @@
   line-height: 1.1;
   color: #2a2030;
   transform: rotate(3deg);
+}
+
+.polaroid--on-red .polaroid__under {
+  color: #fff8f2;
+}
+
+/* beside the red paper: the note starts past its edge, and has a little more height for that */
+.polaroid--right .polaroid__under {
+  inset: 38% 3% 4% 17%;
 }
 
 .polaroid__card {
@@ -681,6 +733,42 @@
   opacity: 0;
 }
 
+/* a long concept note: pulled out, the letter unfolds over the page, its foot still in the envelope */
+.envelope--long {
+  transition: z-index 0s 0.75s;
+}
+
+.envelope--long.is-open {
+  z-index: 4;
+  transition: none;
+}
+
+.envelope--long .envelope__letter {
+  right: auto;
+  width: 86%;
+  padding: 2.4cqh 3.4cqw;
+  background: repeating-linear-gradient(transparent 0, transparent calc(4cqh - 1px), rgba(110, 104, 130, 0.3) calc(4cqh - 1px), rgba(110, 104, 130, 0.3) 4cqh) 0 1.6cqh / 100% 100%, #fffdf4;
+  font-size: 3.1cqh;
+  line-height: 4cqh;
+  transition:
+    left 0.6s cubic-bezier(0.3, 1.1, 0.5, 1),
+    top 0.6s cubic-bezier(0.3, 1.1, 0.5, 1),
+    width 0.6s cubic-bezier(0.3, 1.1, 0.5, 1),
+    height 0.6s cubic-bezier(0.3, 1.1, 0.5, 1),
+    transform 0.6s cubic-bezier(0.3, 1.1, 0.5, 1),
+    box-shadow 0.6s;
+}
+
+.envelope--long.is-open .envelope__letter {
+  left: var(--out-l);
+  top: var(--out-t);
+  width: var(--out-w);
+  height: var(--out-h);
+  transform: rotate(var(--out-r));
+  box-shadow: 0 1cqh 2.4cqh rgba(60, 20, 30, 0.28);
+  transition-delay: 0.2s;
+}
+
 /* a paper tab in a pocket: pull it and the spec sheet comes out (clipped at the pocket's bottom) */
 .spec {
   position: absolute;
@@ -693,7 +781,8 @@
   left: 6%;
   right: 6%;
   top: 0;
-  height: 100%;
+  /* --sheet: how many pockets tall the sheet is; it rests with only its tab showing and comes out to the pocket's mouth */
+  height: calc(100% * var(--sheet, 1));
   z-index: 1;
   padding: 2.2cqh 2cqw 1cqh;
   border: 0;
@@ -701,19 +790,20 @@
   background: url(/art/paper-grain.webp) 0 0 / 220px, #e9e8e6;
   background-blend-mode: multiply;
   box-shadow: 0 0.4cqh 1cqh rgba(0, 0, 0, 0.2);
-  transform: translateY(46%);
+  transform: translateY(calc(46% / var(--sheet, 1)));
   transition: transform 0.6s cubic-bezier(0.3, 1.2, 0.5, 1);
 }
 
 .spec.is-out .spec__sheet {
-  transform: translateY(-58%);
+  transform: translateY(calc((42% - 100% * var(--sheet, 1)) / var(--sheet, 1)));
 }
 
+/* tall enough that, with the sheet in its pocket, the whole word clears the pocket's mouth */
 .spec__tab {
   position: absolute;
-  top: -3.1cqh;
+  top: -5cqh;
   right: 10%;
-  padding: 0.5cqh 1.6cqw 0.6cqh;
+  padding: 0.5cqh 1.6cqw 2.5cqh;
   border-radius: 0.6cqh 0.6cqh 0 0;
   background: var(--tab-yellow);
   font-family: var(--f-hand);
@@ -746,6 +836,49 @@
 .spec__row span:first-child {
   border-right: 1.5px solid #1b1b22;
   margin-right: 1.2cqw;
+}
+
+/* a longer sheet: once out of the pocket it opens out to the left, over the envelope, for whole lines */
+.spec--long {
+  clip-path: inset(-300% -20% 0 -120%);
+  transition: z-index 0s 0.8s;
+}
+
+.spec--long.is-out {
+  z-index: 4;
+  transition: none;
+}
+
+.spec--long .spec__sheet {
+  transition:
+    transform 0.5s cubic-bezier(0.3, 1.2, 0.5, 1) 0.25s,
+    left 0.3s ease-in-out;
+}
+
+.spec--long.is-out .spec__sheet {
+  left: -62%;
+  transition:
+    transform 0.5s cubic-bezier(0.3, 1.2, 0.5, 1),
+    left 0.35s cubic-bezier(0.3, 1.1, 0.5, 1) 0.3s;
+}
+
+.spec--long .spec__table {
+  grid-template-columns: max-content 1fr;
+  column-gap: 0;
+  font-size: 2.5cqh;
+}
+
+.spec--long .spec__table b {
+  grid-column: 1 / -1;
+}
+
+.spec--long .spec__row {
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+}
+
+.spec--long .spec__row span:first-child {
+  padding-right: 1.2cqw;
 }
 
 .spec__pocket {
@@ -789,6 +922,11 @@
   clip-path: polygon(0% 0%, 7% 3%, 14% 0%, 21% 3%, 28% 0%, 35% 3%, 42% 0%, 50% 3%, 57% 0%, 64% 3%, 71% 0%, 78% 3%, 85% 0%, 92% 3%, 100% 0%, 97% 7%, 100% 14%, 97% 21%, 100% 28%, 97% 35%, 100% 42%, 97% 50%, 100% 57%, 97% 64%, 100% 71%, 97% 78%, 100% 85%, 97% 92%, 100% 100%, 92% 97%, 85% 100%, 78% 97%, 71% 100%, 64% 97%, 57% 100%, 50% 97%, 42% 100%, 35% 97%, 28% 100%, 21% 97%, 14% 100%, 7% 97%, 0% 100%, 3% 92%, 0% 85%, 3% 78%, 0% 71%, 3% 64%, 0% 57%, 3% 50%, 0% 42%, 3% 35%, 0% 28%, 3% 21%, 0% 14%, 3% 7%);
 }
 
+/* a photo of her fabric: the whole cut, so clicking it comes closer than the page */
+.swatch__cloth--photo {
+  background-size: cover;
+}
+
 .swatch__tag {
   position: absolute;
   left: 8%;
@@ -824,6 +962,23 @@
     0 0 0 10px #efe6da,
     0 0 0 13px #b9ab98,
     0 30px 60px rgba(0, 0, 0, 0.5);
+  animation: magnify 0.5s cubic-bezier(0.3, 1.3, 0.5, 1);
+}
+
+/* a photo of the real fabric: as big as it holds, no bigger */
+.zoom__cloth--photo {
+  background-size: cover;
+}
+
+/* one of her pieces, looked at closely, on a sheet of her page's paper */
+.zoom__print {
+  display: block;
+  max-height: 80vh;
+  height: auto;
+  padding: 10px;
+  background: url(/art/paper-grain.webp) 0 0 / 220px, #efe3da;
+  background-blend-mode: multiply;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
   animation: magnify 0.5s cubic-bezier(0.3, 1.3, 0.5, 1);
 }
 
@@ -914,9 +1069,116 @@
   }
 }
 
+/* one of her own pieces, stuck in like a print: click it to look closer */
+.print {
+  position: absolute;
+  z-index: 2;
+  padding: 0;
+  border: 0;
+  background: none;
+  filter: drop-shadow(0 0.6cqh 0.9cqh rgba(0, 0, 0, 0.28));
+  transition: scale 0.25s;
+}
+
+.print img:first-child {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* cut out by her, so only the figures cast a shadow */
+.print--bare {
+  filter: drop-shadow(0 0.5cqh 0.6cqh rgba(0, 0, 0, 0.32));
+}
+
+/* across a corner, so her drawing stays clear */
+.print__tape {
+  position: absolute;
+  top: -1.6cqh;
+  left: -9%;
+  width: 34%;
+  height: auto;
+  transform: rotate(-32deg);
+  pointer-events: none;
+}
+
+.print:hover,
+.print:focus-visible {
+  scale: 1.04;
+}
+
+/* "click to see more": her red hand on a torn scrap of white paper, like her INSPIRATION strip */
+.more {
+  position: absolute;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8cqw;
+  padding: 0.9cqh 2.2cqw 1.1cqh 2cqw;
+  font-family: var(--f-hand);
+  font-size: 2.9cqh;
+  line-height: 1;
+  white-space: nowrap;
+  color: #b8222b;
+  text-decoration: none;
+  filter: drop-shadow(0 0.4cqh 0.5cqh rgba(0, 0, 0, 0.22));
+  transition: scale 0.2s;
+}
+
+.more::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url(/art/paper-grain.webp) 0 0 / 180px, #fbfaf6;
+  background-blend-mode: multiply;
+  clip-path: polygon(0 8%, 9% 0, 22% 6%, 37% 1%, 55% 5%, 71% 0, 88% 4%, 100% 0, 98% 52%, 100% 100%, 84% 94%, 66% 100%, 47% 95%, 29% 100%, 13% 94%, 1% 100%, 2% 48%);
+}
+
+.more__arrow {
+  width: 3.4cqh;
+  height: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: translate 0.2s;
+}
+
+.more:hover,
+.more:focus-visible {
+  scale: 1.06;
+}
+
+.more:hover .more__arrow,
+.more:focus-visible .more__arrow {
+  translate: 0.6cqh 0;
+}
+
+.more:focus-visible {
+  outline: 2px dashed #b8222b;
+  outline-offset: 0.5cqh;
+}
+
+.more--inline {
+  position: relative;
+  rotate: -0.5deg;
+}
+
+/* the right-hand page says it only when it shows on its own (phones) */
+.more--single {
+  visibility: hidden;
+}
+
+.book--single .more--single {
+  visibility: visible;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .zoom,
-  .zoom__cloth {
+  .zoom__cloth,
+  .zoom__print {
     animation: none;
   }
 }

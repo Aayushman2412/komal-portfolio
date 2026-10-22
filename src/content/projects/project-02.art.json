@@ -1,0 +1,688 @@
+{
+ "pages": [
+  {
+   "src": "projects/project-02/pages/page-1.webp",
+   "small": "projects/project-02/pages/page-1-small.webp",
+   "w": 1620,
+   "h": 1080
+  },
+  {
+   "src": "projects/project-02/pages/page-2.webp",
+   "small": "projects/project-02/pages/page-2-small.webp",
+   "w": 1620,
+   "h": 1080
+  },
+  {
+   "src": "projects/project-02/pages/page-3.webp",
+   "small": "projects/project-02/pages/page-3-small.webp",
+   "w": 1620,
+   "h": 1080
+  },
+  {
+   "src": "projects/project-02/pages/page-4.webp",
+   "small": "projects/project-02/pages/page-4-small.webp",
+   "w": 1620,
+   "h": 1080
+  }
+ ],
+ "cuts": {
+  "cover": {
+   "src": "projects/project-02/cover.webp",
+   "w": 1620,
+   "h": 833,
+   "page": 1,
+   "box": [
+    0,
+    0,
+    1620,
+    833
+   ],
+   "alt": "Her project cover: a collage of glossy red lips with gold teeth around a girl in a red cap, glasses and a red satin top, over dark and red-washed denim, with a screaming mouth that reads I AM MY OWN MUSE and glitch blocks along the bottom."
+  },
+  "muse": {
+   "src": "projects/project-02/muse.webp",
+   "w": 215,
+   "h": 258,
+   "page": 1,
+   "box": [
+    596,
+    187,
+    811,
+    445
+   ],
+   "alt": "A screaming mouth in black and white, I AM MY OWN MUSE lettered in red inside it."
+  },
+  "cover-girl": {
+   "src": "projects/project-02/cover-girl.webp",
+   "w": 218,
+   "h": 394,
+   "page": 1,
+   "box": [
+    330,
+    74,
+    548,
+    468
+   ],
+   "alt": "Detail of her cover: the girl in a red cap, glasses and a red satin top, a cross on a chain at her neck."
+  },
+  "fabric-indigo-denim": {
+   "src": "projects/project-02/fabric-indigo-denim.webp",
+   "w": 278,
+   "h": 193,
+   "page": 1,
+   "box": [
+    840,
+    12,
+    1118,
+    205
+   ],
+   "alt": "Close-up of dark indigo denim twill crossed by orange and cream topstitching.",
+   "kind": "texture"
+  },
+  "moodboard": {
+   "src": "projects/project-02/moodboard.webp",
+   "w": 1411,
+   "h": 1062,
+   "page": 2,
+   "box": [
+    74,
+    18,
+    1485,
+    1080
+   ],
+   "alt": "Her INSPIRATION board: a collage on pink paper of a white racing helmet, WARREN ST and ONE WAY street signs, a motorbike wheelie at night, a burst of fire, a giant safety pin and a zip, a concrete tower block, a crowd in smoke, a red gem in silver foil, two crumpled Pantone chips and red star shapes, tagged racing, edgy, raw and urban.",
+   "thumb": "projects/project-02/thumbs/moodboard.webp"
+  },
+  "heading-inspiration": {
+   "src": "projects/project-02/heading-inspiration.webp",
+   "w": 362,
+   "h": 65,
+   "page": 2,
+   "box": [
+    1080,
+    223,
+    1442,
+    288
+   ],
+   "alt": "INSPIRATION, her lettering in red on a white paper strip."
+  },
+  "label-racing": {
+   "src": "projects/project-02/label-racing.webp",
+   "w": 98,
+   "h": 85,
+   "page": 2,
+   "box": [
+    556,
+    150,
+    654,
+    235
+   ],
+   "alt": "RACING, her word in black on a red paper tag."
+  },
+  "label-edgy": {
+   "src": "projects/project-02/label-edgy.webp",
+   "w": 93,
+   "h": 58,
+   "page": 2,
+   "box": [
+    910,
+    155,
+    1003,
+    213
+   ],
+   "alt": "EDGY, her word in black on a red paper tag."
+  },
+  "label-raw": {
+   "src": "projects/project-02/label-raw.webp",
+   "w": 105,
+   "h": 68,
+   "page": 2,
+   "box": [
+    1062,
+    321,
+    1167,
+    389
+   ],
+   "alt": "RAW, her word in black on a red paper tag."
+  },
+  "label-urban": {
+   "src": "projects/project-02/label-urban.webp",
+   "w": 115,
+   "h": 73,
+   "page": 2,
+   "box": [
+    638,
+    567,
+    753,
+    640
+   ],
+   "alt": "URBAN, her word in black on a red paper tag."
+  },
+  "chip-red": {
+   "src": "projects/project-02/chip-red.webp",
+   "w": 101,
+   "h": 144,
+   "page": 2,
+   "box": [
+    326,
+    149,
+    427,
+    293
+   ],
+   "alt": "A crumpled Pantone chip in deep red, its label reading PANTONE 199."
+  },
+  "chip-denim": {
+   "src": "projects/project-02/chip-denim.webp",
+   "w": 146,
+   "h": 214,
+   "page": 2,
+   "box": [
+    1173,
+    440,
+    1319,
+    654
+   ],
+   "alt": "A crumpled Pantone chip in washed denim blue, its label reading PANTONE \u2026-4021 Faded Denim (the first digits are hidden in the crumple)."
+  },
+  "helmet": {
+   "src": "projects/project-02/helmet.webp",
+   "w": 376,
+   "h": 367,
+   "page": 2,
+   "box": [
+    525,
+    145,
+    901,
+    512
+   ],
+   "alt": "A white racing helmet with a black leaping-cat logo and SPEEDCAT down the chin, a red RACING tag on top and a gold star pinned on."
+  },
+  "signs": {
+   "src": "projects/project-02/signs.webp",
+   "w": 366,
+   "h": 283,
+   "page": 2,
+   "box": [
+    636,
+    498,
+    1002,
+    781
+   ],
+   "alt": "Street signs at night: WARREN ST and two ONE WAY arrows on a red post."
+  },
+  "bikes": {
+   "src": "projects/project-02/bikes.webp",
+   "w": 264,
+   "h": 396,
+   "page": 2,
+   "box": [
+    603,
+    622,
+    867,
+    1018
+   ],
+   "alt": "Two riders on a golden-lit street at night, one pulling a wheelie."
+  },
+  "fire": {
+   "src": "projects/project-02/fire.webp",
+   "w": 266,
+   "h": 162,
+   "page": 2,
+   "box": [
+    258,
+    490,
+    524,
+    652
+   ],
+   "alt": "A burst of orange fire."
+  },
+  "safety-pin": {
+   "src": "projects/project-02/safety-pin.webp",
+   "w": 237,
+   "h": 171,
+   "page": 2,
+   "box": [
+    154,
+    439,
+    391,
+    610
+   ],
+   "alt": "A large open safety pin."
+  },
+  "zip": {
+   "src": "projects/project-02/zip.webp",
+   "w": 90,
+   "h": 295,
+   "page": 2,
+   "box": [
+    493,
+    528,
+    583,
+    823
+   ],
+   "alt": "A chunky metal zip pull."
+  },
+  "tower": {
+   "src": "projects/project-02/tower.webp",
+   "w": 133,
+   "h": 357,
+   "page": 2,
+   "box": [
+    908,
+    222,
+    1041,
+    579
+   ],
+   "alt": "A stacked concrete tower block in black and white."
+  },
+  "crowd": {
+   "src": "projects/project-02/crowd.webp",
+   "w": 160,
+   "h": 268,
+   "page": 2,
+   "box": [
+    985,
+    656,
+    1145,
+    924
+   ],
+   "alt": "A crowd in silhouette at night, lit orange through smoke."
+  },
+  "crossing": {
+   "src": "projects/project-02/crossing.webp",
+   "w": 192,
+   "h": 296,
+   "page": 2,
+   "box": [
+    258,
+    660,
+    450,
+    956
+   ],
+   "alt": "A zebra crossing in black and white."
+  },
+  "gem": {
+   "src": "projects/project-02/gem.webp",
+   "w": 152,
+   "h": 157,
+   "page": 2,
+   "box": [
+    1144,
+    740,
+    1296,
+    897
+   ],
+   "alt": "A glossy red gem wrapped in crumpled silver foil."
+  },
+  "heading-collection": {
+   "src": "projects/project-02/heading-collection.webp",
+   "w": 455,
+   "h": 162,
+   "page": 3,
+   "box": [
+    413,
+    306,
+    868,
+    468
+   ],
+   "alt": "THE COLLECTION, her heading in navy capitals."
+  },
+  "collection": {
+   "src": "projects/project-02/collection.webp",
+   "w": 645,
+   "h": 852,
+   "page": 3,
+   "box": [
+    783,
+    9,
+    1428,
+    861
+   ],
+   "alt": "Her collection, three illustrated looks in red leather-look and dark denim: a cut-out crop top tied with bows over culottes with red stripes; a glossy red leather jacket with a pleated mini skirt and studded thigh-high boots; a red and denim bustier with a red sash and wide trousers panelled in red.",
+   "thumb": "projects/project-02/thumbs/collection.webp"
+  },
+  "collection-left": {
+   "src": "projects/project-02/collection-left.webp",
+   "w": 273,
+   "h": 836,
+   "page": 3,
+   "box": [
+    783,
+    16,
+    1056,
+    852
+   ],
+   "alt": "Look from her collection, the one she shows as LOOK 3 on her next page: a sleeveless red leather-look crop top with a buckle strap, keyhole cut-outs tied with bows and laced sides, dark denim culottes with red stripes, and pointed black ankle boots."
+  },
+  "collection-middle": {
+   "src": "projects/project-02/collection-middle.webp",
+   "w": 191,
+   "h": 847,
+   "page": 3,
+   "box": [
+    1025,
+    14,
+    1216,
+    861
+   ],
+   "alt": "Look from her collection: a fitted glossy red leather jacket with a wide collar, a dark pleated mini skirt, and black thigh-high boots covered in round studs."
+  },
+  "collection-right": {
+   "src": "projects/project-02/collection-right.webp",
+   "w": 257,
+   "h": 848,
+   "page": 3,
+   "box": [
+    1171,
+    9,
+    1428,
+    857
+   ],
+   "alt": "Look from her collection: a red leather-look bustier with dark denim panels, a red sash tied at the waist, wide dark denim trousers with red panels, and chunky black shoes."
+  },
+  "lips-1": {
+   "src": "projects/project-02/lips-1.webp",
+   "w": 205,
+   "h": 169,
+   "page": 3,
+   "box": [
+    227,
+    27,
+    432,
+    196
+   ],
+   "alt": "Glossy red lips parted over gold teeth."
+  },
+  "lips-2": {
+   "src": "projects/project-02/lips-2.webp",
+   "w": 187,
+   "h": 195,
+   "page": 3,
+   "box": [
+    237,
+    232,
+    424,
+    427
+   ],
+   "alt": "Glossy red lips open over white and silver teeth."
+  },
+  "lips-3": {
+   "src": "projects/project-02/lips-3.webp",
+   "w": 187,
+   "h": 205,
+   "page": 3,
+   "box": [
+    237,
+    460,
+    424,
+    665
+   ],
+   "alt": "Glossy red lips in a half smile, a gold tooth showing."
+  },
+  "pocket": {
+   "src": "projects/project-02/pocket.webp",
+   "w": 258,
+   "h": 233,
+   "page": 3,
+   "box": [
+    199,
+    672,
+    457,
+    905
+   ],
+   "alt": "A blue denim back pocket with two red stitched stars."
+  },
+  "fabric-denim": {
+   "src": "projects/project-02/fabric-denim.webp",
+   "w": 112,
+   "h": 248,
+   "page": 3,
+   "box": [
+    114,
+    190,
+    226,
+    438
+   ],
+   "alt": "Close-up of blue denim twill with a row of orange topstitching.",
+   "kind": "texture"
+  },
+  "fabric-leather": {
+   "src": "projects/project-02/fabric-leather.webp",
+   "w": 101,
+   "h": 105,
+   "page": 3,
+   "box": [
+    1044,
+    186,
+    1145,
+    291
+   ],
+   "alt": "Close-up of the glossy red leather-look jacket, its panels edged in dark piping.",
+   "kind": "texture"
+  },
+  "fabric-panel": {
+   "src": "projects/project-02/fabric-panel.webp",
+   "w": 88,
+   "h": 150,
+   "page": 3,
+   "box": [
+    1298,
+    592,
+    1386,
+    742
+   ],
+   "alt": "Close-up of the wide trousers of the third look: dark denim beside a red panel running down the leg.",
+   "kind": "texture"
+  },
+  "look-3": {
+   "src": "projects/project-02/look-3.webp",
+   "w": 225,
+   "h": 685,
+   "page": 4,
+   "box": [
+    70,
+    1,
+    295,
+    686
+   ],
+   "alt": "LOOK 3, illustrated on a grey denim card: a sleeveless red leather-look crop top with a buckle strap, keyhole cut-outs tied with bows and laced sides, dark denim culottes with red stripes, pointed black ankle boots and sunglasses."
+  },
+  "label-look-3": {
+   "src": "projects/project-02/label-look-3.webp",
+   "w": 99,
+   "h": 33,
+   "page": 4,
+   "box": [
+    88,
+    64,
+    187,
+    97
+   ],
+   "alt": "LOOK 3, in blue capitals on denim."
+  },
+  "heading-ecommerce": {
+   "src": "projects/project-02/heading-ecommerce.webp",
+   "w": 572,
+   "h": 56,
+   "page": 4,
+   "box": [
+    300,
+    82,
+    872,
+    138
+   ],
+   "alt": "E-COMMERCE SHOOT, her heading in dark red capitals."
+  },
+  "ecommerce": {
+   "src": "projects/project-02/ecommerce.webp",
+   "w": 972,
+   "h": 469,
+   "page": 4,
+   "box": [
+    300,
+    82,
+    1272,
+    551
+   ],
+   "alt": "Her e-commerce shoot: LOOK 3 as a 3D render on a grey backdrop, seen from four sides.",
+   "thumb": "projects/project-02/thumbs/ecommerce.webp"
+  },
+  "render-1": {
+   "src": "projects/project-02/render-1.webp",
+   "w": 209,
+   "h": 410,
+   "page": 4,
+   "box": [
+    302,
+    141,
+    511,
+    551
+   ],
+   "alt": "3D render of LOOK 3, three-quarter front, showing the laced side of the crop top."
+  },
+  "render-2": {
+   "src": "projects/project-02/render-2.webp",
+   "w": 271,
+   "h": 410,
+   "page": 4,
+   "box": [
+    514,
+    141,
+    785,
+    551
+   ],
+   "alt": "3D render of LOOK 3 from the front: red crop top with buckle and bows, dark culottes, black ankle boots."
+  },
+  "render-3": {
+   "src": "projects/project-02/render-3.webp",
+   "w": 269,
+   "h": 410,
+   "page": 4,
+   "box": [
+    788,
+    141,
+    1057,
+    551
+   ],
+   "alt": "3D render of LOOK 3 from the side."
+  },
+  "render-4": {
+   "src": "projects/project-02/render-4.webp",
+   "w": 212,
+   "h": 410,
+   "page": 4,
+   "box": [
+    1060,
+    141,
+    1272,
+    551
+   ],
+   "alt": "3D render of LOOK 3 from the back."
+  },
+  "heading-ai-shoot": {
+   "src": "projects/project-02/heading-ai-shoot.webp",
+   "w": 215,
+   "h": 53,
+   "page": 4,
+   "box": [
+    678,
+    553,
+    893,
+    606
+   ],
+   "alt": "AI SHOOT, her heading in dark red capitals."
+  },
+  "ai-shoot": {
+   "src": "projects/project-02/ai-shoot.webp",
+   "w": 893,
+   "h": 509,
+   "page": 4,
+   "box": [
+    359,
+    553,
+    1252,
+    1062
+   ],
+   "alt": "Her AI shoot: six night photos of LOOK 3 with red motorbikes, on wet city streets, in smoke and in a tunnel.",
+   "thumb": "projects/project-02/thumbs/ai-shoot.webp"
+  },
+  "ai-1": {
+   "src": "projects/project-02/ai-1.webp",
+   "w": 204,
+   "h": 302,
+   "page": 4,
+   "box": [
+    434,
+    571,
+    638,
+    873
+   ],
+   "alt": "AI shoot: LOOK 3 at night beside a red motorbike on a wet street, a helmet in her hand."
+  },
+  "ai-2": {
+   "src": "projects/project-02/ai-2.webp",
+   "w": 276,
+   "h": 434,
+   "page": 4,
+   "box": [
+    641,
+    609,
+    917,
+    1043
+   ],
+   "alt": "AI shoot: LOOK 3 on a wet city street at night under red neon, hand on her hip."
+  },
+  "ai-3": {
+   "src": "projects/project-02/ai-3.webp",
+   "w": 183,
+   "h": 276,
+   "page": 4,
+   "box": [
+    918,
+    571,
+    1101,
+    847
+   ],
+   "alt": "AI shoot: a rider on a red motorbike comes through smoke and a crowd, headlights blazing under street lamps."
+  },
+  "ai-4": {
+   "src": "projects/project-02/ai-4.webp",
+   "w": 144,
+   "h": 220,
+   "page": 4,
+   "box": [
+    1103,
+    627,
+    1247,
+    847
+   ],
+   "alt": "AI shoot: a rider seen from above and behind, arms stretched to the handlebars of a red motorbike."
+  },
+  "ai-5": {
+   "src": "projects/project-02/ai-5.webp",
+   "w": 249,
+   "h": 166,
+   "page": 4,
+   "box": [
+    934,
+    851,
+    1183,
+    1017
+   ],
+   "alt": "AI shoot: a rider in a helmet speeds toward the camera through a lit tunnel on a red motorbike, hair flying."
+  },
+  "ai-6": {
+   "src": "projects/project-02/ai-6.webp",
+   "w": 278,
+   "h": 184,
+   "page": 4,
+   "box": [
+    361,
+    876,
+    639,
+    1060
+   ],
+   "alt": "AI shoot: a rider on a red sports bike speeds past city lights at night."
+  }
+ }
+}

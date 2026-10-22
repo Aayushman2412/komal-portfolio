@@ -4,6 +4,7 @@ Sources, newest first. When they disagree, the newer one wins.
 
 | When | What | Where |
 |---|---|---|
+| 22 Oct | **Her projects**: a PDF of her six frames plus PROJECT 01 (pages 7-10) and PROJECT 02 (pages 11-14), drawn as scrapbook pages | [`art-src/projects/`](art-src/projects) (her pages), cut by [`scripts/slice-projects.py`](scripts/slice-projects.py) |
 | 21 Oct | **Third call**, her fixes after seeing the drawn build (2 min), and a corrected About/Index spread | [`docs/meet-3-transcript-en.txt`](docs/meet-3-transcript-en.txt); the new spread is [`docs/frames/6th.jpg`](docs/frames/6th.jpg) |
 | after 18 Oct | **Her six drawn frames**, one per beat. These are the visuals. | [`docs/frames/`](docs/frames) (originals in `art-src/`) |
 | after 18 Oct | **Her notebook pages**: the concept and the inside of the scrapbook | [`docs/notes-concept.jpg`](docs/notes-concept.jpg), [`docs/notes-scrapbook.jpg`](docs/notes-scrapbook.jpg) |
@@ -25,6 +26,21 @@ the 18 Oct recording unless marked otherwise.
 | 00:59–01:05 | "The [page] noise should be the sound of the paper. And when you open it, it should sound like it is being opened." | Paper synthesised in `src/lib/paperSound.ts`: page turns are a corner lifting, a swish, crackle and a soft flop; the cover opening is the spine giving, a whoosh and a card flop, and shutting it is a slower whoosh and a heavier flop. |
 | 01:16–01:30 | "Behind the almirah there are curves... those curve lines should move... those orange lines should move like this." | Her pink-and-orange swirls flow slowly (`src/scenes/RoomSwirl.tsx`, WebGL); the almirah, bulb and stars stay still. |
 | (Aayushman) | Use the corrected About/Index drawing; the star's colours at the top were distorted. | Her new spread replaces the old one, and pages are now cut from the table by colour, so every tip of the star and its spray of dots keep their shape and colour, and the book is sized so the star stays on screen. |
+
+## Her projects (22 Oct)
+
+Each project is four drawn pages, 1620x1080 like her frames. The site keeps them whole and cuts every
+photo, illustration, colour chip and fabric close-up out of them (`art-src/projects/<slug>/cuts.json`).
+
+| | PROJECT 01 (pages 7-10) | PROJECT 02 (pages 11-14) |
+|---|---|---|
+| What it is | Knitwear from carnivorous plants: Venus flytraps, mushrooms, leaf veins; pink and olive stripes, ruffled edges | "I am my own muse": racing, city nights, denim and red leather |
+| Her pages | Glitched leaf cover; INSPIRATION and SILHOUTTE boards with four Pantone TCX chips and an 11-look line-up; two final looks and a flytrap makeup board; the night shoot of the two made pieces | The muse cover; INSPIRATION board (racing, edgy, raw, urban; two Pantone chips); THE COLLECTION (three looks); an e-commerce 3D shoot of LOOK 3 and an AI shoot |
+| In the book | Its spread holds her lettering, the story, concept, specs, two polaroids from the shoot, swatches cut from the photos, her chips and the line-up | Same, with a 3D render and an AI image (labelled as such), her chips, the muse mouth and the collection |
+| Its own page | `project.html#project-01`, opened in a new tab by "click to see more" on the spread: the scrapbook laid open on her table, page by page | `project.html#project-02` |
+
+Her pages carry no written story, title or specs, so those words are ours, in her voice, describing only
+what her pages show. Each is marked `TODO(komal)` in `src/content/site.ts` and `src/content/projects/details.ts`.
 
 ## What she is saying with it
 
@@ -97,8 +113,15 @@ What remains is old-house sound: the wall switch and bulb, the almirah creak, pa
 
 ## Still needed from Komal
 
-- **Projects 01–05**: title, a short story, photos, the spec sheet, the concept note, fabric photos.
-  Her index already promises 17 pages (01–04, 05–07, 08–11, 12–14, 15–17).
+- **Projects 01 and 02, to approve or rewrite**: the titles ("Flytrap" is ours; "I Am My Own Muse" is
+  her cover line), every story, concept, spec row, caption and section text, and the colour names.
+  To confirm: the Pantone codes we could not read whole (16-0299, 19-0220, 199, 17-4021), the year,
+  credits, whether the 3D renders and AI images are hers, and the order of project 02's looks.
+  Photos of the real fabrics would make the swatches sharp (now cut from her shoot photos).
+- **Projects 03-05**: her pages, like 01 and 02. Her index promises 17 pages (01–04, 05–07, 08–11,
+  12–14, 15–17).
+- **Page 5 of her PDF** no longer says "Komal, age 7" above her childhood drawing. The site keeps the
+  earlier version with it until she says which she wants.
 - **Contact**: email, Instagram, any other handles.
 - Two small typos in her lettering, which only she can fix in the drawing: "SINAL LOST" (2nd) and
   "Orignality" (1st). The site's live text spells them correctly.

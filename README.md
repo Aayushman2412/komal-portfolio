@@ -43,7 +43,7 @@ Dev server on http://localhost:5290. `npm run build` type-checks and builds to `
 | She sends | Do this |
 |---|---|
 | A new version of a frame | Save it as `art-src/frame-N.webp` (1620x1080), run `python scripts/slice-art.py` (needs `pip install numpy scipy pillow`) |
-| Her projects | Edit `projects` in [`src/content/site.ts`](src/content/site.ts); photos go in `public/projects/<slug>/` |
+| Her project pages | Save them as `art-src/projects/<slug>/page-N.webp` (1620x1080), list the pieces to cut from them in that folder's `cuts.json`, and run `python scripts/slice-projects.py <slug>` (it writes `public/projects/<slug>/` and `src/content/projects/<slug>.art.json`). Then fill the project in [`src/content/site.ts`](src/content/site.ts) with `more: true`, stick more of her pieces around its spread in [`src/ui/scrapbook/pieces.tsx`](src/ui/scrapbook/pieces.tsx), and lay out its own page in [`src/content/projects/details.ts`](src/content/projects/details.ts) |
 | Fabric photos | Set `src` on a swatch in `site.ts`; it replaces the drawn stand-in |
 | Contact details | `contact` in `site.ts` |
 | AI-made photos for the feed (she mentioned this on the 18 Oct call) | Replace `public/art/feed/card-NN.webp`, keeping the sizes |
@@ -61,6 +61,7 @@ frames' own pixels. The slicer and the site both read it.
 | `/#book` | the scrapbook |
 | `/#index` | the index (send this one to recruiters) |
 | `/#p/<slug>` | a project spread, e.g. `/#p/project-01` |
+| `/project.html#<slug>` | the whole project on its own page, opened from "click to see more" on its spread |
 
 Returning visitors get "skip to the almirah" instead of "skip intro". `prefers-reduced-motion`
 starts in the room. `?motion=force` overrides that for testing.

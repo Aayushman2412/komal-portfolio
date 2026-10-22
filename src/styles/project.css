@@ -1,0 +1,1668 @@
+/* A project's own page (project.html#<slug>): her scrapbook opened up on her table, page by page.
+   Her pages lie on the table whole; under each, her teal boards (joined by her ring binding) hold the
+   pieces cut from it. Sizes are in px/vw here, not cqh as in the book, because these pages scroll. */
+
+html:has(> body.pj),
+body.pj {
+  background: var(--table) url(/art/table.webp) 0 0 / 512px repeat;
+}
+
+body.pj {
+  overscroll-behavior: auto;
+}
+
+.pj-main {
+  --gut: 16px;
+  --label: #f3dc22;
+  --marker: #a3161a;
+  --paper-ink: #2a2030;
+  /* her pink loop border, as on her index and her final-look cards */
+  --loops: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cg fill='none' stroke='%23ea4f8c' stroke-width='2.6'%3E%3Ccircle cx='10' cy='10' r='5.6'/%3E%3Ccircle cx='30' cy='10' r='5.6'/%3E%3Ccircle cx='50' cy='10' r='5.6'/%3E%3Ccircle cx='10' cy='30' r='5.6'/%3E%3Ccircle cx='50' cy='30' r='5.6'/%3E%3Ccircle cx='10' cy='50' r='5.6'/%3E%3Ccircle cx='30' cy='50' r='5.6'/%3E%3Ccircle cx='50' cy='50' r='5.6'/%3E%3C/g%3E%3C/svg%3E");
+  position: relative;
+  min-height: 100dvh;
+  padding: 0 var(--gut) 24px;
+  overflow-x: clip;
+}
+
+@media (min-width: 768px) {
+  .pj-main {
+    --gut: 32px;
+  }
+}
+
+/* ---------- her yellow paper tabs ---------- */
+
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 16px;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 18px 0 14px;
+}
+
+.topbar__projects {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ytab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 15px 2px;
+  border-radius: 5px 11px 4px 9px;
+  background: var(--tab-yellow) url(/art/paper-grain.webp) 0 0 / 200px;
+  background-blend-mode: multiply;
+  box-shadow:
+    0 2px 0 rgba(120, 80, 10, 0.35),
+    0 8px 16px -4px rgba(0, 0, 0, 0.45);
+  color: #2a2010;
+  font-family: var(--f-hand);
+  font-size: 17px;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  rotate: -1.2deg;
+  transition:
+    rotate 0.25s,
+    translate 0.25s,
+    filter 0.2s;
+}
+
+.topbar__projects li:nth-child(even) .ytab {
+  rotate: 1.4deg;
+}
+
+.ytab:hover {
+  rotate: 0deg !important;
+  translate: 0 -2px;
+  filter: brightness(1.06);
+}
+
+/* the project you are on: its tab pulled out, paler, like the open one in her book */
+.ytab[aria-current='page'] {
+  background-color: #fff1b8;
+  translate: 0 4px;
+  box-shadow:
+    0 0 0 2px rgba(42, 32, 16, 0.55) inset,
+    0 8px 16px -4px rgba(0, 0, 0, 0.45);
+}
+
+/* ---------- her pages, whole, on the table ---------- */
+
+.spread__page {
+  position: relative;
+  /* whole on screen: never taller than the window */
+  width: min(100%, calc((100dvh - 64px) * 1.5));
+  margin: 0 auto;
+}
+
+.spread__page .pc__hit {
+  display: block;
+  width: 100%;
+}
+
+.spread__page img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* her pages are photographs of the book on this same table: their edges melt into it */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 2.2%, #000 97.8%, transparent), linear-gradient(transparent, #000 3.3%, #000 96.7%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, transparent, #000 2.2%, #000 97.8%, transparent), linear-gradient(transparent, #000 3.3%, #000 96.7%, transparent);
+  mask-composite: intersect;
+}
+
+.spread {
+  position: relative;
+  max-width: 1320px;
+  margin: clamp(64px, 9vw, 120px) auto 0;
+}
+
+.spread__tag {
+  position: absolute;
+  z-index: 3;
+  left: 2.5%;
+  top: -16px;
+  margin: 0;
+  padding: 3px 14px 5px;
+  background: var(--label) url(/art/paper-grain.webp) 0 0 / 200px;
+  background-blend-mode: multiply;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+  color: #17171c;
+  font-family: var(--f-hand);
+  font-size: 20px;
+  line-height: 1.1;
+  rotate: -3deg;
+}
+
+/* under her page: the pieces of it that the boards show in parts, small, each opening large */
+.closer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 22px;
+  margin: 22px auto 0;
+}
+
+.closer__label {
+  margin: 0;
+  font-family: var(--f-note);
+  font-size: 24px;
+  color: rgba(246, 236, 226, 0.78);
+  rotate: -3deg;
+}
+
+.closer__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.closer__list li {
+  --th: clamp(62px, 7vw, 96px);
+  /* a small piece (one of her labels) no bigger than about the size she cut it */
+  width: clamp(40px, min(calc(var(--th) * var(--ar)), calc(var(--nw) * 1.3px)), 180px);
+  rotate: var(--r);
+  transition:
+    rotate 0.35s cubic-bezier(0.3, 1.4, 0.5, 1),
+    scale 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.closer__list img {
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: 3px;
+  background: #fbf9f3 url(/art/paper-grain.webp) 0 0 / 160px;
+  background-blend-mode: multiply;
+  box-shadow: 0 8px 14px -8px rgba(0, 0, 0, 0.7);
+}
+
+@media (hover: hover) {
+  .closer__list li:hover {
+    rotate: 0deg;
+    scale: 1.08;
+  }
+}
+
+/* ---------- the cover ---------- */
+
+.hero {
+  /* her cover as big as the window allows, with room under it for the name of the project */
+  --pw: min(100%, calc((100dvh - 230px) * 1.5));
+  position: relative;
+  max-width: 1320px;
+  margin: 4px auto 0;
+}
+
+.hero .spread__page {
+  width: var(--pw);
+}
+
+/* the name sits under her cover, clear of it (her cover runs to its edges: her mouths, her rings) */
+.hero__below {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  width: var(--pw);
+  margin: 30px auto 0;
+}
+
+/* her index paper with her PROJECT 0N lettering */
+.hero__card,
+.spec-card {
+  border: 13px solid transparent;
+  border-image: var(--loops) 20 round;
+  background:
+    url(/art/paper-grain.webp) 0 0 / 220px,
+    radial-gradient(ellipse at 40% 35%, #f3f2f0, #d9d8d6);
+  background-blend-mode: multiply;
+  background-clip: padding-box;
+  color: #17171c;
+}
+
+.hero__card {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  width: min(580px, calc(100vw - 2 * var(--gut) - 24px));
+  margin: 0 0 0 -2%;
+  padding: 18px 26px 22px;
+  text-align: center;
+  rotate: -1.8deg;
+  box-shadow: 0 18px 34px -12px rgba(0, 0, 0, 0.6);
+}
+
+.hero__lettering {
+  display: block;
+  width: min(62%, 300px);
+  height: auto;
+  margin: 2px auto 6px;
+}
+
+.hero__title {
+  margin: 0;
+  font-family: var(--f-hand);
+  font-weight: 400;
+  font-size: clamp(40px, 5vw, 68px);
+  line-height: 1;
+  color: #17171c;
+}
+
+.hero__sub {
+  margin: 12px 0 0;
+  font-family: var(--f-note);
+  font-size: clamp(21px, 2vw, 27px);
+  line-height: 1.15;
+  color: var(--paper-ink);
+}
+
+.pj-main .hero__sparkle {
+  left: 22px;
+  top: -26px;
+  width: 46px;
+  rotate: 12deg;
+}
+
+.pj-main .hero__heart {
+  right: 16%;
+  bottom: -20px;
+  width: 48px;
+  rotate: -14deg;
+}
+
+.hero__hint {
+  margin: 0 0 10px;
+  font-family: var(--f-note);
+  font-size: 24px;
+  color: rgba(246, 236, 226, 0.72);
+}
+
+.hero__hint::after {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 10px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  rotate: 45deg;
+  translate: 0 -4px;
+  animation: nudge 1.8s ease-in-out infinite;
+}
+
+/* wide screens: her cover and its name side by side, both in the first view */
+@media (min-width: 1100px) and (min-aspect-ratio: 4/3) {
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) min(390px, 28%);
+    align-items: center;
+    max-width: 1320px;
+    min-height: calc(100dvh - 76px);
+    margin-top: 0;
+  }
+  .hero .spread__page {
+    width: min(100%, calc((100dvh - 96px) * 1.5));
+    margin: 0 0 0 auto;
+  }
+  .hero__below {
+    flex-direction: column;
+    align-items: flex-start;
+    width: auto;
+    margin: 0 0 0 clamp(16px, 1.8vw, 26px);
+  }
+  .hero__card {
+    width: 100%;
+    margin: 0;
+    rotate: 2deg;
+  }
+  .hero__hint {
+    margin: 4px 0 0 18%;
+  }
+}
+
+/* ---------- her boards ---------- */
+
+.boards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: clamp(48px, 6vw, 80px);
+}
+
+.board {
+  /* her frame's thickness; her ring's size */
+  --fw: clamp(10px, 1.35vw, 17px);
+  --ring: clamp(60px, 6.6vw, 94px);
+  --gap: calc(var(--ring) * 0.36);
+  position: relative;
+  width: min(1180px, 100%);
+  padding: clamp(20px, 3.2vw, 46px) clamp(14px, 3.4vw, 50px) clamp(30px, 3.8vw, 54px);
+  border-style: solid;
+  border-color: transparent;
+  border-width: calc(var(--fw) * 1.25) calc(var(--fw) * 1.45) calc(var(--fw) * 1.9);
+  /* her teal frame, cut from her blank page (src/project/art/make-art.py) */
+  border-image: url(../project/art/board.webp) 22 26 34 / calc(var(--fw) * 1.25) calc(var(--fw) * 1.45) calc(var(--fw) * 1.9) stretch;
+  background:
+    url(/art/paper-grain.webp) 0 0 / 300px,
+    radial-gradient(ellipse 75% 62% at 50% 42%, #f6e3d8, #e6cbbd 68%, #d3b3a3);
+  background-blend-mode: multiply;
+  background-clip: padding-box;
+  box-shadow:
+    inset 0 14px 18px -14px rgba(70, 35, 25, 0.5),
+    0 26px 44px -18px rgba(0, 0, 0, 0.7);
+  color: var(--paper-ink);
+  rotate: var(--tilt, 0deg);
+}
+
+.board--bound {
+  margin-top: var(--gap);
+}
+
+/* her ring binding, joining a board to the one above it the way her cover pages show it */
+.rings {
+  position: absolute;
+  z-index: 8;
+  left: 7%;
+  right: 7%;
+  top: calc(-1 * (var(--fw) * 1.25 + var(--gap) / 2) - var(--ring) * 70 / 284);
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.rings img {
+  display: block;
+  width: var(--ring);
+  height: auto;
+  rotate: 90deg;
+  filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.3));
+}
+
+/* her PROJECTS tab, sticking out of the board's edge, and her PROJECT 0N flap in its corner */
+.board__tab {
+  position: absolute;
+  z-index: 1;
+  right: calc(-1 * var(--fw) * 1.45 - clamp(10px, 1.1vw, 15px));
+  top: 16%;
+  width: clamp(18px, 2vw, 27px);
+  height: auto;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+}
+
+.board__flap {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 0;
+  width: clamp(84px, 9.5vw, 128px);
+  height: auto;
+  filter: drop-shadow(-2px -2px 3px rgba(60, 30, 20, 0.25));
+}
+
+.board.has-flap {
+  padding-bottom: calc(clamp(30px, 3.8vw, 54px) + clamp(60px, 6vw, 84px));
+}
+
+.pj-main .sticker {
+  position: absolute;
+  z-index: 7;
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+}
+
+.pj-main .sticker--a {
+  right: -14px;
+  top: 9%;
+  width: clamp(34px, 3.6vw, 52px);
+  rotate: var(--r, 8deg);
+}
+
+.pj-main .sticker--b {
+  left: 2%;
+  bottom: -18px;
+  width: clamp(30px, 3.1vw, 46px);
+  rotate: var(--r, -8deg);
+}
+
+/* ---------- a board's heading, words and note ---------- */
+
+.sheet__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  margin: 0 0 clamp(18px, 2.6vw, 32px);
+}
+
+.sheet__lettering {
+  margin: 0;
+  line-height: 0;
+}
+
+/* her lettering, a little bigger than on her page */
+.sheet__lettering img {
+  display: block;
+  width: auto;
+  max-width: min(100%, 80vw);
+  height: clamp(36px, 4.4vw, 60px);
+  rotate: -1.5deg;
+  filter: drop-shadow(0 2px 3px rgba(60, 30, 20, 0.3));
+}
+
+/* two-line lettering (THE COLLECTION) */
+.sheet__lettering img[width='455'] {
+  height: clamp(70px, 8vw, 116px);
+}
+
+.sheet__page {
+  font-family: var(--f-note);
+  font-size: clamp(19px, 1.7vw, 23px);
+  color: #85604f;
+  rotate: -2deg;
+}
+
+/* a heading on a strip of white paper in red marker, like her INSPIRATION strips */
+.strip {
+  display: inline-block;
+  margin: 0;
+  padding: 0.06em 0.5em 0.12em;
+  background: #fdfbf6 url(/art/paper-grain.webp) 0 0 / 200px;
+  background-blend-mode: multiply;
+  box-shadow: 0 2px 6px rgba(60, 30, 20, 0.28);
+  clip-path: polygon(0.6% 4%, 99.2% 0, 100% 95%, 0 100%);
+  color: var(--marker);
+  font-family: var(--f-hand);
+  font-weight: 400;
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  rotate: -1.5deg;
+}
+
+/* the note (and her tags) beside the section's big piece */
+.sheet__lead {
+  display: grid;
+  grid-template-columns: minmax(0, 36fr) minmax(0, 64fr);
+  gap: clamp(26px, 3.4vw, 48px);
+  align-items: center;
+}
+
+.sheet__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* never much bigger than she cut it, and never taller than about a screen */
+.sheet__feature .pc {
+  width: 100%;
+  max-width: min(calc(var(--nw) * 1.25px), calc(min(820px, 88vh) * var(--ar)));
+  margin: 0 auto;
+}
+
+/* the rest, stuck down in columns: ProjectView puts each in the shortest so far, measured in rows of
+   4px, and the columns' first pieces start at slightly different heights. Each piece sits at a
+   slightly different place in its column. */
+.sheet__flow {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  grid-auto-rows: 4px;
+  gap: 0 clamp(22px, 3vw, 44px);
+  align-items: start;
+}
+
+.sheet__lead + .sheet__flow {
+  margin-top: clamp(40px, 4.4vw, 64px);
+}
+
+.sheet__cell {
+  padding-bottom: clamp(30px, 3.2vw, 46px);
+}
+
+/* never shown much bigger than she cut it, so it stays sharp */
+.sheet__cell > .pc {
+  width: var(--cw);
+  max-width: min(100%, calc(var(--nw) * 1.25px));
+  margin-left: 3%;
+}
+
+.sheet__cell:nth-child(even) > .pc {
+  margin-left: auto;
+  margin-right: 3%;
+}
+
+.sheet__cell:nth-child(3n) > .pc {
+  margin-inline: auto;
+}
+
+/* her tags, under the note */
+.sheet__tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 14px 6%;
+}
+
+.sheet__tags .pc {
+  width: 22%;
+  max-width: calc(var(--nw) * 1.25px);
+}
+
+/* one or two pieces under the note, one above the other, so the note's side fills as far down as the big piece */
+.sheet__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 26px;
+  margin-top: 6px;
+}
+
+.sheet__aside .pc {
+  width: min(100%, calc(var(--w) * 2.2));
+  max-width: calc(var(--nw) * 1.25px);
+  margin-left: 4%;
+}
+
+.sheet__aside .pc:nth-child(even) {
+  align-self: flex-end;
+  margin-right: 4%;
+}
+
+/* chips and fabrics, in a row */
+.sheet__row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 30px 4.5%;
+  margin-top: clamp(16px, 2vw, 28px);
+}
+
+.sheet__row .pc {
+  width: var(--w);
+  max-width: calc(var(--nw) * 1.25px);
+}
+
+.sheet__lead .sheet__row {
+  margin-top: 0;
+}
+
+.sheet__lead .sheet__row .pc {
+  width: calc(var(--w) * 1.6);
+}
+
+
+
+/* pink lined paper with her loop border, like her About page */
+.note {
+  --lh: 1.34em;
+  position: relative;
+  margin: 0;
+  padding: 16px 20px 14px 26px;
+  border: 13px solid transparent;
+  border-image: var(--loops) 20 round;
+  background:
+    url(/art/paper-grain.webp) 0 0 / 200px,
+    repeating-linear-gradient(transparent 0 calc(var(--lh) - 1px), rgba(110, 104, 130, 0.4) calc(var(--lh) - 1px) var(--lh)) 0 calc(16px + 0.12em) / 100% 100%,
+    linear-gradient(160deg, #fdebf3, #f7c9dc);
+  background-blend-mode: multiply;
+  background-clip: padding-box;
+  box-shadow: 0 8px 16px -6px rgba(60, 20, 30, 0.3);
+  font-family: var(--f-note);
+  font-size: clamp(22px, 2vw, 27px);
+  line-height: var(--lh);
+  color: var(--paper-ink);
+  rotate: -1deg;
+}
+
+.note p {
+  margin: 0;
+}
+
+/* her keywords, on her yellow labels */
+.words {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.word {
+  padding: 2px 10px 4px;
+  background: var(--label) url(/art/paper-grain.webp) 0 0 / 160px;
+  background-blend-mode: multiply;
+  box-shadow: 0 1px 3px rgba(60, 40, 0, 0.35);
+  color: #17171c;
+  font-family: var(--f-hand);
+  font-size: clamp(17px, 1.6vw, 22px);
+  line-height: 1.15;
+  rotate: var(--r);
+}
+
+/* ---------- the pieces ---------- */
+
+.pc {
+  position: relative;
+  margin: 0;
+  width: var(--w);
+  rotate: var(--r, 0deg);
+  transition:
+    rotate 0.45s cubic-bezier(0.3, 1.4, 0.5, 1),
+    scale 0.45s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.pc__hit {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+}
+
+.pc__img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (hover: hover) {
+  .pc:hover {
+    z-index: 4;
+    rotate: calc(var(--r, 0deg) * 0.25);
+    scale: 1.03;
+  }
+  /* a polaroid tips the other way, as if picked up */
+  .pc--polaroid:hover {
+    rotate: calc(var(--r, 0deg) * -0.8);
+    scale: 1.05;
+  }
+}
+
+.pj-main .tape {
+  position: absolute;
+  z-index: 3;
+  top: -13px;
+  left: 50%;
+  width: clamp(54px, 36%, 128px);
+  height: auto;
+  translate: -50% 0;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18));
+}
+
+/* a print's or a polaroid's tape: a thin strip, mostly above the picture */
+.pj-main .tape--top {
+  top: -20px;
+  width: clamp(44px, 24%, 96px);
+}
+
+/* a wide print is taped at its two top corners */
+.pj-main .tape--corner {
+  top: -9px;
+  width: clamp(36px, 12%, 72px);
+  translate: none;
+}
+
+.pj-main .tape--l {
+  left: -4%;
+}
+
+.pj-main .tape--r {
+  left: auto;
+  right: -4%;
+}
+
+/* a print: thin white border, taped at the top */
+.pc--print .pc__hit,
+.pc--polaroid .pc__hit {
+  background: #fbf9f3 url(/art/paper-grain.webp) 0 0 / 180px;
+  background-blend-mode: multiply;
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.15),
+    0 12px 24px -10px rgba(40, 20, 10, 0.6);
+}
+
+.pc--print .pc__hit {
+  padding: clamp(4px, 0.7vw, 9px);
+}
+
+.pc--polaroid .pc__hit {
+  padding: 6% 6% 0;
+}
+
+.pc__cap {
+  display: block;
+  padding: 0.3em 0.2em 0.5em;
+  font-family: var(--f-note);
+  font-size: clamp(21px, 2vw, 28px);
+  line-height: 1.1;
+  text-align: center;
+  color: var(--paper-ink);
+}
+
+.pc__note {
+  margin: 16px 4% 0;
+  font-family: var(--f-note);
+  font-size: clamp(19px, 1.7vw, 23px);
+  line-height: 1.15;
+  text-align: center;
+  color: #3a2a33;
+  rotate: calc(var(--r, 0deg) * -0.7);
+}
+
+/* cut out along its edge and glued flat */
+.pc--cutout .pc__img,
+.pc--lettering .pc__img {
+  filter: drop-shadow(0 4px 4px rgba(50, 25, 15, 0.38));
+}
+
+/* an illustration card with her pink loop border */
+.pc--card .pc__hit {
+  padding: 3%;
+  border: 12px solid transparent;
+  border-image: var(--loops) 20 round;
+  background: #fbfaf7 url(/art/paper-grain.webp) 0 0 / 200px;
+  background-blend-mode: multiply;
+  background-clip: padding-box;
+  box-shadow: 0 14px 26px -12px rgba(40, 20, 10, 0.6);
+}
+
+/* a Pantone chip (her code is on it), the colour's name written underneath */
+.pc--chip .pc__img {
+  box-shadow: 0 4px 8px -2px rgba(40, 20, 10, 0.4);
+}
+
+.tag {
+  display: block;
+  width: max-content;
+  max-width: 200%;
+  margin: 10px auto 0;
+  padding: 3px 10px 5px;
+  background: #fffdf2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
+  font-family: var(--f-note);
+  font-size: clamp(18px, 1.6vw, 21px);
+  line-height: 1.1;
+  text-align: center;
+  color: var(--paper-ink);
+  rotate: calc(var(--r, 0deg) * -1.2);
+}
+
+/* fabric cut with pinking shears */
+.pc--fabric .pc__hit {
+  aspect-ratio: 1 / 1.1;
+  filter: drop-shadow(0 6px 7px rgba(40, 20, 10, 0.38));
+}
+
+.pc__cloth {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  clip-path: polygon(0% 0%, 7% 3%, 14% 0%, 21% 3%, 28% 0%, 35% 3%, 42% 0%, 50% 3%, 57% 0%, 64% 3%, 71% 0%, 78% 3%, 85% 0%, 92% 3%, 100% 0%, 97% 7%, 100% 14%, 97% 21%, 100% 28%, 97% 35%, 100% 42%, 97% 50%, 100% 57%, 97% 64%, 100% 71%, 97% 78%, 100% 85%, 97% 92%, 100% 100%, 92% 97%, 85% 100%, 78% 97%, 71% 100%, 64% 97%, 57% 100%, 50% 97%, 42% 100%, 35% 97%, 28% 100%, 21% 97%, 14% 100%, 7% 97%, 0% 100%, 3% 92%, 0% 85%, 3% 78%, 0% 71%, 3% 64%, 0% 57%, 3% 50%, 0% 42%, 3% 35%, 0% 28%, 3% 21%, 0% 14%, 3% 7%);
+}
+
+.pc.is-in .pc__cloth {
+  background-image: var(--cloth);
+}
+
+.tag--fabric {
+  margin-top: -14px;
+  position: relative;
+}
+
+/* the line-up, pegged on a red thread */
+.line {
+  --hang: clamp(150px, 19vw, 236px);
+  --row: clamp(34px, 3.4vw, 48px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--row) clamp(10px, 1.7vw, 24px);
+  margin: clamp(34px, 3.6vw, 48px) 0 0;
+  padding: 0 2%;
+  list-style: none;
+  background: repeating-linear-gradient(transparent 0 7px, var(--thread) 7px 9px, transparent 9px calc(var(--hang) + var(--row)));
+}
+
+.line__look {
+  position: relative;
+  height: var(--hang);
+  padding-top: 10px;
+  rotate: var(--r, 0deg);
+  transform-origin: 50% 8px;
+}
+
+.line__look .pc__hit {
+  height: 100%;
+}
+
+.line__look img {
+  display: block;
+  width: auto;
+  height: 100%;
+  padding: 3px;
+  background: #fff;
+  box-shadow: 0 8px 14px -8px rgba(40, 20, 10, 0.6);
+}
+
+.line__peg {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 0;
+  width: 9px;
+  height: 22px;
+  translate: -50% 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #c78f5b, #e8b980 50%, #b67c48);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.35);
+}
+
+@media (hover: hover) {
+  .line__look:hover {
+    animation: swing 1s ease-in-out;
+  }
+}
+
+/* ---------- the story board ---------- */
+
+.story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(30px, 3.4vw, 48px) clamp(28px, 4.4vw, 64px);
+  align-items: start;
+}
+
+.story__note {
+  rotate: -1.6deg;
+}
+
+.letter {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  position: relative;
+  margin-top: 70px;
+  rotate: 1.6deg;
+}
+
+/* the concept note, pulled out of its envelope */
+.letter__paper {
+  --lh: 1.32em;
+  position: relative;
+  z-index: 1;
+  padding: 18px 26px 118px;
+  background:
+    repeating-linear-gradient(transparent 0 calc(var(--lh) - 1px), rgba(110, 104, 130, 0.3) calc(var(--lh) - 1px) var(--lh)) 0 calc(18px + 0.15em) / 100% 100%,
+    #fffdf4;
+  box-shadow: 0 6px 14px -6px rgba(60, 20, 30, 0.35);
+  font-family: var(--f-note);
+  font-size: clamp(20px, 1.8vw, 24px);
+  line-height: var(--lh);
+  color: var(--paper-ink);
+}
+
+.letter__paper b {
+  display: block;
+  font-family: var(--f-hand);
+  font-weight: 400;
+  font-size: 1.15em;
+  color: var(--pink);
+}
+
+.letter__paper p {
+  margin: 0;
+}
+
+.letter::before,
+.letter__envelope,
+.letter__flap {
+  position: absolute;
+  left: -5%;
+  right: -5%;
+}
+
+/* the envelope's back, behind the letter */
+.letter::before {
+  content: '';
+  bottom: 0;
+  height: 112px;
+  border-radius: 5px;
+  background: #e2a3b8 url(/art/paper-grain.webp) 0 0 / 200px;
+  background-blend-mode: multiply;
+  box-shadow: 0 12px 22px -10px rgba(60, 20, 30, 0.5);
+}
+
+.letter__envelope {
+  z-index: 2;
+  bottom: 0;
+  height: 112px;
+  border-radius: 5px;
+  background: #eeb6c9 url(/art/paper-grain.webp) 0 0 / 200px;
+  background-blend-mode: multiply;
+  clip-path: polygon(0 0, 50% 52%, 100% 0, 100% 100%, 0 100%);
+}
+
+/* its flap, open, behind the letter */
+.letter__flap {
+  z-index: 0;
+  bottom: 112px;
+  height: 70px;
+  background: #d98ba6;
+  clip-path: polygon(0 100%, 50% 0, 100% 100%);
+}
+
+.letter__seal {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  width: 44px;
+  height: auto;
+  translate: -50% 0;
+}
+
+/* her red paper with her words, in white like "Komal, age 7" */
+.red-paper {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(24px, 3vw, 38px) 28px clamp(28px, 3.2vw, 40px);
+  text-align: center;
+  rotate: 2deg;
+}
+
+.red-paper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    url(/art/paper-grain.webp) 0 0 / 200px,
+    radial-gradient(ellipse at 45% 40%, #d8342a, #b8201b);
+  background-blend-mode: multiply;
+  clip-path: polygon(1% 1.5%, 34% 0, 71% 1%, 99% 0.4%, 100% 37%, 98.8% 72%, 99.6% 99%, 62% 100%, 27% 98.9%, 0.4% 99.6%, 0 61%, 1.2% 28%);
+}
+
+.red-paper__text {
+  display: block;
+  font-family: var(--f-hand);
+  font-size: clamp(28px, 3vw, 42px);
+  line-height: 1.1;
+  color: #fff8f2;
+  rotate: -3deg;
+}
+
+/* ---------- spec sheet and palette ---------- */
+
+.specs {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: clamp(40px, 4.4vw, 64px);
+  align-items: start;
+}
+
+.spec-card {
+  position: relative;
+  margin-top: 30px;
+  padding: 22px 24px 24px;
+  rotate: -1deg;
+  box-shadow: 0 14px 26px -12px rgba(40, 20, 10, 0.55);
+}
+
+.spec-card__tab {
+  position: absolute;
+  bottom: calc(100% + 13px);
+  right: 12%;
+  padding: 5px 16px 8px;
+  border-radius: 9px 9px 0 0;
+  background: var(--tab-yellow) url(/art/paper-grain.webp) 0 0 / 160px;
+  background-blend-mode: multiply;
+  font-family: var(--f-hand);
+  font-size: 21px;
+  color: #2a2010;
+}
+
+.spec-card h3,
+.palette h3 {
+  margin: 0 0 14px;
+  font-family: var(--f-hand);
+  font-weight: 400;
+  font-size: clamp(26px, 2.6vw, 34px);
+  line-height: 1.1;
+}
+
+/* ruled like her school index, in marker capitals */
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1.5px solid #17171c;
+  font-family: var(--f-hand);
+  font-size: clamp(16px, 1.5vw, 20px);
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.spec-table th,
+.spec-table td {
+  padding: 8px 12px;
+  border-bottom: 1.5px solid #17171c;
+  font-weight: 400;
+  text-align: left;
+  vertical-align: top;
+}
+
+.spec-table th {
+  width: 36%;
+  border-right: 1.5px solid #17171c;
+}
+
+.palette {
+  rotate: 1deg;
+}
+
+.palette h3 {
+  color: var(--paper-ink);
+}
+
+.palette ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* two colours: one above the other, a little apart, so the palette stands about as tall as the spec sheet */
+.palette ul:has(> li:nth-child(2):last-child) {
+  grid-template-columns: minmax(0, 1fr);
+  width: 58%;
+}
+
+.palette ul:has(> li:nth-child(2):last-child) > li:last-child {
+  translate: 52% 0;
+}
+
+.paint {
+  font-size: 15px;
+  line-height: 1.25;
+  rotate: var(--r);
+}
+
+/* a square of the colour, cut with pinking shears */
+.paint__chip {
+  display: block;
+  margin-bottom: 8px;
+  aspect-ratio: 1.6;
+  background: var(--hex) url(/art/paper-grain.webp) 0 0 / 160px;
+  background-blend-mode: multiply;
+  clip-path: polygon(0% 0%, 8% 4%, 16% 0%, 25% 4%, 33% 0%, 42% 4%, 50% 0%, 58% 4%, 67% 0%, 75% 4%, 83% 0%, 92% 4%, 100% 0%, 97% 12%, 100% 25%, 97% 37%, 100% 50%, 97% 62%, 100% 75%, 97% 87%, 100% 100%, 92% 96%, 83% 100%, 75% 96%, 67% 100%, 58% 96%, 50% 100%, 42% 96%, 33% 100%, 25% 96%, 16% 100%, 8% 96%, 0% 100%, 3% 87%, 0% 75%, 3% 62%, 0% 50%, 3% 37%, 0% 25%, 3% 12%);
+}
+
+.paint__code {
+  font-family: var(--f-osd);
+  color: #1b1b22;
+}
+
+.paint__name {
+  font-family: var(--f-note);
+  font-size: 22px;
+  color: #3a2a33;
+}
+
+/* ---------- where next: her flaps and her "turn" ---------- */
+
+.endnav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1180px;
+  margin: clamp(70px, 8vw, 110px) auto 0;
+}
+
+.endflap {
+  position: relative;
+  display: block;
+  flex: none;
+  width: clamp(112px, 11vw, 152px);
+  aspect-ratio: 118 / 104;
+  text-decoration: none;
+  transition:
+    rotate 0.25s,
+    scale 0.25s;
+}
+
+.endflap--none {
+  visibility: hidden;
+}
+
+.endflap__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.endflap span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0 12% 0 6%;
+  font-family: var(--f-hand);
+  font-size: clamp(15px, 1.4vw, 19px);
+  line-height: 1;
+  text-align: center;
+  color: #17171c;
+  rotate: -38deg;
+}
+
+.endflap--prev .endflap__img {
+  scale: -1 1;
+}
+
+.endflap--prev span {
+  padding: 0 6% 0 12%;
+  color: #fff;
+  rotate: 38deg;
+}
+
+.endflap--index span {
+  color: #fff;
+}
+
+/* her "turn", pointing at the flap */
+.endflap__turn {
+  position: absolute;
+  right: 92%;
+  bottom: 58%;
+  width: clamp(80px, 8vw, 104px);
+  height: auto;
+  pointer-events: none;
+}
+
+.endflap:hover {
+  rotate: -4deg;
+  scale: 1.07;
+}
+
+.pj-foot {
+  padding: 48px 0 12px;
+  font-family: var(--f-note);
+  font-size: 20px;
+  text-align: center;
+  color: rgba(246, 236, 226, 0.5);
+}
+
+/* ---------- her tabs on the right edge (wide screens) ---------- */
+
+.sidetabs {
+  position: fixed;
+  z-index: 20;
+  right: 0;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  translate: 0 -50%;
+}
+
+.sidetab {
+  padding: 12px 7px 12px 9px;
+  border: 0;
+  border-radius: 9px 0 0 9px;
+  background: var(--tab-yellow) url(/art/paper-grain.webp) 0 0 / 160px;
+  background-blend-mode: multiply;
+  box-shadow: -2px 3px 7px rgba(0, 0, 0, 0.4);
+  color: #2a2010;
+  font-family: var(--f-hand);
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  writing-mode: vertical-rl;
+  translate: 7px 0;
+  transition:
+    translate 0.25s,
+    background-color 0.25s;
+}
+
+.sidetab:hover,
+.sidetab.is-on {
+  translate: 0 0;
+}
+
+.sidetab.is-on {
+  background-color: #fff1b8;
+}
+
+@media (max-width: 1259px) {
+  .sidetabs {
+    display: none;
+  }
+}
+
+/* her cover's name card keeps clear of the tabs */
+@media (min-width: 1260px) {
+  .hero {
+    padding-right: 30px;
+  }
+}
+
+/* ---------- no project in the link: the ones that have a page ---------- */
+
+.pj-main--index .board {
+  max-width: 1180px;
+  margin: 40px auto 0;
+}
+
+.pindex {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 36px;
+  margin: 0;
+  padding: 8px 0 0;
+  list-style: none;
+}
+
+.pindex li {
+  rotate: var(--r);
+}
+
+.pindex__card {
+  display: block;
+  padding: 12px 12px 18px;
+  background: #fbf9f3 url(/art/paper-grain.webp) 0 0 / 180px;
+  background-blend-mode: multiply;
+  box-shadow: 0 14px 26px -12px rgba(40, 20, 10, 0.6);
+  color: #17171c;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    rotate 0.3s,
+    scale 0.3s;
+}
+
+.pindex__card:hover {
+  rotate: 1.5deg;
+  scale: 1.03;
+}
+
+.pindex__cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+.pindex__lettering {
+  display: block;
+  width: 58%;
+  height: auto;
+  margin: 14px auto 4px;
+}
+
+.pindex__title {
+  font-family: var(--f-hand);
+  font-size: 28px;
+}
+
+/* ---------- the lightbox ---------- */
+
+.lb {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  background: rgba(20, 12, 9, 0.93);
+  animation: lb-in 0.25s ease-out;
+}
+
+.lb__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 64px 84px 6px;
+  overflow: hidden;
+}
+
+.lb.is-zoomed .lb__stage {
+  display: block;
+  padding: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.lb__pic {
+  display: block;
+  flex: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  line-height: 0;
+}
+
+.lb.is-zoomed .lb__pic {
+  margin: auto;
+}
+
+.lb__pic img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  animation: lb-pic 0.35s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.lb__caption {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 10px 72px 20px;
+  font-family: var(--f-note);
+  font-size: clamp(20px, 2vw, 26px);
+  line-height: 1.2;
+  text-align: center;
+  color: #fff4ea;
+}
+
+.lb.is-zoomed .lb__caption,
+.lb.is-zoomed .lb__hint {
+  display: none;
+}
+
+.lb__count {
+  position: absolute;
+  left: 18px;
+  top: 22px;
+  font-family: var(--f-osd);
+  font-size: 14px;
+  color: rgba(255, 244, 234, 0.7);
+}
+
+.lb__hint {
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  translate: -50% 0;
+  font-family: var(--f-note);
+  font-size: 19px;
+  color: rgba(255, 244, 234, 0.6);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.lb__btn {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--tab-yellow) url(/art/paper-grain.webp) 0 0 / 160px;
+  background-blend-mode: multiply;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+  color: #2a2010;
+}
+
+.lb__btn--close {
+  right: 14px;
+  top: 12px;
+}
+
+.lb__btn--prev,
+.lb__btn--next {
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.lb__btn--prev {
+  left: 16px;
+}
+
+.lb__btn--next {
+  right: 16px;
+}
+
+/* ---------- motion: pages lie down, pieces are pressed onto their boards ---------- */
+
+.pj-motion .pj-main [data-reveal] {
+  opacity: 0;
+  translate: 0 38px;
+  transition:
+    opacity 0.7s ease-out var(--d, 0ms),
+    translate 0.9s cubic-bezier(0.2, 0.75, 0.25, 1) var(--d, 0ms);
+}
+
+.pj-motion .pj-main .pc[data-reveal] {
+  scale: 1.06;
+  transition:
+    opacity 0.6s ease-out var(--d, 0ms),
+    translate 0.8s cubic-bezier(0.2, 0.75, 0.25, 1) var(--d, 0ms),
+    rotate 0.45s cubic-bezier(0.3, 1.4, 0.5, 1),
+    scale 0.6s cubic-bezier(0.3, 1.3, 0.5, 1) var(--d, 0ms);
+}
+
+.pj-motion .pj-main .spread__page[data-reveal] {
+  translate: 0 60px;
+  transform: perspective(2200px) rotateX(18deg) scale(0.97);
+  transform-origin: 50% 100%;
+  transition:
+    opacity 0.8s ease-out,
+    translate 1.1s cubic-bezier(0.2, 0.75, 0.25, 1),
+    transform 1.2s cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+
+.pj-motion .pj-main [data-reveal].is-in {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.pj-motion .pj-main .pc[data-reveal].is-in {
+  scale: 1;
+}
+
+.pj-motion .pj-main .spread__page[data-reveal].is-in {
+  transform: none;
+}
+
+@media (hover: hover) {
+  .pj-motion .pj-main .pc[data-reveal].is-in:hover {
+    scale: 1.03;
+  }
+  .pj-motion .pj-main .pc--polaroid[data-reveal].is-in:hover {
+    scale: 1.05;
+  }
+}
+
+@keyframes swing {
+  25% {
+    rotate: calc(var(--r, 0deg) + 4deg);
+  }
+  60% {
+    rotate: calc(var(--r, 0deg) - 3deg);
+  }
+}
+
+@keyframes nudge {
+  50% {
+    translate: 0 2px;
+  }
+}
+
+@keyframes lb-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes lb-pic {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
+
+/* ---------- phones ---------- */
+
+@media (max-width: 760px) {
+  .topbar {
+    padding-top: 12px;
+  }
+  .ytab {
+    height: 34px;
+    padding: 0 11px 2px;
+    font-size: 15px;
+  }
+  .spread__page {
+    margin: 0 calc(-1 * var(--gut));
+  }
+  .spread__page img {
+    border-radius: 0;
+  }
+  .hero__below {
+    width: 100%;
+    margin-top: 28px;
+  }
+  .hero__card {
+    margin: 0 auto;
+  }
+  .hero__hint {
+    display: none;
+  }
+  .board {
+    --ring: 54px;
+  }
+  .rings {
+    left: 12%;
+    right: 12%;
+  }
+  .rings img:nth-child(n + 4) {
+    display: none;
+  }
+  /* one column: the note, then her pieces two or one to a row (the big piece first, then the ones
+     that stood under the note) */
+  .sheet__lead {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sheet__lead > .sheet__intro {
+    display: contents;
+  }
+  .sheet__lead .sheet__aside {
+    order: 1;
+  }
+  .sheet__flow {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px 5%;
+  }
+  .sheet__cell {
+    display: contents;
+  }
+  .sheet__flow .sheet__intro {
+    width: 100%;
+    margin: 0 0 6px;
+  }
+  .sheet__aside {
+    flex-wrap: wrap;
+    gap: 22px 5%;
+  }
+  .pj-main .pc,
+  .sheet__lead .sheet__row .pc,
+  .sheet__cell:nth-child(n) > .pc {
+    width: var(--wm);
+    margin: 0;
+  }
+  .line {
+    --hang: 168px;
+    padding: 0;
+  }
+  .story,
+  .specs {
+    grid-template-columns: 1fr;
+  }
+  .letter {
+    grid-row: auto;
+    grid-column: auto;
+    margin-top: 10px;
+  }
+  .endnav {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .endnav__book {
+    order: 3;
+    margin: 18px auto 0;
+  }
+  .endflap__turn {
+    width: 70px;
+  }
+  .lb__stage {
+    padding: 60px 8px 4px;
+  }
+  .lb__caption {
+    padding: 8px 64px 16px;
+    font-size: 19px;
+  }
+  .lb__btn--prev,
+  .lb__btn--next {
+    top: auto;
+    bottom: 12px;
+    translate: none;
+  }
+  .lb__btn--prev {
+    left: 10px;
+  }
+  .lb__btn--next {
+    right: 10px;
+  }
+  .lb__hint {
+    top: 22px;
+    font-size: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pj-main *,
+  .pj-main *::after,
+  .lb,
+  .lb * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
