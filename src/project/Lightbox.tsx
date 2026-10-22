@@ -134,7 +134,9 @@ export function Lightbox() {
   }, [state])
 
   const fit: Size = item && room.w > 0 ? scaleTo(item, Math.min(room.w / item.w, room.h / item.h, MAX_UP)) : { w: 0, h: 0 }
-  const shown = zoom ? { w: fit.w * ZOOM, h: fit.h * ZOOM } : fit
+  // closer, but a small piece is not blown up past four times the size it was cut at
+  const closer = item && fit.w > 0 ? Math.max(1.4, Math.min(ZOOM, (4 * item.w) / fit.w)) : ZOOM
+  const shown = zoom ? { w: fit.w * closer, h: fit.h * closer } : fit
 
   // zoomed: keep the point that was clicked under the pointer
   useLayoutEffect(() => {

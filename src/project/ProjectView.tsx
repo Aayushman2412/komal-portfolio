@@ -1,8 +1,8 @@
 import { ArrowLeft } from '@phosphor-icons/react'
 import { Fragment, useEffect, useRef, useState, type CSSProperties } from 'react'
-import { details, type Detail, type Section } from '../content/projects/details'
+import { details, type Detail, type Piece, type Section } from '../content/projects/details'
 import { art, publicUrl } from '../lib/art'
-import { Board, lb, Line, Note, PieceView, RedPaper, Sticker, Strip, Tape, tilt, Words } from './pieces'
+import { Board, colWidth, lb, Line, Note, PieceView, RedPaper, Sticker, Strip, Tape, tilt, Words } from './pieces'
 import { useReveal } from './reveal'
 
 /**
@@ -134,11 +134,90 @@ function StoryBoard({ d, i }: { d: Detail; i: number }) {
   )
 }
 
-function SectionBoard({ d, s, i, bound }: { d: Detail; s: Section; i: number; bound: boolean }) {
+/**
+ * Where a section's pieces go on its board, so it fills like a page of her scrapbook and not a grid
+ * with holes: a big piece (her board, her line-up, a whole shoot) sits beside the note; her tags
+ * line up under the note; the rest are stuck down in columns; chips and fabrics in a row at the end.
+ * With no big piece, the note is simply the first thing in the columns.
+ */
+function layout(s: Section) {
+  const pieces = s.pieces.filter((p) => p.look !== 'hang')
+  const feature = pieces.find((p) => p.w >= 40)
+  const group = (look: Piece['look']) => {
+    const g = pieces.filter((p) => p.look === look)
+    return g.length > 1 ? g : []
+  }
+  const tags = group('lettering')
+  const row = [...group('chip'), ...group('fabric')]
+  const rest = pieces.filter((p) => p !== feature && !tags.includes(p) && !row.includes(p))
+  // two or fewer small pieces go under the note, beside the big one
+  const aside = feature && rest.length <= 2 ? rest : []
+  const flow = aside.length ? [] : rest
+  return { feature, tags, row, aside, flow, rowBeside: !feature && !flow.length && row.length > 0 }
+}
+
+/** How many columns a board's pieces stand in: three on a wide screen, two on a tablet, one on a phone. */
+const colQueries = ['(max-width: 760px)', '(max-width: 1099px)']
+const colsNow = () => (matchMedia(colQueries[0]).matches ? 1 : matchMedia(colQueries[1]).matches ? 2 : 3)
+
+function useColumns() {
+  const [n, setN] = useState(colsNow)
+  useEffect(() => {
+    const mqs = colQueries.map((q) => matchMedia(q))
+    const on = () => setN(colsNow())
+    mqs.forEach((m) => m.addEventListener('change', on))
+    return () => mqs.forEach((m) => m.removeEventListener('change', on))
+  }, [])
+  return n
+}
+
+/** Roughly how tall a piece stands in its column, in column widths, from the shape she cut it to. */
+function tallness(d: Detail, p: Piece) {
+  const c = d.art.cuts[p.cut]
+  const f = Math.min(colWidth(p) / 100, (c.w * 1.6) / 340)
+  const frame = { polaroid: p.note ? 0.5 : 0.3, card: 0.12, print: 0.05 }[p.look as string] ?? 0
+  return f * (c.h / c.w) + frame + 0.14
+}
+
+/** Stick each piece into whichever column is shortest so far, in her order. */
+function intoColumns<T>(items: T[], tall: (t: T) => number, n: number) {
+  const cols: T[][] = Array.from({ length: n }, () => [])
+  const h = cols.map(() => 0)
+  for (const t of items) {
+    const j = h.indexOf(Math.min(...h))
+    cols[j].push(t)
+    h[j] += tall(t)
+  }
+  return cols
+}
+
+function SectionBoard({ d, s, i, bound, cols }: { d: Detail; s: Section; i: number; bound: boolean; cols: number }) {
   const lettering = s.lettering ? d.art.cuts[s.lettering] : undefined
   const tab = s.tab ? d.art.cuts[s.tab] : undefined
   const flap = s.flap ? d.art.cuts[s.flap] : undefined
   const hangs = s.pieces.filter((p) => p.look === 'hang')
+  const { feature, tags, row, aside, flow, rowBeside } = layout(s)
+  let k = i
+  const view = (p: Piece) => <PieceView key={p.cut} d={d} p={p} i={k++} />
+  const intro = (
+    <div className="sheet__intro">
+      {s.text && (
+        <Note>
+          <p>{s.text}</p>
+        </Note>
+      )}
+      {s.words && <Words words={s.words} />}
+      {tags.length > 0 && <div className="sheet__tags">{tags.map(view)}</div>}
+      {aside.length > 0 && <div className="sheet__aside">{aside.map(view)}</div>}
+    </div>
+  )
+  const rowEl = row.length > 0 && <div className="sheet__row">{row.map(view)}</div>
+  const lead = feature || rowBeside
+  const cells = [
+    ...(lead ? [] : [{ key: 'intro', tall: s.text.length / 260 + (s.words ? 0.5 : 0) + 0.35, el: intro }]),
+    ...flow.map((p) => ({ key: p.cut, tall: tallness(d, p), el: view(p) })),
+  ]
+  const columns = intoColumns(cells, (c) => c.tall, Math.min(cols, cells.length))
   return (
     <Board id={`s-${s.id}`} label={s.heading} bound={bound} i={i} className={`board--section ${flap ? 'has-flap' : ''}`}>
       <header className="sheet__head">
@@ -151,21 +230,26 @@ function SectionBoard({ d, s, i, bound }: { d: Detail; s: Section; i: number; bo
         )}
         <span className="sheet__page">from her page {s.page}</span>
       </header>
-      <div className="sheet__body">
-        {(s.text || s.words) && (
-          <div className="sheet__intro">
-            {s.text && (
-              <Note>
-                <p>{s.text}</p>
-              </Note>
-            )}
-            {s.words && <Words words={s.words} />}
-          </div>
-        )}
-        {s.pieces.map((p, k) => (
-          <PieceView key={p.cut} d={d} p={p} i={k + i} />
-        ))}
-      </div>
+      {lead && (
+        <div className="sheet__lead">
+          {intro}
+          {feature ? <div className="sheet__feature">{view(feature)}</div> : rowEl}
+        </div>
+      )}
+      {cells.length > 0 && (
+        <div className="sheet__flow" style={css({ '--cols': columns.length })}>
+          {columns.map((col, j) => (
+            <div key={j} className="sheet__col">
+              {col.map((c) => (
+                <div key={c.key} className="sheet__cell">
+                  {c.el}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+      {!rowBeside && rowEl}
       {hangs.length > 0 && <Line d={d} pieces={hangs} />}
       {tab && <img className="board__tab" src={publicUrl(tab.src)} width={tab.w} height={tab.h} alt={tab.alt} loading="lazy" draggable={false} />}
       {flap && <img className="board__flap" src={publicUrl(flap.src)} width={flap.w} height={flap.h} alt={flap.alt} loading="lazy" draggable={false} />}
@@ -293,6 +377,7 @@ function SideTabs({ d }: { d: Detail }) {
 export function ProjectView({ d }: { d: Detail }) {
   const root = useRef<HTMLElement>(null)
   useReveal(root, d.slug)
+  const cols = useColumns()
   const pages = arrange(d)
   let b = 0
   return (
@@ -302,7 +387,7 @@ export function ProjectView({ d }: { d: Detail }) {
       <div className="boards">
         <StoryBoard d={d} i={b++} />
         {pages[0].map((s) => (
-          <SectionBoard key={s.id} d={d} s={s} i={b++} bound />
+          <SectionBoard key={s.id} d={d} s={s} i={b++} bound cols={cols} />
         ))}
       </div>
       {pages.slice(1).map((sections, k) => {
@@ -318,7 +403,7 @@ export function ProjectView({ d }: { d: Detail }) {
             </section>
             <div className="boards">
               {sections.map((s, j) => (
-                <SectionBoard key={s.id} d={d} s={s} i={b++} bound={j > 0} />
+                <SectionBoard key={s.id} d={d} s={s} i={b++} bound={j > 0} cols={cols} />
               ))}
               {last && <SpecBoard d={d} i={b++} bound={sections.length > 0} />}
             </div>

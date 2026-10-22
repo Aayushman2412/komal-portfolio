@@ -107,6 +107,9 @@ export function RedPaper({ children, className = '' }: { children: ReactNode; cl
   )
 }
 
+/** A piece's width in its column (percent), from its width on a wide board: small strips stay narrow. */
+export const colWidth = (p: Piece) => Math.min(100, Math.max(p.w < 14 ? 34 : 58, p.w * 3.4))
+
 /** The default width on a phone for a piece that is `w` percent of a wide board. */
 const phoneWidth = (w: number) => (w >= 40 ? 100 : w >= 24 ? 74 : w >= 15 ? 48 : 36)
 
@@ -114,7 +117,15 @@ const phoneWidth = (w: number) => (w >= 40 ? 100 : w >= 24 ? 74 : w >= 15 ? 48 :
 export function PieceView({ d, p, i }: { d: Detail; p: Piece; i: number }) {
   const cut = d.art.cuts[p.cut]
   if (!cut) return null
-  const style = css({ '--w': `${p.w}%`, '--wm': `${p.wm ?? phoneWidth(p.w)}%`, '--r': `${p.r ?? tilt(i)}deg`, '--d': `${(i % 4) * 70}ms` })
+  const style = css({
+    '--w': `${p.w}%`,
+    '--wm': `${p.wm ?? phoneWidth(p.w)}%`,
+    // in the columns: its width in a column, and never blown up much past the size it was cut at
+    '--cw': `${colWidth(p)}%`,
+    '--nw': cut.w,
+    '--r': `${p.r ?? tilt(i)}deg`,
+    '--d': `${(i % 4) * 70}ms`,
+  })
   const tape = (i % 2 ? 2 : 1) as 1 | 2
   const tapeStyle = css({ rotate: `${tilt(i + 5, 2.4)}deg` })
 
