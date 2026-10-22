@@ -31,8 +31,8 @@ export function Pic({ cut, className = 'pc__img', eager = false, children }: { c
   )
 }
 
-export function Tape({ kind = 1, style }: { kind?: 1 | 2; style?: CSSProperties }) {
-  return <img className="tape" src={kind === 1 ? art.book.tape1 : art.book.tape2} alt="" draggable={false} style={style} />
+export function Tape({ kind = 1, className = '', style }: { kind?: 1 | 2; className?: string; style?: CSSProperties }) {
+  return <img className={`tape ${className}`} src={kind === 1 ? art.book.tape1 : art.book.tape2} alt="" draggable={false} style={style} />
 }
 
 export function Sticker({ src, className = '', style }: { src: string; className?: string; style?: CSSProperties }) {
@@ -87,7 +87,7 @@ export function Strip({ children, as: Tag = 'h2', className = '' }: { children: 
 /** Her keywords on yellow labels, the way she labelled her boards. */
 export function Words({ words }: { words: string[] }) {
   return (
-    <ul className="words" aria-label="Her words">
+    <ul className="words" aria-label="Words">
       {words.map((w, i) => (
         <li key={w} className="word" style={css({ '--r': `${tilt(i + 3, 1.3)}deg` })}>
           {w}
@@ -126,22 +126,29 @@ export function PieceView({ d, p, i }: { d: Detail; p: Piece; i: number }) {
     '--r': `${p.r ?? tilt(i)}deg`,
     '--d': `${(i % 4) * 70}ms`,
   })
-  const tape = (i % 2 ? 2 : 1) as 1 | 2
-  const tapeStyle = css({ rotate: `${tilt(i + 5, 2.4)}deg` })
+  // one thin strip of tape at the top, only just over the picture's edge; a print wider than it is
+  // tall is taped at its two top corners instead, so the tape stays off her lettering and off faces
+  const tape = <Tape kind={1} className="tape--top" style={css({ rotate: `${tilt(i + 5, 1.6)}deg` })} />
+  const corners = (
+    <>
+      <Tape kind={1} className="tape--corner tape--l" style={css({ rotate: `${-38 + tilt(i, 1.5)}deg` })} />
+      <Tape kind={1} className="tape--corner tape--r" style={css({ rotate: `${38 + tilt(i + 3, 1.5)}deg` })} />
+    </>
+  )
 
   switch (p.look) {
     case 'print':
       return (
         <figure className="pc pc--print" style={style} data-reveal>
           <Pic cut={cut} />
-          <Tape kind={tape} style={tapeStyle} />
+          {cut.w > cut.h * 1.1 ? corners : tape}
         </figure>
       )
     case 'polaroid':
       return (
         <figure className="pc pc--polaroid" style={style} data-reveal>
           <Pic cut={cut}>{p.caption && <span className="pc__cap">{p.caption}</span>}</Pic>
-          <Tape kind={tape} style={tapeStyle} />
+          {tape}
           {p.note && <figcaption className="pc__note">{p.note}</figcaption>}
         </figure>
       )
@@ -152,16 +159,12 @@ export function PieceView({ d, p, i }: { d: Detail; p: Piece; i: number }) {
         </figure>
       )
     case 'chip': {
+      // her chip already carries its code: only the colour's name, written by hand, goes under it
       const c = d.palette.find((x) => x.cut === p.cut)
       return (
         <figure className="pc pc--chip" style={style} data-reveal>
           <Pic cut={cut} />
-          {c && (
-            <figcaption className="tag">
-              <b>{c.code}</b>
-              {c.label}
-            </figcaption>
-          )}
+          {c && <figcaption className="tag">{c.label}</figcaption>}
         </figure>
       )
     }
@@ -194,7 +197,7 @@ export function PieceView({ d, p, i }: { d: Detail; p: Piece; i: number }) {
 /** The line-up, pegged on a red thread like washing on a line. */
 export function Line({ d, pieces }: { d: Detail; pieces: Piece[] }) {
   return (
-    <ul className="line" aria-label="Her line-up, look by look">
+    <ul className="line" aria-label="The line-up, look by look">
       {pieces.map((p, i) => {
         const cut = d.art.cuts[p.cut]
         if (!cut) return null

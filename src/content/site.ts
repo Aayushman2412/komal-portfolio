@@ -34,7 +34,11 @@ export type Project = {
   swatches: { name: string; kind: SwatchKind; src?: string; w?: number; h?: number }[]
   /** Written on her red paper behind the first polaroid (without it, the polaroid's caption is). */
   redNote?: string
-  /** Her Pantone chips, as she painted and labelled them; `hex` is sampled from her paint, `src` is the chip cut from her page. */
+  /**
+   * Her Pantone chips, as she painted and labelled them; `hex` is sampled from her paint, `src` is the chip
+   * cut from her page. `label` names the colour in words: ours, unless her chip prints one (Faded Denim), so
+   * the site writes it by hand, apart from the code.
+   */
   palette?: { code: string; hex: string; label: string; src: string }[]
   /** Her project cover, the first of her pages for it. */
   cover?: string
@@ -98,7 +102,8 @@ const flytrap: Project = {
     fabric('project-01', 'fabric-stripes', 'striped rib', 'khadi'),
   ],
   redNote: 'ominous, raw, earthy, uncanny',
-  // TODO(komal): 16-0299 is hard to read on her chip, and 19-0220 looks lighter than Pantone's 19- range
+  // TODO(komal): 16-0299 is hard to read on her chip, and 19-0220 looks lighter than Pantone's 19- range.
+  // The colour names are ours (her chips carry only the codes), so the site writes them by hand, never beside a code.
   palette: [
     chip('project-01', 'chip-yellow', '13-0544 TCX', '#dfcb58', 'warm yellow'),
     chip('project-01', 'chip-green', '16-0299 TCX', '#3d4933', 'dark moss green'),
@@ -129,13 +134,15 @@ const muse: Project = {
     ['details', 'bows, laces, studs'],
     ['shoots', '3D e-commerce, AI'],
   ],
+  // her own LOOK 3 first; the AI shoot says so on the front of its polaroid
   photos: [
-    photo('project-02', 'ai-2', 'look 3, after dark', 'From my AI shoot: red neon, a wet street, and LOOK 3.', '50% 18%'),
-    photo('project-02', 'ai-5', 'full speed', 'The tunnel shot: the racing feeling I wanted for the whole collection.'),
+    photo('project-02', 'render-2', 'look 3 in 3D', 'From my e-commerce shoot: LOOK 3 as a 3D render, from the front.', '50% 0%'),
+    photo('project-02', 'ai-5', 'AI shoot: full speed', 'The tunnel shot: the racing feeling I wanted for the whole collection.'),
   ],
+  // TODO(komal): these are cut from her cover collage and her drawing of the collection; photos of the real fabrics would be better
   swatches: [
     fabric('project-02', 'fabric-indigo-denim', 'indigo denim', 'denim'),
-    fabric('project-02', 'fabric-red-denim', 'wine-tinted denim', 'denim'),
+    fabric('project-02', 'fabric-panel', 'red panel', 'denim'),
     fabric('project-02', 'fabric-leather', 'red leather-look', 'block'),
   ],
   redNote: 'racing, edgy, raw, urban',

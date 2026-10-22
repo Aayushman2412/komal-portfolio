@@ -116,13 +116,14 @@ export function Note({ children, className = '', ...pos }: Pos & { children: Rea
 
 /**
  * A polaroid. Lift it to read what is written underneath (her notes: "polaroid → handwritten note
- * underneath"); `onRed` when it is stuck on her red paper, so the note is written in white.
+ * underneath"); `onRed` when it is stuck on her red paper, so the note is written in white. One that
+ * lifts to the right sits beside the red paper, so its note starts clear of it.
  */
 export function Polaroid({ photo, tape, lift = 'left', onRed, ...pos }: Pos & { photo: Project['photos'][number]; tape?: 1 | 2; lift?: 'left' | 'right'; onRed?: boolean }) {
   const [lifted, setLifted] = useState(false)
   const toward = { '--lift-r': lift === 'left' ? '-4deg' : '4deg' }
   return (
-    <div className={`polaroid ${onRed ? 'polaroid--on-red' : ''}`} style={{ ...place(pos), ...(toward as CSSProperties) }}>
+    <div className={`polaroid polaroid--${lift} ${onRed ? 'polaroid--on-red' : ''}`} style={{ ...place(pos), ...(toward as CSSProperties) }}>
       <p className="polaroid__under">{photo.note}</p>
       <button
         className={`polaroid__card ${lifted ? 'is-lifted' : ''}`}
@@ -227,8 +228,8 @@ export function Swatch({ swatch, ...pos }: Pos & { swatch: Project['swatches'][n
   const [zoom, setZoom] = useState(false)
   const small = swatch.src ?? fabricUrl(swatch.kind)
   useEscape(zoom, setZoom)
-  // a photo of the real fabric is shown at most about three times its own size, so it stays fabric, not blur
-  const most = swatch.src && swatch.w && swatch.h ? Math.round(Math.min(swatch.w, swatch.h) * 3.2) : 0
+  // a photo of the fabric is shown at most twice its own size: a small crop gives a smaller circle, but a sharp one
+  const most = swatch.src && swatch.w && swatch.h ? Math.round(Math.min(swatch.w, swatch.h) * 2) : 0
   return (
     <>
       <button

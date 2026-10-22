@@ -143,6 +143,61 @@ body.pj {
   rotate: -3deg;
 }
 
+/* under her page: the pieces of it that the boards show in parts, small, each opening large */
+.closer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 22px;
+  margin: 22px auto 0;
+}
+
+.closer__label {
+  margin: 0;
+  font-family: var(--f-note);
+  font-size: 24px;
+  color: rgba(246, 236, 226, 0.78);
+  rotate: -3deg;
+}
+
+.closer__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.closer__list li {
+  --th: clamp(62px, 7vw, 96px);
+  width: clamp(40px, calc(var(--th) * var(--ar)), 180px);
+  rotate: var(--r);
+  transition:
+    rotate 0.35s cubic-bezier(0.3, 1.4, 0.5, 1),
+    scale 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.closer__list img {
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: 3px;
+  background: #fbf9f3 url(/art/paper-grain.webp) 0 0 / 160px;
+  background-blend-mode: multiply;
+  box-shadow: 0 8px 14px -8px rgba(0, 0, 0, 0.7);
+}
+
+@media (hover: hover) {
+  .closer__list li:hover {
+    rotate: 0deg;
+    scale: 1.08;
+  }
+}
+
 /* ---------- the cover ---------- */
 
 .hero {
@@ -459,15 +514,17 @@ body.pj {
 
 .sheet__feature .pc {
   width: 100%;
-  max-width: calc(var(--nw) * 1.5px);
+  max-width: calc(var(--nw) * 1.25px);
   margin: 0 auto;
 }
 
-/* the rest, stuck down in columns (ProjectView puts each in the shortest), each at a slightly
-   different place in its column */
+/* the rest, stuck down in columns: ProjectView puts each in the shortest so far, measured in rows of
+   4px, and the columns' first pieces start at slightly different heights. Each piece sits at a
+   slightly different place in its column. */
 .sheet__flow {
   display: grid;
   grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  grid-auto-rows: 4px;
   gap: 0 clamp(22px, 3vw, 44px);
   align-items: start;
 }
@@ -477,12 +534,13 @@ body.pj {
 }
 
 .sheet__cell {
-  margin: 0 0 clamp(30px, 3.2vw, 46px);
+  padding-bottom: clamp(30px, 3.2vw, 46px);
 }
 
+/* never shown much bigger than she cut it, so it stays sharp */
 .sheet__cell > .pc {
   width: var(--cw);
-  max-width: min(100%, calc(var(--nw) * 1.6px));
+  max-width: min(100%, calc(var(--nw) * 1.25px));
   margin-left: 3%;
 }
 
@@ -493,15 +551,6 @@ body.pj {
 
 .sheet__cell:nth-child(3n) > .pc {
   margin-inline: auto;
-}
-
-/* the columns' first pieces start at slightly different heights */
-.sheet__col:nth-child(2) {
-  padding-top: clamp(14px, 2vw, 30px);
-}
-
-.sheet__col:nth-child(3) {
-  padding-top: clamp(6px, 1vw, 14px);
 }
 
 /* her tags, under the note */
@@ -515,7 +564,7 @@ body.pj {
 
 .sheet__tags .pc {
   width: 22%;
-  max-width: calc(var(--nw) * 1.3px);
+  max-width: calc(var(--nw) * 1.25px);
 }
 
 /* one or two small pieces, under the note */
@@ -529,7 +578,7 @@ body.pj {
 
 .sheet__aside .pc {
   width: 46%;
-  max-width: calc(var(--nw) * 1.5px);
+  max-width: calc(var(--nw) * 1.25px);
 }
 
 /* chips and fabrics, in a row */
@@ -544,6 +593,7 @@ body.pj {
 
 .sheet__row .pc {
   width: var(--w);
+  max-width: calc(var(--nw) * 1.25px);
 }
 
 .sheet__lead .sheet__row {
@@ -661,6 +711,28 @@ body.pj {
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18));
 }
 
+/* a print's or a polaroid's tape: a thin strip, mostly above the picture */
+.pj-main .tape--top {
+  top: -20px;
+  width: clamp(44px, 24%, 96px);
+}
+
+/* a wide print is taped at its two top corners */
+.pj-main .tape--corner {
+  top: -9px;
+  width: clamp(36px, 12%, 72px);
+  translate: none;
+}
+
+.pj-main .tape--l {
+  left: -4%;
+}
+
+.pj-main .tape--r {
+  left: auto;
+  right: -4%;
+}
+
 /* a print: thin white border, taped at the top */
 .pc--print .pc__hit,
 .pc--polaroid .pc__hit {
@@ -716,7 +788,7 @@ body.pj {
   box-shadow: 0 14px 26px -12px rgba(40, 20, 10, 0.6);
 }
 
-/* a Pantone chip, its code written underneath */
+/* a Pantone chip (her code is on it), the colour's name written underneath */
 .pc--chip .pc__img {
   box-shadow: 0 4px 8px -2px rgba(40, 20, 10, 0.4);
 }
@@ -735,15 +807,6 @@ body.pj {
   text-align: center;
   color: var(--paper-ink);
   rotate: calc(var(--r, 0deg) * -1.2);
-}
-
-.tag b {
-  display: block;
-  font-family: var(--f-osd);
-  font-weight: 400;
-  font-size: 13px;
-  letter-spacing: 0.04em;
-  color: #1b1b22;
 }
 
 /* fabric cut with pinking shears */
@@ -1027,12 +1090,15 @@ body.pj {
 }
 
 .paint {
+  font-size: 15px;
+  line-height: 1.25;
   rotate: var(--r);
 }
 
 /* a square of the colour, cut with pinking shears */
 .paint__chip {
   display: block;
+  margin-bottom: 8px;
   aspect-ratio: 1.6;
   background: var(--hex) url(/art/paper-grain.webp) 0 0 / 160px;
   background-blend-mode: multiply;
@@ -1040,18 +1106,13 @@ body.pj {
 }
 
 .paint__code {
-  display: block;
-  margin-top: 8px;
   font-family: var(--f-osd);
-  font-size: 15px;
   color: #1b1b22;
 }
 
 .paint__name {
-  display: block;
   font-family: var(--f-note);
   font-size: 22px;
-  line-height: 1.1;
   color: #3a2a33;
 }
 
@@ -1501,7 +1562,6 @@ body.pj {
     align-items: flex-start;
     gap: 30px 5%;
   }
-  .sheet__col,
   .sheet__cell {
     display: contents;
   }

@@ -1,17 +1,18 @@
 import { ArrowLeft } from '@phosphor-icons/react'
-import { Fragment, useEffect, useRef, useState, type CSSProperties } from 'react'
-import { details, type Detail, type Piece, type Section } from '../content/projects/details'
+import { Fragment, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react'
+import { details, type Cut, type Detail, type Piece, type Section } from '../content/projects/details'
 import { art, publicUrl } from '../lib/art'
-import { Board, colWidth, lb, Line, Note, PieceView, RedPaper, Sticker, Strip, Tape, tilt, Words } from './pieces'
+import { Board, lb, Line, Note, PieceView, RedPaper, Sticker, Strip, Tape, tilt, Words } from './pieces'
 import { useReveal } from './reveal'
 
 /**
  * A project's own page: the scrapbook opened up on her table, page by page. Her cover comes first,
- * big, with the project's name on her index paper; then each of her pages whole, as she drew it, and
- * under it boards (joined by her ring binding) holding what is on that page: a few lines in her voice
- * and every piece cut from it, stuck down like things in a scrapbook. The story, the concept note,
- * the spec sheet and the palette sit on their own boards. Her yellow corner flap turns to the next
- * project; the tabs on the right edge (wide screens) jump between her pages.
+ * big, with the project's name on her index paper; then each of her pages whole, as she drew it, the
+ * pieces of it that the boards show in parts small under it ("look closer"), and boards (joined by her
+ * ring binding) holding what is on that page: a few lines in her voice and the pieces cut from it,
+ * stuck down like things in a scrapbook. The story, the concept note, the spec sheet and the palette
+ * sit on their own boards. Her yellow corner flap turns to the next project; the tabs on the right
+ * edge (wide screens) jump between her pages.
  */
 const num = (n: number) => String(n).padStart(2, '0')
 /** The book, open at this project's spread. */
@@ -19,11 +20,31 @@ const bookAt = (slug: string) => `./#p/${slug}`
 const css = (vars: Record<string, string | number>) => vars as CSSProperties
 
 /**
- * Each of her pages with its sections. A piece in the manifest that no section names is added to the
- * last section of its page, so nothing she cut is ever left off.
+ * Back to the book. The book opened this page in a new tab, and is still open at this project behind
+ * it: then close this tab rather than load a second copy of the whole story in it. Opened any other
+ * way (a shared link, or after turning to another project here), the link simply goes to the book.
+ */
+function backToBook(e: MouseEvent<HTMLAnchorElement>) {
+  let fromBook = false
+  try {
+    fromBook = history.length === 1 && !!document.referrer && new URL(document.referrer).origin === location.origin
+  } catch {
+    fromBook = false
+  }
+  if (!fromBook || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+  const href = e.currentTarget.href
+  e.preventDefault()
+  window.close()
+  // still here (the browser kept the tab open): go there after all
+  setTimeout(() => location.assign(href), 150)
+}
+
+/**
+ * Each of her pages with its sections. A piece in the manifest that no section (and no "look closer"
+ * strip) names is added to the last section of its page, so nothing she cut is ever left off.
  */
 function arrange(d: Detail) {
-  const named = new Set<string>()
+  const named = new Set<string>(['cover', ...Object.values(d.closer).flat()])
   for (const s of d.sections) {
     s.pieces.forEach((p) => named.add(p.cut))
     for (const c of [s.lettering, s.tab, s.flap]) if (c) named.add(c)
@@ -53,7 +74,7 @@ function Stickers({ i }: { i: number }) {
 function TopBar({ d }: { d?: Detail }) {
   return (
     <nav className="topbar" aria-label="Komal's projects">
-      <a className="ytab ytab--back" href={d ? bookAt(d.slug) : './#index'}>
+      <a className="ytab ytab--back" href={d ? bookAt(d.slug) : './#index'} onClick={backToBook}>
         <ArrowLeft size={16} weight="bold" aria-hidden />
         back to the scrapbook
       </a>
@@ -70,17 +91,43 @@ function TopBar({ d }: { d?: Detail }) {
   )
 }
 
-/** One of her pages, whole, lying on the table. */
-function PagePic({ d, n, eager = false }: { d: Detail; n: number; eager?: boolean }) {
+/** One of her pages, whole, lying on the table; it opens large (or opens `opens`, her cover cut from it). */
+function PagePic({ d, n, eager = false, opens }: { d: Detail; n: number; eager?: boolean; opens?: Cut }) {
   const page = d.art.pages[n - 1]
   const src = publicUrl(page.src)
   const alt = d.pageAlts[n - 1] ?? `Her page ${n}`
+  const big = opens ? lb(publicUrl(opens.src), opens.alt, opens.w, opens.h) : lb(src, alt, page.w, page.h)
   return (
     <figure className={`spread__page ${n === 1 ? 'spread__page--cover' : ''}`} data-reveal>
-      <button type="button" className="pc__hit" {...lb(src, alt, page.w, page.h)}>
+      <button type="button" className="pc__hit" {...big}>
         <img src={src} width={page.w} height={page.h} alt={alt} loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : 'auto'} decoding="async" draggable={false} />
       </button>
     </figure>
+  )
+}
+
+/**
+ * Small, under her page: the pieces of it that the boards show in parts, or that repeat her page. Each
+ * opens large, so every piece she cut is there to look at, but nothing fills the page twice.
+ */
+function Closer({ d, n }: { d: Detail; n: number }) {
+  const cuts = (d.closer[n] ?? []).flatMap((name) => (d.art.cuts[name] ? [d.art.cuts[name]] : []))
+  if (!cuts.length) return null
+  return (
+    <div className="closer" data-reveal>
+      <p className="closer__label" aria-hidden>
+        look closer
+      </p>
+      <ul className="closer__list" aria-label={`Parts of page ${n}, to look at large`}>
+        {cuts.map((c, k) => (
+          <li key={c.src} style={css({ '--ar': (c.w / c.h).toFixed(3), '--r': `${tilt(k + n, 0.8)}deg` })}>
+            <button type="button" className="pc__hit" {...lb(publicUrl(c.src), c.alt, c.w, c.h)}>
+              <img src={publicUrl(c.src)} width={c.w} height={c.h} alt={c.alt} loading="lazy" decoding="async" draggable={false} />
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
@@ -88,7 +135,7 @@ function PagePic({ d, n, eager = false }: { d: Detail; n: number; eager?: boolea
 function Hero({ d }: { d: Detail }) {
   return (
     <header className="hero" id="cover">
-      <PagePic d={d} n={1} eager />
+      <PagePic d={d} n={1} eager opens={d.art.cuts.cover} />
       <div className="hero__below">
         <div className="hero__card" data-reveal>
           <img className="hero__lettering" src={art.projectTitles[d.n - 1]} alt={`Project ${num(d.n)}`} draggable={false} />
@@ -171,24 +218,56 @@ function useColumns() {
   return n
 }
 
-/** Roughly how tall a piece stands in its column, in column widths, from the shape she cut it to. */
-function tallness(d: Detail, p: Piece) {
-  const c = d.art.cuts[p.cut]
-  const f = Math.min(colWidth(p) / 100, (c.w * 1.6) / 340)
-  const frame = { polaroid: p.note ? 0.5 : 0.3, card: 0.12, print: 0.05 }[p.look as string] ?? 0
-  return f * (c.h / c.w) + frame + 0.14
-}
+/** The rows the columns are measured in (px), and how many of them columns 2 and 3 start lower. */
+const ROW = 4
+const STAGGER = [0, 7, 3]
 
-/** Stick each piece into whichever column is shortest so far, in her order. */
-function intoColumns<T>(items: T[], tall: (t: T) => number, n: number) {
-  const cols: T[][] = Array.from({ length: n }, () => [])
-  const h = cols.map(() => 0)
-  for (const t of items) {
-    const j = h.indexOf(Math.min(...h))
-    cols[j].push(t)
-    h[j] += tall(t)
-  }
-  return cols
+/**
+ * Pieces stuck down in columns that end level: the note first, then the tallest piece into whichever
+ * column is shortest so far, and so on down; in each column they keep her order. The heights are the
+ * pieces' real ones, measured as laid out (their images carry their sizes, so this is right before
+ * any has loaded) and again whenever one changes size (a font arriving, a narrower window). They stay
+ * where they are in the page; only their place in the grid changes.
+ */
+function Columns({ cells, n }: { cells: { key: string; el: ReactNode }[]; n: number }) {
+  const root = useRef<HTMLDivElement>(null)
+  const [at, setAt] = useState<Record<string, string>>({})
+  const keys = cells.map((c) => c.key).join(' ')
+  useLayoutEffect(() => {
+    const el = root.current
+    if (!el) return
+    const names = keys.split(' ')
+    const lay = () => {
+      const span = [...el.children].map((c) => Math.max(1, Math.ceil((c as HTMLElement).offsetHeight / ROW)))
+      const order = names.map((_, k) => k).sort((x, y) => (names[x] === 'intro' ? -1 : names[y] === 'intro' ? 1 : span[y] - span[x]))
+      const h = STAGGER.slice(0, n)
+      const col = names.map(() => 0)
+      for (const k of order) {
+        col[k] = h.indexOf(Math.min(...h))
+        h[col[k]] += span[k]
+      }
+      const top = STAGGER.slice(0, n)
+      const next: Record<string, string> = {}
+      names.forEach((name, k) => {
+        next[name] = `${top[col[k]] + 1} / ${col[k] + 1} / span ${span[k]}`
+        top[col[k]] += span[k]
+      })
+      setAt((was) => (JSON.stringify(was) === JSON.stringify(next) ? was : next))
+    }
+    lay()
+    const ro = new ResizeObserver(lay)
+    for (const c of el.children) ro.observe(c)
+    return () => ro.disconnect()
+  }, [keys, n])
+  return (
+    <div ref={root} className="sheet__flow" style={css({ '--cols': n })}>
+      {cells.map((c) => (
+        <div key={c.key} className="sheet__cell" style={at[c.key] ? { gridArea: at[c.key] } : undefined}>
+          {c.el}
+        </div>
+      ))}
+    </div>
+  )
 }
 
 function SectionBoard({ d, s, i, bound, cols }: { d: Detail; s: Section; i: number; bound: boolean; cols: number }) {
@@ -213,11 +292,7 @@ function SectionBoard({ d, s, i, bound, cols }: { d: Detail; s: Section; i: numb
   )
   const rowEl = row.length > 0 && <div className="sheet__row">{row.map(view)}</div>
   const lead = feature || rowBeside
-  const cells = [
-    ...(lead ? [] : [{ key: 'intro', tall: s.text.length / 260 + (s.words ? 0.5 : 0) + 0.35, el: intro }]),
-    ...flow.map((p) => ({ key: p.cut, tall: tallness(d, p), el: view(p) })),
-  ]
-  const columns = intoColumns(cells, (c) => c.tall, Math.min(cols, cells.length))
+  const cells = [...(lead ? [] : [{ key: 'intro', el: intro }]), ...flow.map((p) => ({ key: p.cut, el: view(p) }))]
   return (
     <Board id={`s-${s.id}`} label={s.heading} bound={bound} i={i} className={`board--section ${flap ? 'has-flap' : ''}`}>
       <header className="sheet__head">
@@ -228,7 +303,7 @@ function SectionBoard({ d, s, i, bound, cols }: { d: Detail; s: Section; i: numb
         ) : (
           <Strip>{s.heading}</Strip>
         )}
-        <span className="sheet__page">from her page {s.page}</span>
+        <span className="sheet__page">from my page {s.page}</span>
       </header>
       {lead && (
         <div className="sheet__lead">
@@ -236,19 +311,7 @@ function SectionBoard({ d, s, i, bound, cols }: { d: Detail; s: Section; i: numb
           {feature ? <div className="sheet__feature">{view(feature)}</div> : rowEl}
         </div>
       )}
-      {cells.length > 0 && (
-        <div className="sheet__flow" style={css({ '--cols': columns.length })}>
-          {columns.map((col, j) => (
-            <div key={j} className="sheet__col">
-              {col.map((c) => (
-                <div key={c.key} className="sheet__cell">
-                  {c.el}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      )}
+      {cells.length > 0 && <Columns cells={cells} n={Math.min(cols, cells.length)} />}
       {!rowBeside && rowEl}
       {hangs.length > 0 && <Line d={d} pieces={hangs} />}
       {tab && <img className="board__tab" src={publicUrl(tab.src)} width={tab.w} height={tab.h} alt={tab.alt} loading="lazy" draggable={false} />}
@@ -289,8 +352,8 @@ function SpecBoard({ d, i, bound }: { d: Detail; i: number; bound: boolean }) {
               {d.palette.map((c, k) => (
                 <li key={c.cut} className="paint" style={css({ '--hex': c.hex, '--r': `${tilt(k + 2, 1.2)}deg` })}>
                   <span className="paint__chip" aria-hidden />
-                  <span className="paint__code">{c.code}</span>
-                  <span className="paint__name">{c.label}</span>
+                  {/* her code typed, our name for the colour written after it by hand */}
+                  <span className="paint__code">{c.code}</span> <span className="paint__name">– {c.label}</span>
                 </li>
               ))}
             </ul>
@@ -317,7 +380,7 @@ function EndNav({ d }: { d: Detail }) {
       ) : (
         <span className="endflap endflap--none" />
       )}
-      <a className="ytab endnav__book" href={bookAt(d.slug)}>
+      <a className="ytab endnav__book" href={bookAt(d.slug)} onClick={backToBook}>
         <ArrowLeft size={16} weight="bold" aria-hidden />
         back to the scrapbook
       </a>
@@ -358,7 +421,7 @@ function SideTabs({ d }: { d: Detail }) {
     return () => io.disconnect()
   }, [d])
   return (
-    <nav className="sidetabs" aria-label="Her pages">
+    <nav className="sidetabs" aria-label="The pages">
       {tabs.map((t) => (
         <button
           key={t.id}
@@ -395,11 +458,12 @@ export function ProjectView({ d }: { d: Detail }) {
         const last = n === pages.length
         return (
           <Fragment key={n}>
-            <section className="spread" id={`page-${n}`} aria-label={`Her page ${n} of ${pages.length}`}>
+            <section className="spread" id={`page-${n}`} aria-label={`Page ${n} of ${pages.length}`}>
               <p className="spread__tag" aria-hidden>
                 page {n}
               </p>
               <PagePic d={d} n={n} />
+              <Closer d={d} n={n} />
             </section>
             <div className="boards">
               {sections.map((s, j) => (

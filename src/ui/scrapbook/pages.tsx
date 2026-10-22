@@ -77,7 +77,7 @@ function ProjectLeft({ p, n }: { p: Project; n: number }) {
 }
 
 function ProjectRight({ p, next, go }: { p: Project; next: { to: string; label: string }; go: Go }) {
-  // three swatches sit a little closer and smaller than two
+  // three swatches sit a little closer and smaller than two, the last one clear of her "turn"
   const three = p.swatches.length > 2
   return (
     <>
@@ -97,7 +97,7 @@ function ProjectRight({ p, next, go }: { p: Project; next: { to: string; label: 
       )}
       {p.swatches.map((s, i) =>
         three ? (
-          <Swatch key={s.name + i} x={6 + i * 19.5} y={68.5 + (i % 2) * 3} w={16.5} r={i % 2 ? 6 : -7} swatch={s} />
+          <Swatch key={s.name + i} x={6 + i * 18.5} y={68.5 + (i % 2) * 3} w={16.5} r={i % 2 ? 6 : -7} swatch={s} />
         ) : (
           <Swatch key={s.name + i} x={10 + i * 25} y={68 + (i % 2) * 3} w={19} r={i % 2 ? 6 : -7} swatch={s} />
         ),

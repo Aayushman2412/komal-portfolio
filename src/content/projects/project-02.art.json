@@ -75,20 +75,6 @@
    "alt": "Close-up of dark indigo denim twill crossed by orange and cream topstitching.",
    "kind": "texture"
   },
-  "fabric-red-denim": {
-   "src": "projects/project-02/fabric-red-denim.webp",
-   "w": 270,
-   "h": 230,
-   "page": 1,
-   "box": [
-    845,
-    330,
-    1115,
-    560
-   ],
-   "alt": "Close-up of denim tinted wine red: a jeans waistband with orange topstitching and belt-loop marks over the twill.",
-   "kind": "texture"
-  },
   "moodboard": {
    "src": "projects/project-02/moodboard.webp",
    "w": 1411,
@@ -466,6 +452,20 @@
     291
    ],
    "alt": "Close-up of the glossy red leather-look jacket, its panels edged in dark piping.",
+   "kind": "texture"
+  },
+  "fabric-panel": {
+   "src": "projects/project-02/fabric-panel.webp",
+   "w": 88,
+   "h": 150,
+   "page": 3,
+   "box": [
+    1298,
+    592,
+    1386,
+    742
+   ],
+   "alt": "Close-up of the wide trousers of the third look: dark denim beside a red panel running down the leg.",
    "kind": "texture"
   },
   "look-3": {

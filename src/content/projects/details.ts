@@ -20,7 +20,7 @@ export type ProjectArt = { pages: { src: string; w: number; h: number }[]; cuts:
  * How a piece is stuck onto the board.
  * print: a photo print, taped at the top. polaroid: white frame with a caption, the note written
  * beside it. cutout: cut along its edge and glued flat. card: an illustration card with her pink loop
- * border. chip: a Pantone chip with its code written under it. fabric: a swatch cut with pinking
+ * border. chip: a Pantone chip with the colour's name written under it. fabric: a swatch cut with pinking
  * shears. hang: pegged on a thread (the line-up). lettering: her own lettering, stuck on like a label.
  */
 export type Look = 'print' | 'polaroid' | 'cutout' | 'card' | 'chip' | 'fabric' | 'hang' | 'lettering'
@@ -71,6 +71,13 @@ export type Detail = {
   /** What is on each of her four pages, for anyone who cannot see them (and the lightbox caption). */
   pageAlts: string[]
   sections: Section[]
+  /**
+   * By page: her pieces that the boards show in parts (her whole moodboard, her line-up panel, a whole
+   * shoot), or that only repeat her page (the blown-up prints behind her photos). They sit small under
+   * her page, to open large, so nothing is shown twice at full size. Her cover (the cut named `cover`)
+   * is what her cover page opens.
+   */
+  closer: Record<number, string[]>
 }
 
 const P = (cut: string, look: Look, w: number, extra: Omit<Piece, 'cut' | 'look' | 'w'> = {}): Piece => ({ cut, look, w, ...extra })
@@ -84,14 +91,12 @@ const flytrap: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
     'Her page of final looks: two illustration cards, front and back, with pink loop borders, beside the Venus flytrap makeup: red-rimmed eyes, lime brows, glossy lips and flytraps in the hair.',
     'Her night shoot: the knits photographed at night in tall grass, six photos laid over two blown-up prints.',
   ],
+  closer: {
+    2: ['moodboard', 'leaf', 'mushrooms', 'face', 'embellishment', 'lineup'],
+    3: ['look-1-front', 'look-1-back', 'look-2-front', 'look-2-back'],
+    4: ['backdrop-left', 'backdrop-right'],
+  },
   sections: [
-    {
-      id: 'cover',
-      heading: 'The cover',
-      page: 1,
-      text: 'A leaf, up close, until it starts to glitch. Pink flesh, dark green veins. This is where it began.',
-      pieces: [P('cover', 'print', 58, { r: 1.5 })],
-    },
     {
       id: 'inspiration',
       heading: 'Inspiration',
@@ -101,10 +106,6 @@ const flytrap: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
       words: ['ominous', 'raw', 'textures', 'earthy', 'uncanny'],
       pieces: [
         P('inspiration', 'cutout', 62, { r: -1 }),
-        P('moodboard', 'cutout', 33, { r: 2 }),
-        P('leaf', 'cutout', 24, { r: -4 }),
-        P('mushrooms', 'cutout', 15, { r: 5 }),
-        P('face', 'cutout', 14, { r: -3 }),
         P('chip-yellow', 'chip', 13),
         P('chip-green', 'chip', 12),
         P('chip-olive', 'chip', 12),
@@ -118,17 +119,14 @@ const flytrap: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
       page: 2,
       text: 'Bodycon, an oversized turtleneck, layers and flare. Rough edges, patchwork, wavy lines, and flytraps as embellishment.',
       words: ['BODYCON', 'TURTLENECK', 'LAYERS', 'OVER-SIZED', 'FLARE', 'ROUGH EDGES', 'PATCHWORK', 'EMBELLISHMENT', 'WAVY'],
-      pieces: [P('silhouette', 'cutout', 60, { r: 1 }), P('embellishment', 'cutout', 20, { r: -6 })],
+      pieces: [P('silhouette', 'cutout', 60, { r: 1 })],
     },
     {
       id: 'lineup',
       heading: 'The line-up',
       page: 2,
       text: 'Eleven looks in pink and lime: ruffled seams and stripes, cropped turtlenecks, wide trousers, wrap skirts and column dresses.',
-      pieces: [
-        P('lineup', 'print', 56, { r: -1.2, wm: 100 }),
-        ...Array.from({ length: 11 }, (_, i) => P(`lineup-${i + 1}`, 'hang', 0)),
-      ],
+      pieces: Array.from({ length: 11 }, (_, i) => P(`lineup-${i + 1}`, 'hang', 0)),
       tab: 'tab-projects',
       flap: 'flap-project-01',
     },
@@ -140,10 +138,6 @@ const flytrap: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
       pieces: [
         P('look-1', 'card', 31, { r: -2, wm: 80 }),
         P('look-2', 'card', 29, { r: 2.5, wm: 80 }),
-        P('look-1-front', 'print', 11, { wm: 40 }),
-        P('look-1-back', 'print', 11, { wm: 40 }),
-        P('look-2-front', 'cutout', 11, { wm: 40 }),
-        P('look-2-back', 'cutout', 11, { wm: 40 }),
       ],
     },
     {
@@ -159,14 +153,12 @@ const flytrap: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
       page: 4,
       text: 'Shot at night, in tall grass, so the knits glow out of the dark.',
       pieces: [
-        P('backdrop-left', 'print', 11, { r: -2, wm: 26 }),
         P('photo-1', 'polaroid', 24, { r: -4, wm: 72 }),
         P('photo-2', 'print', 25, { r: 3, wm: 70 }),
         P('photo-3', 'print', 19, { r: -2, wm: 56 }),
         P('photo-4', 'polaroid', 24, { r: 4, wm: 72 }),
         P('photo-5', 'print', 19, { r: -3, wm: 56 }),
         P('photo-6', 'print', 29, { r: 2, wm: 80 }),
-        P('backdrop-right', 'print', 9, { r: 3, wm: 22 }),
       ],
     },
     {
@@ -188,19 +180,18 @@ const muse: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
     'Her page THE COLLECTION: three illustrated looks in red leather-look and dark denim, beside red lips with gold teeth, denim and a back pocket with red stars.',
     'Her E-COMMERCE SHOOT, LOOK 3 drawn and as four 3D renders from every side, and her AI SHOOT, six night photos of LOOK 3 with red motorbikes.',
   ],
+  closer: {
+    2: ['moodboard'],
+    3: ['collection'],
+    4: ['ecommerce', 'ai-shoot'],
+  },
   sections: [
     {
       id: 'muse',
       heading: 'I am my own muse',
       page: 1,
       text: 'My cover is a collage: red lips with gold teeth, layers of denim, a girl in a red cap. The mouth in the middle screams it for me: I am my own muse.',
-      pieces: [
-        P('cover', 'print', 62, { r: -1, wm: 100 }),
-        P('muse', 'cutout', 19, { r: 6, wm: 54 }),
-        P('cover-girl', 'print', 17, { r: -4, wm: 46 }),
-        P('fabric-indigo-denim', 'fabric', 17, { r: 3 }),
-        P('fabric-red-denim', 'fabric', 17, { r: -4 }),
-      ],
+      pieces: [P('muse', 'cutout', 24, { r: 6, wm: 60 }), P('cover-girl', 'print', 20, { r: -4, wm: 52 }), P('fabric-indigo-denim', 'fabric', 17, { r: 3 })],
     },
     {
       id: 'inspiration',
@@ -209,7 +200,6 @@ const muse: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
       page: 2,
       text: 'A racing helmet, street signs, bikes at night, fire, a crowd in smoke, a safety pin and a zip. Four words on red tags: racing, edgy, raw, urban.',
       pieces: [
-        P('moodboard', 'cutout', 60, { r: 1, wm: 100 }),
         P('label-racing', 'lettering', 9, { r: -8 }),
         P('label-edgy', 'lettering', 9, { r: 5 }),
         P('label-raw', 'lettering', 9, { r: -4 }),
@@ -240,7 +230,6 @@ const muse: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
       page: 3,
       text: 'Three looks in red leather-look and dark denim: a cut-out crop top tied with bows over culottes, a glossy jacket with studded thigh-high boots, and a bustier with a red sash and wide trousers panelled in red.',
       pieces: [
-        P('collection', 'cutout', 40, { r: 0, wm: 96 }),
         P('collection-left', 'cutout', 15, { r: -2, wm: 30 }),
         P('collection-middle', 'cutout', 11, { r: 1, wm: 22 }),
         P('collection-right', 'cutout', 15, { r: 2, wm: 30 }),
@@ -249,6 +238,7 @@ const muse: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
         P('lips-3', 'cutout', 13, { r: -3, wm: 38 }),
         P('pocket', 'cutout', 16, { r: 5, wm: 46 }),
         P('fabric-leather', 'fabric', 14, { r: -4 }),
+        P('fabric-panel', 'fabric', 13, { r: 3 }),
         P('fabric-denim', 'fabric', 13, { r: 5, caption: 'denim' }),
       ],
     },
@@ -261,9 +251,8 @@ const muse: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
       pieces: [
         P('look-3', 'cutout', 15, { r: -2, wm: 42 }),
         P('label-look-3', 'lettering', 9, { r: -5, wm: 26 }),
-        P('ecommerce', 'print', 62, { r: 1, wm: 100 }),
         P('render-1', 'print', 14, { r: -3, wm: 42 }),
-        P('render-2', 'print', 17, { r: 2, wm: 46 }),
+        P('render-2', 'polaroid', 20, { r: 2, wm: 56 }),
         P('render-3', 'print', 17, { r: -2, wm: 46 }),
         P('render-4', 'print', 14, { r: 3, wm: 42 }),
       ],
@@ -275,8 +264,7 @@ const muse: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
       page: 4,
       text: 'LOOK 3 at night with AI: wet streets, red neon, red motorbikes, smoke and a tunnel.',
       pieces: [
-        P('ai-shoot', 'print', 58, { r: -1, wm: 100 }),
-        P('ai-2', 'polaroid', 22, { r: 3, wm: 70 }),
+        P('ai-2', 'polaroid', 22, { r: 3, wm: 70, caption: 'look 3, after dark', note: 'Red neon, a wet street, and LOOK 3.' }),
         P('ai-1', 'print', 17, { r: -3, wm: 48 }),
         P('ai-3', 'print', 16, { r: 2, wm: 46 }),
         P('ai-4', 'print', 13, { r: -4, wm: 38 }),

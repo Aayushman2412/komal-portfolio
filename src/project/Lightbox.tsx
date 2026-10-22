@@ -15,14 +15,26 @@ import { createPortal } from 'react-dom'
  * Any picture on the page, large. Every `data-lb` button on the page is one picture, in page order:
  * click or tap one to open it here; arrow keys, the arrows or a swipe step through them; Escape, the
  * cross or a click beside the picture closes it. Click (or tap) the picture to look closer: it grows
- * to twice the size and follows the mouse (or scrolls under a finger); pinch-zoom works too. Her alt
- * text is the caption, in her handwriting font.
+ * to twice the size and follows the mouse (or scrolls under a finger); pinch-zoom works too. The alt
+ * text is the caption, in her handwriting font and in her voice (`mine`).
  */
 type Item = { src: string; alt: string; w: number; h: number }
 type Size = { w: number; h: number }
 const ZOOM = 2.2
-/** Small pieces (a chip, a label) grow to at most this many times their own size. */
-const MAX_UP = 3
+/** Small pieces (a chip, a label) grow to at most this many times their own size, so they stay sharp... */
+const MAX_UP = 2
+/** ...and looking closer takes any piece to at most this many times its own size. */
+const MOST = 3
+
+/**
+ * The caption under the picture speaks as she does on her pages: the alt text describes "her cover",
+ * "her lettering", the caption says "my cover", "my lettering". Only her own things change: "her
+ * hand", "her hip" of a model in a photo stay as they are.
+ */
+const mine = (alt: string) =>
+  alt
+    .replace(/\b([Hh])er (?=(own |project|page|spread|cover|board|inspiration|INSPIRATION|SILHOUTTE|PROJECT|line-up|lettering|word|heading|collection|e-commerce|E-COMMERCE|AI |night|labels|next page))/g, (_, h: string) => (h === 'H' ? 'My ' : 'my '))
+    .replace(/\bshe shows\b/g, 'I show')
 const finger = () => matchMedia('(pointer: coarse)').matches
 
 function itemsOnPage() {
@@ -134,8 +146,8 @@ export function Lightbox() {
   }, [state])
 
   const fit: Size = item && room.w > 0 ? scaleTo(item, Math.min(room.w / item.w, room.h / item.h, MAX_UP)) : { w: 0, h: 0 }
-  // closer, but a small piece is not blown up past four times the size it was cut at
-  const closer = item && fit.w > 0 ? Math.max(1.4, Math.min(ZOOM, (4 * item.w) / fit.w)) : ZOOM
+  // closer, but a small piece is not blown up past three times the size it was cut at
+  const closer = item && fit.w > 0 ? Math.max(1.4, Math.min(ZOOM, (MOST * item.w) / fit.w)) : ZOOM
   const shown = zoom ? { w: fit.w * closer, h: fit.h * closer } : fit
 
   // zoomed: keep the point that was clicked under the pointer
@@ -205,7 +217,7 @@ export function Lightbox() {
         </button>
       </div>
       <p className="lb__caption" onClick={(e) => e.stopPropagation()}>
-        {item.alt}
+        {mine(item.alt)}
       </p>
       <span className="lb__count" aria-live="polite">
         {state.i + 1} / {state.items.length}

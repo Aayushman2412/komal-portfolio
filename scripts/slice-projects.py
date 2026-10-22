@@ -14,7 +14,9 @@ holding her pages (page-1.webp ...) and cuts.json, the list of pieces to cut fro
     }
 
 `box` is a rectangle in page pixels; `poly` cuts any shape (soft-edged alpha). kind "texture" is a
-fabric close-up for a swatch (saved a little sharper). Pages and pieces go to
+fabric close-up for a swatch (saved a little sharper). `"frame": true` marks a `poly` piece the site
+shows whole in a frame (a print, a card, a polaroid): a hole in it would show the frame's white
+backing, so the slicer warns when more than 2% of it is see-through. Pages and pieces go to
 public/projects/<slug>/, and their sizes, boxes and alt text to src/content/projects/<slug>.art.json
 for the site.
 
@@ -69,6 +71,10 @@ def project(slug: str) -> dict:
     for c in spec["cuts"]:
         piece = cut(loaded[c["page"]], c)
         q = 92 if c.get("kind") == "texture" else 88
+        if c.get("frame") and piece.mode == "RGBA":
+            clear = sum(piece.getchannel("A").histogram()[:128]) / (piece.width * piece.height)
+            if clear > 0.02:
+                print(f"   WARNING {c['name']} is {clear:.0%} see-through, and it is shown in a frame: stop its outline before what overlaps it")
         save(piece, OUT / slug / f"{c['name']}.webp", q=q)
         entry["cuts"][c["name"]] = {
             "src": f"projects/{slug}/{c['name']}.webp",

@@ -427,11 +427,11 @@
   },
   "look-2": {
    "src": "projects/project-01/look-2.webp",
-   "w": 394,
+   "w": 337,
    "h": 689,
    "page": 3,
    "box": [
-    531,
+    588,
     346,
     925,
     1035
@@ -597,13 +597,13 @@
   "backdrop-right": {
    "src": "projects/project-01/backdrop-right.webp",
    "w": 170,
-   "h": 1080,
+   "h": 748,
    "page": 4,
    "box": [
     1450,
     0,
     1620,
-    1080
+    748
    ],
    "alt": "A blown-up print from the night shoot behind the photos: the striped rib knit with a flower embellishment."
   },

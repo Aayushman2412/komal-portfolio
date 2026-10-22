@@ -552,6 +552,11 @@
   color: #fff8f2;
 }
 
+/* beside the red paper: the note starts past its edge, and has a little more height for that */
+.polaroid--right .polaroid__under {
+  inset: 38% 3% 4% 17%;
+}
+
 .polaroid__card {
   position: relative;
   display: block;
@@ -781,11 +786,12 @@
   transform: translateY(calc((42% - 100% * var(--sheet, 1)) / var(--sheet, 1)));
 }
 
+/* tall enough that, with the sheet in its pocket, the whole word clears the pocket's mouth */
 .spec__tab {
   position: absolute;
-  top: -3.1cqh;
+  top: -5cqh;
   right: 10%;
-  padding: 0.5cqh 1.6cqw 0.6cqh;
+  padding: 0.5cqh 1.6cqw 2.5cqh;
   border-radius: 0.6cqh 0.6cqh 0 0;
   background: var(--tab-yellow);
   font-family: var(--f-hand);
