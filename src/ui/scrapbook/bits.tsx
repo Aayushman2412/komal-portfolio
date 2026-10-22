@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
+import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import type { Project } from '../../content/site'
 import { art, regions } from '../../lib/art'
@@ -8,8 +8,9 @@ import { FACE } from './size'
 
 /**
  * The things stuck into the project pages, in the style of her drawn pages: her own washi tape and
- * stickers, a pink lined note with a loop border, polaroids, an envelope, a paper tab and swatches.
- * Positions are in page percent, so everything scales with the book.
+ * stickers, a pink lined note with a loop border, polaroids, an envelope, a paper tab, swatches, prints
+ * of her own pieces and the "click to see more" scrap. Positions are in page percent, so everything
+ * scales with the book.
  */
 
 type Pos = { x: number; y: number; r?: number; w?: number; h?: number }
@@ -20,6 +21,21 @@ export const place = ({ x, y, r = 0, w, h }: Pos): CSSProperties => ({
   height: h ? `${h}%` : undefined,
   transform: r ? `rotate(${r}deg)` : undefined,
 })
+
+/** Escape puts back whatever is zoomed in, before the book hears it (Escape there closes the book). */
+function useEscape(active: boolean, close: () => void) {
+  useEffect(() => {
+    if (!active) return
+    const key = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation()
+        close()
+      }
+    }
+    window.addEventListener('keydown', key, true)
+    return () => window.removeEventListener('keydown', key, true)
+  }, [active, close])
+}
 
 /** A clickable area over her drawn pages (her tabs, her "turn" flap, her index rows). Box in page pixels. */
 export function Spot({ box, label, onGo }: { box: number[]; label: string; onGo: () => void }) {
@@ -116,7 +132,7 @@ export function Polaroid({ photo, tape, lift = 'left', ...pos }: Pos & { photo: 
           setLifted((v) => !v)
         }}
       >
-        <span className="polaroid__photo">{photo.src ? <img src={photo.src} alt="" loading="lazy" /> : <span className="polaroid__empty">photo to come</span>}</span>
+        <span className="polaroid__photo">{photo.src ? <img src={photo.src} alt={photo.alt ?? ''} loading="lazy" /> : <span className="polaroid__empty">photo to come</span>}</span>
         <span className="polaroid__caption">{photo.caption}</span>
         {tape && <img className="polaroid__tape" src={tape === 1 ? art.book.tape1 : art.book.tape2} alt="" draggable={false} />}
       </button>
@@ -124,13 +140,26 @@ export function Polaroid({ photo, tape, lift = 'left', ...pos }: Pos & { photo: 
   )
 }
 
-/** An envelope with the concept note inside (her notes: "envelope → concept note"). */
-export function Envelope({ text, ...pos }: Pos & { text: string }) {
+/**
+ * An envelope with the concept note inside (her notes: "envelope → concept note"). A long note gives
+ * `out`, where the letter lies once it is pulled out (page percent, like the envelope): it comes up
+ * out of the envelope and unfolds there, still tucked in at the bottom.
+ */
+export function Envelope({ text, out, ...pos }: Pos & { text: string; out?: { x: number; y: number; w: number; h: number } }) {
   const [open, setOpen] = useState(false)
+  const { x, y, w = 1, h = 1, r = 0 } = pos
+  // the unfolded letter, in the envelope's own percent
+  const sheet = out && {
+    '--out-l': `${((out.x - x) / w) * 100}%`,
+    '--out-t': `${((out.y - y) / h) * 100}%`,
+    '--out-w': `${(out.w / w) * 100}%`,
+    '--out-h': `${(out.h / h) * 100}%`,
+    '--out-r': `${-r * 0.8}deg`,
+  }
   return (
     <button
-      className={`envelope ${open ? 'is-open' : ''}`}
-      style={place(pos)}
+      className={`envelope ${out ? 'envelope--long' : ''} ${open ? 'is-open' : ''}`}
+      style={{ ...place(pos), ...(sheet as CSSProperties) }}
       data-interactive
       aria-expanded={open}
       aria-label={open ? 'Close the envelope' : 'Open the envelope: the concept note'}
@@ -154,11 +183,14 @@ export function Envelope({ text, ...pos }: Pos & { text: string }) {
   )
 }
 
-/** A paper tab poking out of a pocket; pull it and the spec sheet slides out (her notes: "paper tab → specs sheet hidden"). */
-export function SpecTab({ specs, ...pos }: Pos & { specs: Project['specs'] }) {
+/**
+ * A paper tab poking out of a pocket; pull it and the spec sheet slides out (her notes: "paper tab →
+ * specs sheet hidden"). `sheet` makes the sheet taller than its pocket, for more rows.
+ */
+export function SpecTab({ specs, sheet, ...pos }: Pos & { specs: Project['specs']; sheet?: number }) {
   const [out, setOut] = useState(false)
   return (
-    <div className={`spec ${out ? 'is-out' : ''}`} style={place(pos)}>
+    <div className={`spec ${out ? 'is-out' : ''}`} style={{ ...place(pos), ...(sheet ? ({ '--sheet': sheet } as CSSProperties) : {}) }}>
       <button
         className="spec__sheet"
         data-interactive
@@ -190,17 +222,9 @@ export function SpecTab({ specs, ...pos }: Pos & { specs: Project['specs'] }) {
 export function Swatch({ swatch, ...pos }: Pos & { swatch: Project['swatches'][number] }) {
   const [zoom, setZoom] = useState(false)
   const small = swatch.src ?? fabricUrl(swatch.kind)
-  useEffect(() => {
-    if (!zoom) return
-    const key = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.stopPropagation()
-        setZoom(false)
-      }
-    }
-    window.addEventListener('keydown', key, true)
-    return () => window.removeEventListener('keydown', key, true)
-  }, [zoom])
+  useEscape(zoom, useCallback(() => setZoom(false), []))
+  // a photo of the real fabric is shown at most about three times its own size, so it stays fabric, not blur
+  const most = swatch.src && swatch.w && swatch.h ? Math.round(Math.min(swatch.w, swatch.h) * 3.2) : 0
   return (
     <>
       <button
@@ -220,12 +244,83 @@ export function Swatch({ swatch, ...pos }: Pos & { swatch: Project['swatches'][n
       {zoom &&
         createPortal(
           <div className="zoom" role="dialog" aria-label={swatch.name} onClick={() => setZoom(false)}>
-            <span className="zoom__cloth" style={{ backgroundImage: `url(${swatch.src ?? fabricUrl(swatch.kind, 768)})` }} />
+            <span
+              className={`zoom__cloth ${most ? 'zoom__cloth--photo' : ''}`}
+              style={{ backgroundImage: `url(${swatch.src ?? fabricUrl(swatch.kind, 768)})`, ...(most ? { width: `min(68vmin, 620px, ${most}px)` } : {}) }}
+            />
             <span className="zoom__tag">{swatch.name}</span>
             <span className="zoom__hint">click anywhere to put it back</span>
           </div>,
           document.body,
         )}
     </>
+  )
+}
+
+/**
+ * One of her own pieces stuck in like a print, taped down, or `bare` when she cut it out; click it to
+ * look closer (her line-up, her collection). `size` is the piece's own size in pixels, so the closer
+ * look shows it as large as it holds (about twice), never more.
+ */
+export function Print({ src, alt, size, tape, bare, ...pos }: Pos & { src: string; alt: string; size: [number, number]; tape?: 1 | 2; bare?: boolean }) {
+  const [zoom, setZoom] = useState(false)
+  useEscape(zoom, useCallback(() => setZoom(false), []))
+  const [iw, ih] = size
+  return (
+    <>
+      <button
+        className={`print ${bare ? 'print--bare' : ''}`}
+        style={place(pos)}
+        data-interactive
+        aria-label={`${alt} Look closer`}
+        onClick={(e) => {
+          e.stopPropagation()
+          sound.click()
+          setZoom(true)
+        }}
+      >
+        <img src={src} alt="" draggable={false} loading="lazy" />
+        {tape && <img className="print__tape" src={tape === 1 ? art.book.tape1 : art.book.tape2} alt="" draggable={false} />}
+      </button>
+      {zoom &&
+        createPortal(
+          <div className="zoom" role="dialog" aria-label={alt} onClick={() => setZoom(false)}>
+            <img className="zoom__print" src={src} alt={alt} style={{ width: `min(92vw, ${iw * 2}px, calc(80vh * ${(iw / ih).toFixed(4)}))` }} />
+            <span className="zoom__hint">click anywhere to put it back</span>
+          </div>,
+          document.body,
+        )}
+    </>
+  )
+}
+
+/**
+ * "click to see more": her hand on a torn scrap of white paper, like her INSPIRATION strip. It is a
+ * real link, so it opens the project's own page in a new tab (and middle-click, copy link, keyboard
+ * all work); it never turns the page.
+ */
+export function More({ href, title, className = '', ...pos }: Pos & { href: string; title: string; className?: string }) {
+  return (
+    <a
+      className={`more ${className}`}
+      style={place(pos)}
+      href={href}
+      target="_blank"
+      rel="noopener"
+      draggable={false}
+      data-interactive
+      aria-label={`click to see more: ${title}, the whole project (opens in a new tab)`}
+      onPointerDown={(e) => e.stopPropagation()}
+      onClick={(e) => {
+        e.stopPropagation()
+        sound.click()
+      }}
+    >
+      <span className="more__text">click to see more</span>
+      <svg className="more__arrow" viewBox="0 0 40 22" aria-hidden="true">
+        <path d="M2 14c7-6 17-8 30-5" />
+        <path d="M26 3.5l7 5.6-7.6 4.4" />
+      </svg>
+    </a>
   )
 }
