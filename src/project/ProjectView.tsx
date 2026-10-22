@@ -2,6 +2,7 @@ import { ArrowLeft } from '@phosphor-icons/react'
 import { Fragment, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react'
 import { details, type Cut, type Detail, type Piece, type Section } from '../content/projects/details'
 import { art, publicUrl } from '../lib/art'
+import { askBook } from '../lib/bookChannel'
 import { Board, lb, Line, Note, PieceView, RedPaper, Sticker, Strip, Tape, tilt, Words } from './pieces'
 import { useReveal } from './reveal'
 
@@ -19,24 +20,31 @@ const num = (n: number) => String(n).padStart(2, '0')
 const bookAt = (slug: string) => `./#p/${slug}`
 const css = (vars: Record<string, string | number>) => vars as CSSProperties
 
-/**
- * Back to the book. The book opened this page in a new tab, and is still open at this project behind
- * it: then close this tab rather than load a second copy of the whole story in it. Opened any other
- * way (a shared link, or after turning to another project here), the link simply goes to the book.
- */
-function backToBook(e: MouseEvent<HTMLAnchorElement>) {
-  let fromBook = false
+/** The book opened this page in a new tab (and nothing has been followed here since). */
+function openedFromBook() {
   try {
-    fromBook = history.length === 1 && !!document.referrer && new URL(document.referrer).origin === location.origin
+    return history.length === 1 && !!document.referrer && new URL(document.referrer).origin === location.origin
   } catch {
-    fromBook = false
+    return false
   }
-  if (!fromBook || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+}
+
+/**
+ * Back to the book, at `target` (this project, or 'index'). When the book opened this page in a new
+ * tab and is still open behind it, it turns there and this tab closes, rather than load a second copy
+ * of the whole story in it. Opened any other way (a shared link, or after turning to another project
+ * here), or with the book's tab gone, the link simply goes to the book.
+ */
+const toBook = (target: string) => (e: MouseEvent<HTMLAnchorElement>) => {
+  if (!openedFromBook() || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
   const href = e.currentTarget.href
   e.preventDefault()
-  window.close()
-  // still here (the browser kept the tab open): go there after all
-  setTimeout(() => location.assign(href), 150)
+  askBook(target).then((answered) => {
+    if (!answered) return location.assign(href)
+    window.close()
+    // still here (the browser kept the tab open): go there after all
+    setTimeout(() => location.assign(href), 150)
+  })
 }
 
 /**
@@ -74,7 +82,7 @@ function Stickers({ i }: { i: number }) {
 function TopBar({ d }: { d?: Detail }) {
   return (
     <nav className="topbar" aria-label="Komal's projects">
-      <a className="ytab ytab--back" href={d ? bookAt(d.slug) : './#index'} onClick={backToBook}>
+      <a className="ytab ytab--back" href={d ? bookAt(d.slug) : './#index'} onClick={toBook(d ? d.slug : 'index')}>
         <ArrowLeft size={16} weight="bold" aria-hidden />
         back to the scrapbook
       </a>
@@ -100,7 +108,19 @@ function PagePic({ d, n, eager = false, opens }: { d: Detail; n: number; eager?:
   return (
     <figure className={`spread__page ${n === 1 ? 'spread__page--cover' : ''}`} data-reveal>
       <button type="button" className="pc__hit" {...big}>
-        <img src={src} width={page.w} height={page.h} alt={alt} loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : 'auto'} decoding="async" draggable={false} />
+        <img
+          src={src}
+          // a phone shows her page about 390 px wide: the 810 px copy is sharp enough there
+          srcSet={page.small ? `${publicUrl(page.small)} 810w, ${src} ${page.w}w` : undefined}
+          sizes={page.small ? '(max-width: 760px) 100vw, 90vw' : undefined}
+          width={page.w}
+          height={page.h}
+          alt={alt}
+          loading={eager ? 'eager' : 'lazy'}
+          fetchPriority={eager ? 'high' : 'auto'}
+          decoding="async"
+          draggable={false}
+        />
       </button>
     </figure>
   )
@@ -120,9 +140,10 @@ function Closer({ d, n }: { d: Detail; n: number }) {
       </p>
       <ul className="closer__list" aria-label={`Parts of page ${n}, to look at large`}>
         {cuts.map((c, k) => (
-          <li key={c.src} style={css({ '--ar': (c.w / c.h).toFixed(3), '--r': `${tilt(k + n, 0.8)}deg` })}>
+          <li key={c.src} style={css({ '--ar': (c.w / c.h).toFixed(3), '--nw': c.w, '--r': `${tilt(k + n, 0.8)}deg` })}>
             <button type="button" className="pc__hit" {...lb(publicUrl(c.src), c.alt, c.w, c.h)}>
-              <img src={publicUrl(c.src)} width={c.w} height={c.h} alt={c.alt} loading="lazy" decoding="async" draggable={false} />
+              {/* a small copy here; the button opens the piece itself */}
+              <img src={publicUrl(c.thumb ?? c.src)} width={c.w} height={c.h} alt={c.alt} loading="lazy" decoding="async" draggable={false} />
             </button>
           </li>
         ))}
@@ -141,7 +162,8 @@ function Hero({ d }: { d: Detail }) {
           <img className="hero__lettering" src={art.projectTitles[d.n - 1]} alt={`Project ${num(d.n)}`} draggable={false} />
           <h1 className="hero__title">{d.title}</h1>
           {d.subtitle && <p className="hero__sub">{d.subtitle}</p>}
-          <Tape kind={1} style={css({ left: '-6%', top: '-9%', width: '30%', rotate: '-26deg' })} />
+          {/* on the corner away from her cover, so it only ever sits on the card and the table */}
+          <Tape kind={1} style={css({ left: 'auto', right: '-3%', top: '-8%', width: 'min(30%, 112px)', translate: 'none', rotate: '24deg' })} />
           <Sticker src={art.book.sparkle} className="hero__sparkle" />
           <Sticker src={art.book.heart} className="hero__heart" />
         </div>
@@ -183,9 +205,10 @@ function StoryBoard({ d, i }: { d: Detail; i: number }) {
 
 /**
  * Where a section's pieces go on its board, so it fills like a page of her scrapbook and not a grid
- * with holes: a big piece (her board, her line-up, a whole shoot) sits beside the note; her tags
- * line up under the note; the rest are stuck down in columns; chips and fabrics in a row at the end.
- * With no big piece, the note is simply the first thing in the columns.
+ * with holes: a big piece (a look, a face) sits beside the note, with up to two more under the note;
+ * her tags line up under the note; the rest are stuck down in columns; chips and fabrics in a row at
+ * the end. With no big piece, a few small pieces (or only chips and fabrics) stand in a row beside the
+ * note, and more than that start the columns with the note.
  */
 function layout(s: Section) {
   const pieces = s.pieces.filter((p) => p.look !== 'hang')
@@ -195,12 +218,13 @@ function layout(s: Section) {
     return g.length > 1 ? g : []
   }
   const tags = group('lettering')
-  const row = [...group('chip'), ...group('fabric')]
-  const rest = pieces.filter((p) => p !== feature && !tags.includes(p) && !row.includes(p))
+  const chips = [...group('chip'), ...group('fabric')]
+  const rest = pieces.filter((p) => p !== feature && !tags.includes(p) && !chips.includes(p))
   // two or fewer small pieces go under the note, beside the big one
   const aside = feature && rest.length <= 2 ? rest : []
-  const flow = aside.length ? [] : rest
-  return { feature, tags, row, aside, flow, rowBeside: !feature && !flow.length && row.length > 0 }
+  const beside = feature ? [] : !chips.length && rest.length <= 3 ? rest : !rest.length ? chips : []
+  const flow = aside.length || beside === rest ? [] : rest
+  return { feature, tags, row: beside === chips ? [] : chips, aside, flow, beside }
 }
 
 /** How many columns a board's pieces stand in: three on a wide screen, two on a tablet, one on a phone. */
@@ -275,7 +299,7 @@ function SectionBoard({ d, s, i, bound, cols }: { d: Detail; s: Section; i: numb
   const tab = s.tab ? d.art.cuts[s.tab] : undefined
   const flap = s.flap ? d.art.cuts[s.flap] : undefined
   const hangs = s.pieces.filter((p) => p.look === 'hang')
-  const { feature, tags, row, aside, flow, rowBeside } = layout(s)
+  const { feature, tags, row, aside, flow, beside } = layout(s)
   let k = i
   const view = (p: Piece) => <PieceView key={p.cut} d={d} p={p} i={k++} />
   const intro = (
@@ -291,7 +315,8 @@ function SectionBoard({ d, s, i, bound, cols }: { d: Detail; s: Section; i: numb
     </div>
   )
   const rowEl = row.length > 0 && <div className="sheet__row">{row.map(view)}</div>
-  const lead = feature || rowBeside
+  const besideEl = beside.length > 0 && <div className="sheet__row">{beside.map(view)}</div>
+  const lead = feature || besideEl
   const cells = [...(lead ? [] : [{ key: 'intro', el: intro }]), ...flow.map((p) => ({ key: p.cut, el: view(p) }))]
   return (
     <Board id={`s-${s.id}`} label={s.heading} bound={bound} i={i} className={`board--section ${flap ? 'has-flap' : ''}`}>
@@ -308,11 +333,11 @@ function SectionBoard({ d, s, i, bound, cols }: { d: Detail; s: Section; i: numb
       {lead && (
         <div className="sheet__lead">
           {intro}
-          {feature ? <div className="sheet__feature">{view(feature)}</div> : rowEl}
+          {feature ? <div className="sheet__feature">{view(feature)}</div> : besideEl}
         </div>
       )}
       {cells.length > 0 && <Columns cells={cells} n={Math.min(cols, cells.length)} />}
-      {!rowBeside && rowEl}
+      {rowEl}
       {hangs.length > 0 && <Line d={d} pieces={hangs} />}
       {tab && <img className="board__tab" src={publicUrl(tab.src)} width={tab.w} height={tab.h} alt={tab.alt} loading="lazy" draggable={false} />}
       {flap && <img className="board__flap" src={publicUrl(flap.src)} width={flap.w} height={flap.h} alt={flap.alt} loading="lazy" draggable={false} />}
@@ -380,7 +405,7 @@ function EndNav({ d }: { d: Detail }) {
       ) : (
         <span className="endflap endflap--none" />
       )}
-      <a className="ytab endnav__book" href={bookAt(d.slug)} onClick={backToBook}>
+      <a className="ytab endnav__book" href={bookAt(d.slug)} onClick={toBook(d.slug)}>
         <ArrowLeft size={16} weight="bold" aria-hidden />
         back to the scrapbook
       </a>
@@ -388,6 +413,7 @@ function EndNav({ d }: { d: Detail }) {
         className={`endflap endflap--next ${next ? '' : 'endflap--index'}`}
         href={next ? `#${next.slug}` : './#index'}
         aria-label={next ? `Turn to project ${num(next.n)}: ${next.title}` : 'Turn to the index of the scrapbook'}
+        onClick={next ? undefined : toBook('index')}
       >
         <img className="endflap__turn" src={art.book.turn} alt="" draggable={false} />
         <img className="endflap__img" src={next ? art.book.flapYellow : art.book.flapGreen} alt="" draggable={false} />

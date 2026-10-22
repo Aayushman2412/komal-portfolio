@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { site, type Project } from '../../content/site'
 import { art, regions } from '../../lib/art'
 import { Envelope, Flap, IndexCard, More, Note, Polaroid, RedPaper, SpecTab, Sticker, Swatch, Tape } from './bits'
@@ -79,14 +79,17 @@ function ProjectLeft({ p, n }: { p: Project; n: number }) {
 function ProjectRight({ p, next, go }: { p: Project; next: { to: string; label: string }; go: Go }) {
   // three swatches sit a little closer and smaller than two, the last one clear of her "turn"
   const three = p.swatches.length > 2
+  // one polaroid up at a time: lifting one puts the other back, so neither hides the other's note
+  const [up, setUp] = useState<number | null>(null)
+  const lifting = (k: number) => ({ lifted: up === k, onLift: (on: boolean) => setUp(on ? k : null) })
   return (
     <>
       {p.more && <Pieces slug={p.slug} side="right" under />}
       <RedPaper x={7} y={13} w={56} h={p.more ? 52.5 : 50} r={-3}>
         <span className={`red-paper__note ${p.redNote ? 'red-paper__note--words' : ''}`}>{p.redNote ?? p.photos[0].caption}</span>
       </RedPaper>
-      <Polaroid x={12} y={p.more ? 16 : 17} w={44} r={-5} photo={p.photos[0]} tape={1} onRed={p.more} />
-      <Polaroid x={55} y={p.more ? 31 : 33} w={37} r={6} photo={p.photos[1]} tape={1} lift="right" />
+      <Polaroid x={12} y={p.more ? 16 : 17} w={44} r={-5} photo={p.photos[0]} tape={1} onRed {...lifting(0)} />
+      <Polaroid x={55} y={p.more ? 31 : 33} w={37} r={6} photo={p.photos[1]} tape={1} lift="right" {...lifting(1)} />
       {p.more ? (
         <Pieces slug={p.slug} side="right" />
       ) : (

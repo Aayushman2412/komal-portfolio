@@ -13,8 +13,9 @@ import project02Art from './project-02.art.json'
  * for her OK. Her keywords are her own words, spelled as she meant them.
  */
 
-export type Cut = { src: string; w: number; h: number; page: number; box: number[]; alt: string; kind?: string }
-export type ProjectArt = { pages: { src: string; w: number; h: number }[]; cuts: Record<string, Cut> }
+/** `thumb`: a small copy for the "look closer" strip. A page's `small` is the page 810 px wide, for phones. */
+export type Cut = { src: string; w: number; h: number; page: number; box: number[]; alt: string; kind?: string; thumb?: string }
+export type ProjectArt = { pages: { src: string; small?: string; w: number; h: number }[]; cuts: Record<string, Cut> }
 
 /**
  * How a piece is stuck onto the board.
@@ -91,8 +92,9 @@ const flytrap: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
     'Her page of final looks: two illustration cards, front and back, with pink loop borders, beside the Venus flytrap makeup: red-rimmed eyes, lime brows, glossy lips and flytraps in the hair.',
     'Her night shoot: the knits photographed at night in tall grass, six photos laid over two blown-up prints.',
   ],
+  // her board's two halves open whole from here; the boards below hold their parts
   closer: {
-    2: ['moodboard', 'leaf', 'mushrooms', 'face', 'embellishment', 'lineup'],
+    2: ['moodboard', 'inspiration', 'silhouette', 'embellishment', 'lineup'],
     3: ['look-1-front', 'look-1-back', 'look-2-front', 'look-2-back'],
     4: ['backdrop-left', 'backdrop-right'],
   },
@@ -102,10 +104,14 @@ const flytrap: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
       heading: 'Inspiration',
       lettering: 'heading-inspiration',
       page: 2,
-      text: 'A giant leaf, mushroom gills, moss, Venus flytraps and an uncanny face. My words for them: ominous, raw, textures, earthy, uncanny. The four chips are my palette.',
-      words: ['ominous', 'raw', 'textures', 'earthy', 'uncanny'],
+      text: 'Where it started: the trap itself, a leaf seen from above, the gills under a mushroom, and a face hidden in a pod. I took my four colours straight from them.',
+      // "ominous" is on her leaf
+      words: ['raw', 'textures', 'earthy', 'uncanny'],
       pieces: [
-        P('inspiration', 'cutout', 62, { r: -1 }),
+        P('flytrap', 'cutout', 21, { r: -3, wm: 62 }),
+        P('leaf', 'cutout', 24, { r: 2, wm: 74 }),
+        P('mushrooms', 'cutout', 19, { r: -2, wm: 54 }),
+        P('face', 'cutout', 16, { r: 4, wm: 48 }),
         P('chip-yellow', 'chip', 13),
         P('chip-green', 'chip', 12),
         P('chip-olive', 'chip', 12),
@@ -117,9 +123,16 @@ const flytrap: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
       heading: 'Silhouette',
       lettering: 'heading-silhouette',
       page: 2,
-      text: 'Bodycon, an oversized turtleneck, layers and flare. Rough edges, patchwork, wavy lines, and flytraps as embellishment.',
-      words: ['BODYCON', 'TURTLENECK', 'LAYERS', 'OVER-SIZED', 'FLARE', 'ROUGH EDGES', 'PATCHWORK', 'EMBELLISHMENT', 'WAVY'],
-      pieces: [P('silhouette', 'cutout', 60, { r: 1 })],
+      text: 'The shapes I cut out for it: a column gown with flytraps stitched on its hem, an oversized rib turtleneck with one long sleeve, a skirt that flares, and fabric frayed into layers.',
+      // "OVER-SIZED" is on her turtleneck
+      words: ['BODYCON', 'TURTLENECK', 'LAYERS', 'FLARE', 'ROUGH EDGES', 'PATCHWORK', 'EMBELLISHMENT', 'WAVY'],
+      pieces: [
+        P('gown-front', 'cutout', 22, { r: -2, wm: 74 }),
+        P('turtleneck', 'cutout', 23, { r: 2, wm: 74 }),
+        P('rough-edges', 'cutout', 16, { r: -3, wm: 54 }),
+        P('gown-back', 'cutout', 10, { r: 3, wm: 30 }),
+        P('flare', 'cutout', 12, { r: -2, wm: 36 }),
+      ],
     },
     {
       id: 'lineup',
@@ -135,9 +148,10 @@ const flytrap: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
       heading: 'Two final looks',
       page: 3,
       text: 'A cropped turtleneck over a long striped skirt, and a strapless striped column dress, front and back. Olive, moss, mustard and pink, with little flowers along the stripes.',
+      // the first look beside the note, the second under it
       pieces: [
-        P('look-1', 'card', 31, { r: -2, wm: 80 }),
-        P('look-2', 'card', 29, { r: 2.5, wm: 80 }),
+        P('look-1', 'card', 44, { r: -2, wm: 86 }),
+        P('look-2', 'card', 33, { r: 2.5, wm: 80 }),
       ],
     },
     {
@@ -145,7 +159,8 @@ const flytrap: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
       heading: 'Makeup',
       page: 3,
       text: 'The flytrap on the face: red-rimmed eyes, lime brows, glossy red lips, and flytraps tucked into the hair.',
-      pieces: [P('makeup-face', 'cutout', 30, { r: -1.5, wm: 86 }), P('makeup-eyes', 'print', 30, { r: 3, wm: 80 }), P('makeup-hair', 'cutout', 36, { r: -2, wm: 92 })],
+      // the face beside the note, the eyes and the hair under it
+      pieces: [P('makeup-face', 'print', 44, { r: -1.5, wm: 86 }), P('makeup-eyes', 'print', 36, { r: 3, wm: 80 }), P('makeup-hair', 'cutout', 38, { r: -2, wm: 92 })],
     },
     {
       id: 'night-shoot',
@@ -180,10 +195,11 @@ const muse: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
     'Her page THE COLLECTION: three illustrated looks in red leather-look and dark denim, beside red lips with gold teeth, denim and a back pocket with red stars.',
     'Her E-COMMERCE SHOOT, LOOK 3 drawn and as four 3D renders from every side, and her AI SHOOT, six night photos of LOOK 3 with red motorbikes.',
   ],
+  // her lettering already on a piece (RACING on the helmet, LOOK 3 on its card) opens from here too
   closer: {
-    2: ['moodboard'],
+    2: ['moodboard', 'label-racing'],
     3: ['collection'],
-    4: ['ecommerce', 'ai-shoot'],
+    4: ['ecommerce', 'ai-shoot', 'label-look-3'],
   },
   sections: [
     {
@@ -191,16 +207,16 @@ const muse: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
       heading: 'I am my own muse',
       page: 1,
       text: 'My cover is a collage: red lips with gold teeth, layers of denim, a girl in a red cap. The mouth in the middle screams it for me: I am my own muse.',
-      pieces: [P('muse', 'cutout', 24, { r: 6, wm: 60 }), P('cover-girl', 'print', 20, { r: -4, wm: 52 }), P('fabric-indigo-denim', 'fabric', 17, { r: 3 })],
+      // three pieces, in a row beside the note
+      pieces: [P('muse', 'cutout', 20, { r: 6, wm: 60 }), P('cover-girl', 'print', 18, { r: -4, wm: 52 }), P('fabric-indigo-denim', 'fabric', 14, { r: 3, wm: 44 })],
     },
     {
       id: 'inspiration',
       heading: 'Inspiration',
       lettering: 'heading-inspiration',
       page: 2,
-      text: 'A racing helmet, street signs, bikes at night, fire, a crowd in smoke, a safety pin and a zip. Four words on red tags: racing, edgy, raw, urban.',
+      text: 'Everything on it moves fast or cuts: a racing helmet, street signs, bikes at night, fire, a crowd in smoke, a giant safety pin and a zip. I tagged the mood on red paper.',
       pieces: [
-        P('label-racing', 'lettering', 9, { r: -8 }),
         P('label-edgy', 'lettering', 9, { r: 5 }),
         P('label-raw', 'lettering', 9, { r: -4 }),
         P('label-urban', 'lettering', 10, { r: 6 }),
@@ -249,8 +265,7 @@ const muse: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
       page: 4,
       text: 'LOOK 3 as a 3D render, turned to show the front, side and back.',
       pieces: [
-        P('look-3', 'cutout', 15, { r: -2, wm: 42 }),
-        P('label-look-3', 'lettering', 9, { r: -5, wm: 26 }),
+        P('look-3', 'cutout', 22, { r: -2, wm: 56 }),
         P('render-1', 'print', 14, { r: -3, wm: 42 }),
         P('render-2', 'polaroid', 20, { r: 2, wm: 56 }),
         P('render-3', 'print', 17, { r: -2, wm: 46 }),

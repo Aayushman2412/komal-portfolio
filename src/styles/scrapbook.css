@@ -78,7 +78,8 @@
   width: calc(var(--pw) * var(--stack-w) / 810);
 }
 
-/* the boards already turned show on the left only once the cover has swung over to that side */
+/* the boards already turned show on the left only once the cover lies on that side: while it swings
+   over (or is held up by hand) there is no page there yet, and they would show as one bare board */
 .book__stage:not([data-cover='over']) .book__stack--l {
   display: none;
 }
@@ -99,6 +100,16 @@
 }
 
 .book--spread .leaf:not(.is-near) {
+  visibility: hidden;
+}
+
+/* another page has come over this one while pages turn: its top edge (her ABOUT ME star) is
+   clipped, and once that page lies flat on it, it is hidden (see paintLeaf) */
+.book--spread .leaf[data-under='edge'] > .page {
+  clip-path: inset(calc(95 / 1080 * 100%) 0 0 0);
+}
+
+.book--spread .leaf[data-under='all'] {
   visibility: hidden;
 }
 
@@ -248,9 +259,10 @@
   transform: rotateY(180deg);
 }
 
-/* the first page is there as soon as the cover lifts, and stays until the cover has shut over it */
+/* the first page is there as soon as the cover lifts (the cover still hides it, and the boards under
+   it have already widened), and stays until the cover has shut over it */
 .single__page--cover.is-before ~ .single__page.is-current {
-  transition: opacity 0.15s;
+  transition: none;
 }
 
 .single__page--cover.is-current ~ .single__page.is-after {
@@ -908,6 +920,11 @@
   background-size: 170%;
   background-position: center;
   clip-path: polygon(0% 0%, 7% 3%, 14% 0%, 21% 3%, 28% 0%, 35% 3%, 42% 0%, 50% 3%, 57% 0%, 64% 3%, 71% 0%, 78% 3%, 85% 0%, 92% 3%, 100% 0%, 97% 7%, 100% 14%, 97% 21%, 100% 28%, 97% 35%, 100% 42%, 97% 50%, 100% 57%, 97% 64%, 100% 71%, 97% 78%, 100% 85%, 97% 92%, 100% 100%, 92% 97%, 85% 100%, 78% 97%, 71% 100%, 64% 97%, 57% 100%, 50% 97%, 42% 100%, 35% 97%, 28% 100%, 21% 97%, 14% 100%, 7% 97%, 0% 100%, 3% 92%, 0% 85%, 3% 78%, 0% 71%, 3% 64%, 0% 57%, 3% 50%, 0% 42%, 3% 35%, 0% 28%, 3% 21%, 0% 14%, 3% 7%);
+}
+
+/* a photo of her fabric: the whole cut, so clicking it comes closer than the page */
+.swatch__cloth--photo {
+  background-size: cover;
 }
 
 .swatch__tag {

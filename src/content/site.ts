@@ -81,9 +81,9 @@ const flytrap: Project = {
   title: 'Flytrap',
   subtitle: 'A knitwear collection grown from leaves, moss, mushrooms and Venus flytraps.',
   story:
-    'A leaf, moss, mushrooms and Venus flytraps: ominous, raw, earthy, a little uncanny. I turned them into rib and waffle knits with rough, ruffled edges. Even the makeup is a flytrap.',
+    'A Venus flytrap, a giant leaf, moss and mushrooms. I turned them into knitwear: rib and waffle knits in moss, mustard and pink, with rough, ruffled edges. Even the makeup is a flytrap.',
   concept:
-    'Nature, but not the pretty kind. I gathered a giant leaf, mushroom gills, moss, Venus flytraps and an uncanny face, and labelled how they felt: ominous, raw, textures, earthy, uncanny. My four colours came from there: a warm yellow, a dark moss green, olive and a soft pink. The silhouettes are bodycon and oversized, layered and flared, with rough edges, patchwork and wavy lines, made up in rib and waffle knits. The photos were taken at night, in tall grass.',
+    'Nature, but not the pretty kind. I gathered a giant leaf, mushroom gills, moss, Venus flytraps and an uncanny face, and took my four colours from them: a warm yellow, a dark moss green, olive and a soft pink. The trap gave me the shapes: bodycon and oversized, layered and flared, with rough edges, patchwork and wavy lines, all in rib and waffle knits. I shot the looks at night, in tall grass, so they glow out of the dark.',
   specs: [
     ['line-up', '11 looks'],
     ['final looks', '2, front & back'],
@@ -123,11 +123,11 @@ const muse: Project = {
   title: 'I Am My Own Muse',
   subtitle: 'A racing-inspired collection in denim and red leather-look, with an e-commerce shoot and an AI shoot.',
   story:
-    'I am my own muse. It started with a racing helmet, street signs, bikes at night and fire: edgy, raw, urban. Then I took LOOK 3 further, into 3D and out into the night.',
+    'I am my own muse. Racing and the street at night started it: a helmet, street signs, bikes and fire. Then I took LOOK 3 further, into 3D and out into the night.',
   concept:
-    'The idea is in the mouth on my cover: I am my own muse. The mood comes from racing and the street: a white racing helmet, street signs, a wheelie at night, fire, a giant safety pin and a zip. Four words on red tags hold it together: racing, edgy, raw, urban. The colours are two crumpled Pantone chips, a deep red and Faded Denim, so the looks live in red leather-look and dark denim, with red lips, gold teeth and stars for attitude.',
+    'The idea is in the mouth on my cover: I am my own muse. The mood comes from racing and the street: a white racing helmet, street signs, a wheelie at night, fire, a giant safety pin and a zip. The colours are two crumpled Pantone chips, a deep red and Faded Denim, so the looks live in red leather-look and dark denim, with bows, laces and studs, and red lips, gold teeth and stars for attitude.',
   specs: [
-    ['mood', 'racing, edgy, raw, urban'],
+    ['mood', 'racing, the street at night'],
     ['colours', 'deep red, faded denim'],
     ['materials', 'denim, red leather-look'],
     ['looks', '3'],
@@ -146,8 +146,8 @@ const muse: Project = {
     fabric('project-02', 'fabric-leather', 'red leather-look', 'block'),
   ],
   redNote: 'racing, edgy, raw, urban',
-  // TODO(komal): the full codes; only "199" and "…-4021 Faded Denim" show past the crumples
-  palette: [chip('project-02', 'chip-red', 'PANTONE 199', '#9e3336', 'deep red'), chip('project-02', 'chip-denim', 'PANTONE …-4021', '#3d5770', 'Faded Denim')],
+  // TODO(komal): confirm the codes; only "199" and "…-4021 Faded Denim" show past the crumples (Faded Denim is 17-4021 TCX)
+  palette: [chip('project-02', 'chip-red', 'PANTONE 199', '#9e3336', 'deep red'), chip('project-02', 'chip-denim', 'PANTONE 17-4021 TCX', '#3d5770', 'Faded Denim')],
   cover: piece('project-02', 'cover').url,
   more: true,
 }

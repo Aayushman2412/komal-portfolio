@@ -174,7 +174,8 @@ body.pj {
 
 .closer__list li {
   --th: clamp(62px, 7vw, 96px);
-  width: clamp(40px, calc(var(--th) * var(--ar)), 180px);
+  /* a small piece (one of her labels) no bigger than about the size she cut it */
+  width: clamp(40px, min(calc(var(--th) * var(--ar)), calc(var(--nw) * 1.3px)), 180px);
   rotate: var(--r);
   transition:
     rotate 0.35s cubic-bezier(0.3, 1.4, 0.5, 1),
@@ -212,7 +213,7 @@ body.pj {
   width: var(--pw);
 }
 
-/* the name sits over the blank board at the bottom of her cover */
+/* the name sits under her cover, clear of it (her cover runs to its edges: her mouths, her rings) */
 .hero__below {
   position: relative;
   z-index: 2;
@@ -221,10 +222,10 @@ body.pj {
   justify-content: space-between;
   gap: 24px;
   width: var(--pw);
-  margin: calc(var(--pw) * -0.018) auto 0;
+  margin: 30px auto 0;
 }
 
-/* her index paper with her PROJECT 0N lettering; it sits over the blank board at the bottom of her cover */
+/* her index paper with her PROJECT 0N lettering */
 .hero__card,
 .spec-card {
   border: 13px solid transparent;
@@ -274,8 +275,8 @@ body.pj {
 }
 
 .pj-main .hero__sparkle {
-  right: -20px;
-  top: -24px;
+  left: 22px;
+  top: -26px;
   width: 46px;
   rotate: 12deg;
 }
@@ -325,7 +326,7 @@ body.pj {
     flex-direction: column;
     align-items: flex-start;
     width: auto;
-    margin: 0 0 0 -12%;
+    margin: 0 0 0 clamp(16px, 1.8vw, 26px);
   }
   .hero__card {
     width: 100%;
@@ -512,9 +513,10 @@ body.pj {
   gap: 22px;
 }
 
+/* never much bigger than she cut it, and never taller than about a screen */
 .sheet__feature .pc {
   width: 100%;
-  max-width: calc(var(--nw) * 1.25px);
+  max-width: min(calc(var(--nw) * 1.25px), calc(min(820px, 88vh) * var(--ar)));
   margin: 0 auto;
 }
 
@@ -567,18 +569,24 @@ body.pj {
   max-width: calc(var(--nw) * 1.25px);
 }
 
-/* one or two small pieces, under the note */
+/* one or two pieces under the note, one above the other, so the note's side fills as far down as the big piece */
 .sheet__aside {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: flex-start;
-  gap: 6%;
+  gap: 26px;
   margin-top: 6px;
 }
 
 .sheet__aside .pc {
-  width: 46%;
+  width: min(100%, calc(var(--w) * 2.2));
   max-width: calc(var(--nw) * 1.25px);
+  margin-left: 4%;
+}
+
+.sheet__aside .pc:nth-child(even) {
+  align-self: flex-end;
+  margin-right: 4%;
 }
 
 /* chips and fabrics, in a row */
@@ -821,6 +829,10 @@ body.pj {
   background-size: cover;
   background-position: center;
   clip-path: polygon(0% 0%, 7% 3%, 14% 0%, 21% 3%, 28% 0%, 35% 3%, 42% 0%, 50% 3%, 57% 0%, 64% 3%, 71% 0%, 78% 3%, 85% 0%, 92% 3%, 100% 0%, 97% 7%, 100% 14%, 97% 21%, 100% 28%, 97% 35%, 100% 42%, 97% 50%, 100% 57%, 97% 64%, 100% 71%, 97% 78%, 100% 85%, 97% 92%, 100% 100%, 92% 97%, 85% 100%, 78% 97%, 71% 100%, 64% 97%, 57% 100%, 50% 97%, 42% 100%, 35% 97%, 28% 100%, 21% 97%, 14% 100%, 7% 97%, 0% 100%, 3% 92%, 0% 85%, 3% 78%, 0% 71%, 3% 64%, 0% 57%, 3% 50%, 0% 42%, 3% 35%, 0% 28%, 3% 21%, 0% 14%, 3% 7%);
+}
+
+.pc.is-in .pc__cloth {
+  background-image: var(--cloth);
 }
 
 .tag--fabric {
@@ -1087,6 +1099,16 @@ body.pj {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* two colours: one above the other, a little apart, so the palette stands about as tall as the spec sheet */
+.palette ul:has(> li:nth-child(2):last-child) {
+  grid-template-columns: minmax(0, 1fr);
+  width: 58%;
+}
+
+.palette ul:has(> li:nth-child(2):last-child) > li:last-child {
+  translate: 52% 0;
 }
 
 .paint {
@@ -1533,7 +1555,7 @@ body.pj {
   }
   .hero__below {
     width: 100%;
-    margin-top: -4vw;
+    margin-top: 28px;
   }
   .hero__card {
     margin: 0 auto;
@@ -1551,9 +1573,16 @@ body.pj {
   .rings img:nth-child(n + 4) {
     display: none;
   }
-  /* one column: the note, then her pieces two or one to a row */
+  /* one column: the note, then her pieces two or one to a row (the big piece first, then the ones
+     that stood under the note) */
   .sheet__lead {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .sheet__lead > .sheet__intro {
+    display: contents;
+  }
+  .sheet__lead .sheet__aside {
+    order: 1;
   }
   .sheet__flow {
     display: flex;

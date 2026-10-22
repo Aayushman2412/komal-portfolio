@@ -85,8 +85,20 @@ export function Scrapbook() {
       el.style.transform = `rotateY(${-a}deg)`
       el.style.zIndex = String(a > 90 ? i + 1 : N - i + (a > 0.5 ? N : 0))
       el.style.setProperty('--shade', String(Math.sin((a * Math.PI) / 180)))
-      // the boards already turned show under the left page only once the cover is over on that side
-      if (i === 0 && stageEl.current) stageEl.current.dataset.cover = a > 90 ? 'over' : 'shut'
+      // the boards already turned show under the left page only once the cover lies on that side
+      if (i === 0 && stageEl.current) stageEl.current.dataset.cover = a >= 178 ? 'over' : 'shut'
+      // while pages turn, as at rest, nothing stuck out past the top of a page further in (her ABOUT ME
+      // star) shows: once a page has come over to its side its top edge is clipped, and once that page
+      // lies flat on it, it is hidden (the cover is narrower than a page, so it hides nothing on the
+      // right until the book is shut)
+      const on = angles.current
+      leaves.current.forEach((leaf, j) => {
+        if (!leaf) return
+        const left = on[j] > 90
+        const over = (lim: number) => (left ? on.some((b, k) => k > j && b >= 180 - lim) : on.some((b, k) => k > 0 && k < j && b <= lim))
+        const under = over(2) ? 'all' : over(90) ? 'edge' : ''
+        if (leaf.dataset.under !== under) leaf.dataset.under = under
+      })
     },
     [N],
   )

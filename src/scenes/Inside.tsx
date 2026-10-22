@@ -33,12 +33,35 @@ const FLAT_CORNERS: Pt[] = [
 
 type Mote = { x: number; y: number; r: number; vx: number; vy: number; ph: number }
 
+/** How far the pointer's parallax moves the drawing, in screen px (x, y). */
+const WOBBLE = [8, 5]
+
+/**
+ * Where ANCHOR goes on one axis at scale `s`: the safe box's centre in the middle of the screen, then
+ * moved as little as it takes to keep the KEEP box (her scrapbook and her "this one" over it) on a
+ * narrow screen, and never so far that the parallax could show past the drawing's edge.
+ */
+function axis(view: number, size: number, s: number, a: number, centre: number, keep0: number, keep1: number, wobble: number) {
+  const pad = 10 + wobble
+  let p = view / 2 + (a - centre) * s
+  p = Math.min(p, view - pad - (keep1 - a) * s)
+  p = Math.max(p, pad - (keep0 - a) * s)
+  const lo = view - (size - a) * s + wobble
+  const hi = a * s - wobble
+  return lo > hi ? (lo + hi) / 2 : Math.min(hi, Math.max(lo, p))
+}
+
 /** Scale and screen position of ANCHOR for the inside drawing right now. */
 function place(vw: number, vh: number) {
   const fit = fitFrame(vw, vh, regions.inside.safe)
   // a little over the cover fit, so the pointer's parallax never shows an edge
   const sF = fit.s * (1 + 24 / Math.min(vw, vh))
-  const pF: [number, number] = [fit.x + ANCHOR[0] * sF - live.pointer.x * 8, fit.y + ANCHOR[1] * sF + live.pointer.y * 5]
+  const [s0, t0, s1, t1] = regions.inside.safe
+  const [k0, l0, k1, l1] = regions.inside.keep
+  const pF: [number, number] = [
+    axis(vw, FRAME.w, sF, ANCHOR[0], (s0 + s1) / 2, k0, k1, WOBBLE[0]) - live.pointer.x * WOBBLE[0],
+    axis(vh, FRAME.h, sF, ANCHOR[1], (t0 + t1) / 2, l0, l1, WOBBLE[1]) + live.pointer.y * WOBBLE[1],
+  ]
   const k = insideCam.k
   if (k >= 1) return { s: sF, p: pF }
   // in the doorway: the INSIDE_VIEW part of her drawing exactly fills the room's open doors

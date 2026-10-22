@@ -2,21 +2,25 @@
  "pages": [
   {
    "src": "projects/project-01/pages/page-1.webp",
+   "small": "projects/project-01/pages/page-1-small.webp",
    "w": 1620,
    "h": 1080
   },
   {
    "src": "projects/project-01/pages/page-2.webp",
+   "small": "projects/project-01/pages/page-2-small.webp",
    "w": 1620,
    "h": 1080
   },
   {
    "src": "projects/project-01/pages/page-3.webp",
+   "small": "projects/project-01/pages/page-3-small.webp",
    "w": 1620,
    "h": 1080
   },
   {
    "src": "projects/project-01/pages/page-4.webp",
+   "small": "projects/project-01/pages/page-4-small.webp",
    "w": 1620,
    "h": 1080
   }
@@ -46,7 +50,8 @@
     886,
     1059
    ],
-   "alt": "Her inspiration and silhouette board: a collage of a giant leaf, mushrooms, Venus flytraps, moss, an uncanny face, gowns, an oversized knit and ruffled, layered fabrics, with four Pantone chips and her labels."
+   "alt": "Her inspiration and silhouette board: a collage of a giant leaf, mushrooms, Venus flytraps, moss, an uncanny face, gowns, an oversized knit and ruffled, layered fabrics, with four Pantone chips and her labels.",
+   "thumb": "projects/project-01/thumbs/moodboard.webp"
   },
   "inspiration": {
    "src": "projects/project-01/inspiration.webp",
@@ -59,7 +64,8 @@
     886,
     585
    ],
-   "alt": "The INSPIRATION half of her board: a giant leaf, mushrooms, Venus flytraps, moss, curling green tendrils, pink and brown organic textures and an uncanny face, labelled ominous, raw, textures, earthy and uncanny, with four Pantone chips."
+   "alt": "The INSPIRATION half of her board: a giant leaf, mushrooms, Venus flytraps, moss, curling green tendrils, pink and brown organic textures and an uncanny face, labelled ominous, raw, textures, earthy and uncanny, with four Pantone chips.",
+   "thumb": "projects/project-01/thumbs/inspiration.webp"
   },
   "silhouette": {
    "src": "projects/project-01/silhouette.webp",
@@ -72,7 +78,8 @@
     827,
     1059
    ],
-   "alt": "The SILHOUTTE half of her board: a strapless pink bodycon gown, an oversized ribbed turtleneck, a pink gown seen from the back, layered rough-edged fabric, pink ruffles, green wavy patchwork and two flytrap embellishments, each labelled."
+   "alt": "The SILHOUTTE half of her board: a strapless pink bodycon gown, an oversized ribbed turtleneck, a pink gown seen from the back, layered rough-edged fabric, pink ruffles, green wavy patchwork and two flytrap embellishments, each labelled.",
+   "thumb": "projects/project-01/thumbs/silhouette.webp"
   },
   "heading-inspiration": {
    "src": "projects/project-01/heading-inspiration.webp",
@@ -204,6 +211,84 @@
    ],
    "alt": "Two Venus flytraps used as embellishments: green, spiky-edged, with dark red centres."
   },
+  "flytrap": {
+   "src": "projects/project-01/flytrap.webp",
+   "w": 191,
+   "h": 195,
+   "page": 2,
+   "box": [
+    292,
+    382,
+    483,
+    577
+   ],
+   "alt": "A Venus flytrap, wide open: a deep red trap above a lime green one, their pink teeth spread like lashes."
+  },
+  "rough-edges": {
+   "src": "projects/project-01/rough-edges.webp",
+   "w": 156,
+   "h": 299,
+   "page": 2,
+   "box": [
+    146,
+    607,
+    302,
+    906
+   ],
+   "alt": "Rough edges: layers of frayed brown fabric stacked over a pink ruffle."
+  },
+  "gown-front": {
+   "src": "projects/project-01/gown-front.webp",
+   "w": 236,
+   "h": 455,
+   "page": 2,
+   "box": [
+    217,
+    567,
+    453,
+    1022
+   ],
+   "alt": "The bodycon silhouette: a model in a strapless pale pink column gown with a sheer train, outlined in yellow, two Venus flytraps on its hem as embellishment."
+  },
+  "turtleneck": {
+   "src": "projects/project-01/turtleneck.webp",
+   "w": 240,
+   "h": 330,
+   "page": 2,
+   "box": [
+    381,
+    549,
+    621,
+    879
+   ],
+   "alt": "An oversized turtleneck in olive rib knit, one long sleeve hanging to the knee, outlined in yellow and labelled OVER-SIZED."
+  },
+  "gown-back": {
+   "src": "projects/project-01/gown-back.webp",
+   "w": 80,
+   "h": 375,
+   "page": 2,
+   "box": [
+    558,
+    638,
+    638,
+    1013
+   ],
+   "alt": "The same pale pink strapless gown from the back, the model looking over her shoulder."
+  },
+  "flare": {
+   "src": "projects/project-01/flare.webp",
+   "w": 104,
+   "h": 282,
+   "page": 2,
+   "box": [
+    624,
+    599,
+    728,
+    881
+   ],
+   "alt": "Flare: a long pale pink skirt falling in layers and flaring at the hem, its folds traced in yellow."
+  },
   "lineup": {
    "src": "projects/project-01/lineup.webp",
    "w": 580,
@@ -215,7 +300,8 @@
     1509,
     587
    ],
-   "alt": "Her line-up of eleven illustrated looks in pink and lime green: ruffled seams, stripes, cropped turtlenecks, long sleeves, wide trousers, draped and wrap skirts and column dresses, with small flower embellishments."
+   "alt": "Her line-up of eleven illustrated looks in pink and lime green: ruffled seams, stripes, cropped turtlenecks, long sleeves, wide trousers, draped and wrap skirts and column dresses, with small flower embellishments.",
+   "thumb": "projects/project-01/thumbs/lineup.webp"
   },
   "lineup-1": {
    "src": "projects/project-01/lineup-1.webp",
@@ -410,7 +496,8 @@
     280,
     705
    ],
-   "alt": "Final look from the front: a cropped knit turtleneck with ruffled sleeves and a long striped rib-knit skirt with small flowers."
+   "alt": "Final look from the front: a cropped knit turtleneck with ruffled sleeves and a long striped rib-knit skirt with small flowers.",
+   "thumb": "projects/project-01/thumbs/look-1-front.webp"
   },
   "look-1-back": {
    "src": "projects/project-01/look-1-back.webp",
@@ -423,7 +510,8 @@
     485,
     705
    ],
-   "alt": "Final look from the back: the cropped turtleneck leaves the waist bare above the long striped skirt."
+   "alt": "Final look from the back: the cropped turtleneck leaves the waist bare above the long striped skirt.",
+   "thumb": "projects/project-01/thumbs/look-1-back.webp"
   },
   "look-2": {
    "src": "projects/project-01/look-2.webp",
@@ -449,7 +537,8 @@
     769,
     967
    ],
-   "alt": "Strapless striped column dress from the front, with small flowers."
+   "alt": "Strapless striped column dress from the front, with small flowers.",
+   "thumb": "projects/project-01/thumbs/look-2-front.webp"
   },
   "look-2-back": {
    "src": "projects/project-01/look-2-back.webp",
@@ -462,7 +551,8 @@
     923,
     951
    ],
-   "alt": "Strapless striped column dress from the back."
+   "alt": "Strapless striped column dress from the back.",
+   "thumb": "projects/project-01/thumbs/look-2-back.webp"
   },
   "makeup-eyes": {
    "src": "projects/project-01/makeup-eyes.webp",
@@ -479,16 +569,16 @@
   },
   "makeup-face": {
    "src": "projects/project-01/makeup-face.webp",
-   "w": 680,
-   "h": 1076,
+   "w": 512,
+   "h": 1080,
    "page": 3,
    "box": [
-    938,
-    2,
-    1618,
-    1078
+    1108,
+    0,
+    1620,
+    1080
    ],
-   "alt": "Makeup reference: a face with red-rimmed eyes, lime brows, glossy red and gold lips, and Venus flytraps worn in the hair like ears."
+   "alt": "Makeup reference: a face with red-rimmed eyes, lime brows, glossy red and gold lips, and a Venus flytrap worn in the hair like an ear."
   },
   "makeup-hair": {
    "src": "projects/project-01/makeup-hair.webp",
@@ -592,7 +682,8 @@
     238,
     1080
    ],
-   "alt": "A blown-up, cool-toned print from the night shoot behind the photos: the cropped turtleneck and striped skirt."
+   "alt": "A blown-up, cool-toned print from the night shoot behind the photos: the cropped turtleneck and striped skirt.",
+   "thumb": "projects/project-01/thumbs/backdrop-left.webp"
   },
   "backdrop-right": {
    "src": "projects/project-01/backdrop-right.webp",
@@ -605,7 +696,8 @@
     1620,
     748
    ],
-   "alt": "A blown-up print from the night shoot behind the photos: the striped rib knit with a flower embellishment."
+   "alt": "A blown-up print from the night shoot behind the photos: the striped rib knit with a flower embellishment.",
+   "thumb": "projects/project-01/thumbs/backdrop-right.webp"
   },
   "fabric-waffle": {
    "src": "projects/project-01/fabric-waffle.webp",

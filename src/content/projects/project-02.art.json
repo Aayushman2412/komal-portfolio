@@ -2,21 +2,25 @@
  "pages": [
   {
    "src": "projects/project-02/pages/page-1.webp",
+   "small": "projects/project-02/pages/page-1-small.webp",
    "w": 1620,
    "h": 1080
   },
   {
    "src": "projects/project-02/pages/page-2.webp",
+   "small": "projects/project-02/pages/page-2-small.webp",
    "w": 1620,
    "h": 1080
   },
   {
    "src": "projects/project-02/pages/page-3.webp",
+   "small": "projects/project-02/pages/page-3-small.webp",
    "w": 1620,
    "h": 1080
   },
   {
    "src": "projects/project-02/pages/page-4.webp",
+   "small": "projects/project-02/pages/page-4-small.webp",
    "w": 1620,
    "h": 1080
   }
@@ -86,7 +90,8 @@
     1485,
     1080
    ],
-   "alt": "Her INSPIRATION board: a collage on pink paper of a white racing helmet, WARREN ST and ONE WAY street signs, a motorbike wheelie at night, a burst of fire, a giant safety pin and a zip, a concrete tower block, a crowd in smoke, a red gem in silver foil, two crumpled Pantone chips and red star shapes, tagged racing, edgy, raw and urban."
+   "alt": "Her INSPIRATION board: a collage on pink paper of a white racing helmet, WARREN ST and ONE WAY street signs, a motorbike wheelie at night, a burst of fire, a giant safety pin and a zip, a concrete tower block, a crowd in smoke, a red gem in silver foil, two crumpled Pantone chips and red star shapes, tagged racing, edgy, raw and urban.",
+   "thumb": "projects/project-02/thumbs/moodboard.webp"
   },
   "heading-inspiration": {
    "src": "projects/project-02/heading-inspiration.webp",
@@ -333,7 +338,8 @@
     1428,
     861
    ],
-   "alt": "Her collection, three illustrated looks in red leather-look and dark denim: a cut-out crop top tied with bows over culottes with red stripes; a glossy red leather jacket with a pleated mini skirt and studded thigh-high boots; a red and denim bustier with a red sash and wide trousers panelled in red."
+   "alt": "Her collection, three illustrated looks in red leather-look and dark denim: a cut-out crop top tied with bows over culottes with red stripes; a glossy red leather jacket with a pleated mini skirt and studded thigh-high boots; a red and denim bustier with a red sash and wide trousers panelled in red.",
+   "thumb": "projects/project-02/thumbs/collection.webp"
   },
   "collection-left": {
    "src": "projects/project-02/collection-left.webp",
@@ -518,7 +524,8 @@
     1272,
     551
    ],
-   "alt": "Her e-commerce shoot: LOOK 3 as a 3D render on a grey backdrop, seen from four sides."
+   "alt": "Her e-commerce shoot: LOOK 3 as a 3D render on a grey backdrop, seen from four sides.",
+   "thumb": "projects/project-02/thumbs/ecommerce.webp"
   },
   "render-1": {
    "src": "projects/project-02/render-1.webp",
@@ -596,7 +603,8 @@
     1252,
     1062
    ],
-   "alt": "Her AI shoot: six night photos of LOOK 3 with red motorbikes, on wet city streets, in smoke and in a tunnel."
+   "alt": "Her AI shoot: six night photos of LOOK 3 with red motorbikes, on wet city streets, in smoke and in a tunnel.",
+   "thumb": "projects/project-02/thumbs/ai-shoot.webp"
   },
   "ai-1": {
    "src": "projects/project-02/ai-1.webp",

@@ -123,6 +123,7 @@ export function PieceView({ d, p, i }: { d: Detail; p: Piece; i: number }) {
     // in the columns: its width in a column, and never blown up much past the size it was cut at
     '--cw': `${colWidth(p)}%`,
     '--nw': cut.w,
+    '--ar': (cut.w / cut.h).toFixed(3),
     '--r': `${p.r ?? tilt(i)}deg`,
     '--d': `${(i % 4) * 70}ms`,
   })
@@ -172,7 +173,8 @@ export function PieceView({ d, p, i }: { d: Detail; p: Piece; i: number }) {
       return (
         <figure className="pc pc--fabric" style={style} data-reveal>
           <button type="button" className="pc__hit" {...lb(publicUrl(cut.src), cut.alt, cut.w, cut.h)} aria-label={`${p.caption ?? 'fabric'}: ${cut.alt}`}>
-            <span className="pc__cloth" style={{ backgroundImage: `url(${publicUrl(cut.src)})` }} />
+            {/* drawn once the swatch is in view (a background image does not wait like a lazy image) */}
+            <span className="pc__cloth" style={css({ '--cloth': `url(${publicUrl(cut.src)})` })} />
           </button>
           {p.caption && <figcaption className="tag tag--fabric">{p.caption}</figcaption>}
         </figure>

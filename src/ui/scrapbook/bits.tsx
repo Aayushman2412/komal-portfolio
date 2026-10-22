@@ -119,8 +119,18 @@ export function Note({ children, className = '', ...pos }: Pos & { children: Rea
  * underneath"); `onRed` when it is stuck on her red paper, so the note is written in white. One that
  * lifts to the right sits beside the red paper, so its note starts clear of it.
  */
-export function Polaroid({ photo, tape, lift = 'left', onRed, ...pos }: Pos & { photo: Project['photos'][number]; tape?: 1 | 2; lift?: 'left' | 'right'; onRed?: boolean }) {
-  const [lifted, setLifted] = useState(false)
+export function Polaroid({
+  photo,
+  tape,
+  lift = 'left',
+  onRed,
+  lifted: liftedBy,
+  onLift,
+  ...pos
+}: Pos & { photo: Project['photos'][number]; tape?: 1 | 2; lift?: 'left' | 'right'; onRed?: boolean; lifted?: boolean; onLift?: (up: boolean) => void }) {
+  const [own, setOwn] = useState(false)
+  // the page may hold it (`lifted`, `onLift`), so lifting one polaroid puts the other back down
+  const lifted = liftedBy ?? own
   const toward = { '--lift-r': lift === 'left' ? '-4deg' : '4deg' }
   return (
     <div className={`polaroid polaroid--${lift} ${onRed ? 'polaroid--on-red' : ''}`} style={{ ...place(pos), ...(toward as CSSProperties) }}>
@@ -133,7 +143,8 @@ export function Polaroid({ photo, tape, lift = 'left', onRed, ...pos }: Pos & { 
         onClick={(e) => {
           e.stopPropagation()
           sound.click()
-          setLifted((v) => !v)
+          setOwn(!lifted)
+          onLift?.(!lifted)
         }}
       >
         <span className="polaroid__photo">{photo.src ? <img src={photo.src} alt={photo.alt ?? ''} loading="lazy" style={photo.focus ? { objectPosition: photo.focus } : undefined} /> : <span className="polaroid__empty">photo to come</span>}</span>
@@ -228,7 +239,8 @@ export function Swatch({ swatch, ...pos }: Pos & { swatch: Project['swatches'][n
   const [zoom, setZoom] = useState(false)
   const small = swatch.src ?? fabricUrl(swatch.kind)
   useEscape(zoom, setZoom)
-  // a photo of the fabric is shown at most twice its own size: a small crop gives a smaller circle, but a sharp one
+  // a photo of the fabric is shown at most twice its own size: a small crop gives a smaller circle, but a
+  // sharp one (and on the page it is shown whole, so the circle still comes closer than the page does)
   const most = swatch.src && swatch.w && swatch.h ? Math.round(Math.min(swatch.w, swatch.h) * 2) : 0
   return (
     <>
@@ -243,7 +255,7 @@ export function Swatch({ swatch, ...pos }: Pos & { swatch: Project['swatches'][n
           setZoom(true)
         }}
       >
-        <span className="swatch__cloth" style={{ backgroundImage: `url(${small})` }} />
+        <span className={`swatch__cloth ${swatch.src ? 'swatch__cloth--photo' : ''}`} style={{ backgroundImage: `url(${small})` }} />
         <span className="swatch__tag">{swatch.name}</span>
       </button>
       {/* data-interactive: it is portaled out of the book, but React still bubbles its pointer events up to the page, which would turn */}
