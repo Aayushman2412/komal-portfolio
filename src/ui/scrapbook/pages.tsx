@@ -31,6 +31,11 @@ const tabs = (): Spot[] => [
 const moreHref = (p: Project) => `project.html#${p.slug}`
 
 function ProjectLeft({ p, n }: { p: Project; n: number }) {
+  const title = (
+    <p className="proj__title">
+      {p.title} {p.year && <span>{p.year}</span>}
+    </p>
+  )
   return (
     <>
       {p.more && <Pieces slug={p.slug} side="left" under />}
@@ -38,25 +43,28 @@ function ProjectLeft({ p, n }: { p: Project; n: number }) {
         <img className="proj__lettering" src={art.projectTitles[n] ?? art.projectTitles[0]} alt={`Project ${num(n)}`} draggable={false} />
       </IndexCard>
       {p.more ? (
-        <Pieces slug={p.slug} side="left" />
+        <>
+          <Pieces slug={p.slug} side="left" />
+          <div className="proj__head">
+            {title}
+            <More href={moreHref(p)} title={p.title} />
+          </div>
+        </>
       ) : (
         <>
           <Sticker src={art.book.smiley} x={66} y={14} w={9} r={10} />
           <Sticker src={art.book.sparkle} x={80} y={20} w={6} r={-6} />
+          {title}
         </>
       )}
-      <p className={`proj__title ${p.more ? 'proj__title--more' : ''}`}>
-        {p.title} {p.year && <span>{p.year}</span>}
-      </p>
-      {p.more && <More href={moreHref(p)} title={p.title} x={p.title.length > 10 ? 52 : 36} y={26.2} r={-2} />}
       <Tape kind={2} x={3} y={32.5} r={-8} w={18} />
-      <Note x={9} y={34} w={82} h={29} r={-1.2}>
+      <Note x={9} y={p.more ? 33 : 34} w={82} h={p.more ? 31 : 29} r={-1.2}>
         <p>{p.story}</p>
       </Note>
       {p.more ? (
         <>
-          <Envelope x={9} y={67.5} w={40} h={19} r={-4} text={p.concept} out={{ x: 6, y: 21, w: 86, h: 60 }} />
-          <SpecTab x={56} y={65} w={36} h={24} r={3} specs={p.specs} sheet={1.3} />
+          <Envelope x={7.5} y={68} w={39} h={18.5} r={-4} text={p.concept} out={{ x: 6, y: 23, w: 86, h: 58 }} />
+          <SpecTab x={52} y={67.5} w={40} h={23} r={3} specs={p.specs} sheet={1.35} />
         </>
       ) : (
         <>
@@ -74,10 +82,10 @@ function ProjectRight({ p, next, go }: { p: Project; next: { to: string; label: 
   return (
     <>
       {p.more && <Pieces slug={p.slug} side="right" under />}
-      <RedPaper x={7} y={13} w={56} h={50} r={-3}>
+      <RedPaper x={7} y={13} w={56} h={p.more ? 52.5 : 50} r={-3}>
         <span className={`red-paper__note ${p.redNote ? 'red-paper__note--words' : ''}`}>{p.redNote ?? p.photos[0].caption}</span>
       </RedPaper>
-      <Polaroid x={12} y={17} w={44} r={-5} photo={p.photos[0]} tape={1} />
+      <Polaroid x={12} y={p.more ? 16 : 17} w={44} r={-5} photo={p.photos[0]} tape={1} onRed={p.more} />
       <Polaroid x={55} y={p.more ? 31 : 33} w={37} r={6} photo={p.photos[1]} tape={1} lift="right" />
       {p.more ? (
         <Pieces slug={p.slug} side="right" />
@@ -95,7 +103,7 @@ function ProjectRight({ p, next, go }: { p: Project; next: { to: string; label: 
         ),
       )}
       {/* one page at a time, the right-hand page says it too */}
-      {p.more && <More href={moreHref(p)} title={p.title} className="more--single" x={9} y={63.6} r={2} />}
+      {p.more && <More href={moreHref(p)} title={p.title} className="more--single" x={7} y={88} r={-1.5} />}
       <Flap label={next.label} onGo={() => go(next.to)} />
     </>
   )

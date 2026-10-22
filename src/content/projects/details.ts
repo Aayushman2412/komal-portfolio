@@ -68,6 +68,8 @@ export type Detail = {
   redNote?: string
   palette: { code: string; hex: string; label: string; cut: string }[]
   art: ProjectArt
+  /** What is on each of her four pages, for anyone who cannot see them (and the lightbox caption). */
+  pageAlts: string[]
   sections: Section[]
 }
 
@@ -76,6 +78,12 @@ const P = (cut: string, look: Look, w: number, extra: Omit<Piece, 'cut' | 'look'
 const flytrap: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
   slug: 'project-01',
   n: 1,
+  pageAlts: [
+    'Her cover for project 01: a glitched close-up of pink and dark green leaf veins on a teal board, its ring binding along the bottom.',
+    'Her spread for project 01. Left: her INSPIRATION and SILHOUTTE board, a collage of a giant leaf, mushrooms, Venus flytraps, moss and an uncanny face, labelled in yellow, with four Pantone chips and pink gowns and an oversized turtleneck. Right: her line-up of eleven illustrated looks in pink and lime, her PROJECTS tab and her PROJECT 01 corner flap.',
+    'Her page of final looks: two illustration cards, front and back, with pink loop borders, beside the Venus flytrap makeup: red-rimmed eyes, lime brows, glossy lips and flytraps in the hair.',
+    'Her night shoot: the knits photographed at night in tall grass, six photos laid over two blown-up prints.',
+  ],
   sections: [
     {
       id: 'cover',
@@ -110,7 +118,7 @@ const flytrap: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
       page: 2,
       text: 'Bodycon, an oversized turtleneck, layers and flare. Rough edges, patchwork, wavy lines, and flytraps as embellishment.',
       words: ['BODYCON', 'TURTLENECK', 'LAYERS', 'OVER-SIZED', 'FLARE', 'ROUGH EDGES', 'PATCHWORK', 'EMBELLISHMENT', 'WAVY'],
-      pieces: [P('silhouette', 'cutout', 64, { r: 1 }), P('embellishment', 'cutout', 20, { r: -6 })],
+      pieces: [P('silhouette', 'cutout', 60, { r: 1 }), P('embellishment', 'cutout', 20, { r: -6 })],
     },
     {
       id: 'lineup',
@@ -174,6 +182,12 @@ const flytrap: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
 const muse: Omit<Detail, keyof SiteText | 'art' | 'palette'> = {
   slug: 'project-02',
   n: 2,
+  pageAlts: [
+    'Her cover for project 02: a collage of red lips with gold teeth, denim and a girl in a red cap, with I AM MY OWN MUSE lettered in red inside a screaming mouth, its ring binding along the bottom.',
+    'Her INSPIRATION board: a white racing helmet, WARREN ST and ONE WAY signs, bikes at night, fire, a crowd in smoke, a zebra crossing, a zip, a safety pin, a red gem, two crumpled Pantone chips, and the words RACING, EDGY, RAW and URBAN on red tags.',
+    'Her page THE COLLECTION: three illustrated looks in red leather-look and dark denim, beside red lips with gold teeth, denim and a back pocket with red stars.',
+    'Her E-COMMERCE SHOOT, LOOK 3 drawn and as four 3D renders from every side, and her AI SHOOT, six night photos of LOOK 3 with red motorbikes.',
+  ],
   sections: [
     {
       id: 'muse',

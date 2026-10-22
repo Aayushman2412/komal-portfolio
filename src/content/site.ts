@@ -22,8 +22,11 @@ export type Project = {
   concept: string
   /** On the spec sheet that slides out from behind the paper tab. */
   specs: [string, string][]
-  /** Polaroids; `note` is written on the page underneath each one. Put photos in /public/projects/<slug>/. */
-  photos: { src?: string; alt?: string; caption: string; note: string }[]
+  /**
+   * Polaroids; `note` is written on the page underneath each one. Put photos in /public/projects/<slug>/.
+   * `focus` is where the square print is centred on a photo of another shape (CSS object-position).
+   */
+  photos: { src?: string; alt?: string; focus?: string; caption: string; note: string }[]
   /**
    * Click to zoom into the fabric. `src` is a photo of the real fabric (`w`, `h` its size, so the zoom
    * never blows it up past what it holds); without one a drawn swatch of `kind` stands in.
@@ -52,9 +55,9 @@ export function piece(slug: string, name: string) {
   return { ...c, url: publicUrl(c.src) }
 }
 
-const photo = (slug: string, name: string, caption: string, note: string) => {
+const photo = (slug: string, name: string, caption: string, note: string, focus?: string) => {
   const c = piece(slug, name)
-  return { src: c.url, alt: c.alt, caption, note }
+  return { src: c.url, alt: c.alt, caption, note, focus }
 }
 
 const fabric = (slug: string, name: string, label: string, kind: SwatchKind) => {
@@ -74,7 +77,7 @@ const flytrap: Project = {
   title: 'Flytrap',
   subtitle: 'A knitwear collection grown from leaves, moss, mushrooms and Venus flytraps.',
   story:
-    'It started with a leaf, moss, mushrooms and Venus flytraps: ominous, raw, earthy, a little uncanny. I turned them into rib and waffle knits with rough, ruffled edges. Even the makeup is a flytrap.',
+    'A leaf, moss, mushrooms and Venus flytraps: ominous, raw, earthy, a little uncanny. I turned them into rib and waffle knits with rough, ruffled edges. Even the makeup is a flytrap.',
   concept:
     'Nature, but not the pretty kind. I gathered a giant leaf, mushroom gills, moss, Venus flytraps and an uncanny face, and labelled how they felt: ominous, raw, textures, earthy, uncanny. My four colours came from there: a warm yellow, a dark moss green, olive and a soft pink. The silhouettes are bodycon and oversized, layered and flared, with rough edges, patchwork and wavy lines, made up in rib and waffle knits. The photos were taken at night, in tall grass.',
   specs: [
@@ -86,8 +89,8 @@ const flytrap: Project = {
     ['shoot', 'at night, in tall grass'],
   ],
   photos: [
-    photo('project-01', 'photo-1', 'the striped dress', 'Rib-knit stripes, raw ruffled seams and little flowers.'),
-    photo('project-01', 'photo-4', 'the cropped turtleneck', 'Waffle knit, a ribbed collar, and sleeves that ruffle at the edges.'),
+    photo('project-01', 'photo-4', 'the cropped turtleneck', 'Waffle knit, a ribbed collar, and sleeves that ruffle at the edges.', '50% 4%'),
+    photo('project-01', 'photo-1', 'the striped dress', 'Rib-knit stripes, raw ruffled seams and little flowers.', '50% 3%'),
   ],
   swatches: [
     fabric('project-01', 'fabric-waffle', 'waffle knit', 'khadi'),
@@ -115,7 +118,7 @@ const muse: Project = {
   title: 'I Am My Own Muse',
   subtitle: 'A racing-inspired collection in denim and red leather-look, with an e-commerce shoot and an AI shoot.',
   story:
-    'I am my own muse. It started with a racing helmet, street signs, bikes at night and fire. Edgy, raw and urban, in deep red and faded denim. Then I took LOOK 3 further: into 3D, and out into the night.',
+    'I am my own muse. It started with a racing helmet, street signs, bikes at night and fire: edgy, raw, urban. Then I took LOOK 3 further, into 3D and out into the night.',
   concept:
     'The idea is in the mouth on my cover: I am my own muse. The mood comes from racing and the street: a white racing helmet, street signs, a wheelie at night, fire, a giant safety pin and a zip. Four words on red tags hold it together: racing, edgy, raw, urban. The colours are two crumpled Pantone chips, a deep red and Faded Denim, so the looks live in red leather-look and dark denim, with red lips, gold teeth and stars for attitude.',
   specs: [
@@ -123,11 +126,11 @@ const muse: Project = {
     ['colours', 'deep red, faded denim'],
     ['materials', 'denim, red leather-look'],
     ['looks', '3'],
-    ['details', 'bows, laces, studs, a red sash'],
+    ['details', 'bows, laces, studs'],
     ['shoots', '3D e-commerce, AI'],
   ],
   photos: [
-    photo('project-02', 'ai-2', 'look 3, after dark', 'From my AI shoot: red neon, a wet street, and LOOK 3.'),
+    photo('project-02', 'ai-2', 'look 3, after dark', 'From my AI shoot: red neon, a wet street, and LOOK 3.', '50% 18%'),
     photo('project-02', 'ai-5', 'full speed', 'The tunnel shot: the racing feeling I wanted for the whole collection.'),
   ],
   swatches: [

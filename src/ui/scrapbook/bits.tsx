@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import type { Project } from '../../content/site'
 import { art, regions } from '../../lib/art'
@@ -23,18 +23,18 @@ export const place = ({ x, y, r = 0, w, h }: Pos): CSSProperties => ({
 })
 
 /** Escape puts back whatever is zoomed in, before the book hears it (Escape there closes the book). */
-function useEscape(active: boolean, close: () => void) {
+function useEscape(zoom: boolean, setZoom: (zoom: boolean) => void) {
   useEffect(() => {
-    if (!active) return
+    if (!zoom) return
     const key = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.stopPropagation()
-        close()
+        setZoom(false)
       }
     }
     window.addEventListener('keydown', key, true)
     return () => window.removeEventListener('keydown', key, true)
-  }, [active, close])
+  }, [zoom, setZoom])
 }
 
 /** A clickable area over her drawn pages (her tabs, her "turn" flap, her index rows). Box in page pixels. */
@@ -114,12 +114,15 @@ export function Note({ children, className = '', ...pos }: Pos & { children: Rea
   )
 }
 
-/** A polaroid. Lift it to read what is written underneath (her notes: "polaroid → handwritten note underneath"). */
-export function Polaroid({ photo, tape, lift = 'left', ...pos }: Pos & { photo: Project['photos'][number]; tape?: 1 | 2; lift?: 'left' | 'right' }) {
+/**
+ * A polaroid. Lift it to read what is written underneath (her notes: "polaroid → handwritten note
+ * underneath"); `onRed` when it is stuck on her red paper, so the note is written in white.
+ */
+export function Polaroid({ photo, tape, lift = 'left', onRed, ...pos }: Pos & { photo: Project['photos'][number]; tape?: 1 | 2; lift?: 'left' | 'right'; onRed?: boolean }) {
   const [lifted, setLifted] = useState(false)
   const toward = { '--lift-r': lift === 'left' ? '-4deg' : '4deg' }
   return (
-    <div className="polaroid" style={{ ...place(pos), ...(toward as CSSProperties) }}>
+    <div className={`polaroid ${onRed ? 'polaroid--on-red' : ''}`} style={{ ...place(pos), ...(toward as CSSProperties) }}>
       <p className="polaroid__under">{photo.note}</p>
       <button
         className={`polaroid__card ${lifted ? 'is-lifted' : ''}`}
@@ -132,7 +135,7 @@ export function Polaroid({ photo, tape, lift = 'left', ...pos }: Pos & { photo: 
           setLifted((v) => !v)
         }}
       >
-        <span className="polaroid__photo">{photo.src ? <img src={photo.src} alt={photo.alt ?? ''} loading="lazy" /> : <span className="polaroid__empty">photo to come</span>}</span>
+        <span className="polaroid__photo">{photo.src ? <img src={photo.src} alt={photo.alt ?? ''} loading="lazy" style={photo.focus ? { objectPosition: photo.focus } : undefined} /> : <span className="polaroid__empty">photo to come</span>}</span>
         <span className="polaroid__caption">{photo.caption}</span>
         {tape && <img className="polaroid__tape" src={tape === 1 ? art.book.tape1 : art.book.tape2} alt="" draggable={false} />}
       </button>
@@ -185,12 +188,13 @@ export function Envelope({ text, out, ...pos }: Pos & { text: string; out?: { x:
 
 /**
  * A paper tab poking out of a pocket; pull it and the spec sheet slides out (her notes: "paper tab →
- * specs sheet hidden"). `sheet` makes the sheet taller than its pocket, for more rows.
+ * specs sheet hidden"). A longer sheet gives `sheet`, how many pockets tall it is: pulled out, it
+ * also opens out to the left, wide enough for whole lines.
  */
 export function SpecTab({ specs, sheet, ...pos }: Pos & { specs: Project['specs']; sheet?: number }) {
   const [out, setOut] = useState(false)
   return (
-    <div className={`spec ${out ? 'is-out' : ''}`} style={{ ...place(pos), ...(sheet ? ({ '--sheet': sheet } as CSSProperties) : {}) }}>
+    <div className={`spec ${sheet ? 'spec--long' : ''} ${out ? 'is-out' : ''}`} style={{ ...place(pos), ...(sheet ? ({ '--sheet': sheet } as CSSProperties) : {}) }}>
       <button
         className="spec__sheet"
         data-interactive
@@ -222,7 +226,7 @@ export function SpecTab({ specs, sheet, ...pos }: Pos & { specs: Project['specs'
 export function Swatch({ swatch, ...pos }: Pos & { swatch: Project['swatches'][number] }) {
   const [zoom, setZoom] = useState(false)
   const small = swatch.src ?? fabricUrl(swatch.kind)
-  useEscape(zoom, useCallback(() => setZoom(false), []))
+  useEscape(zoom, setZoom)
   // a photo of the real fabric is shown at most about three times its own size, so it stays fabric, not blur
   const most = swatch.src && swatch.w && swatch.h ? Math.round(Math.min(swatch.w, swatch.h) * 3.2) : 0
   return (
@@ -241,9 +245,10 @@ export function Swatch({ swatch, ...pos }: Pos & { swatch: Project['swatches'][n
         <span className="swatch__cloth" style={{ backgroundImage: `url(${small})` }} />
         <span className="swatch__tag">{swatch.name}</span>
       </button>
+      {/* data-interactive: it is portaled out of the book, but React still bubbles its pointer events up to the page, which would turn */}
       {zoom &&
         createPortal(
-          <div className="zoom" role="dialog" aria-label={swatch.name} onClick={() => setZoom(false)}>
+          <div className="zoom" role="dialog" aria-label={swatch.name} data-interactive onClick={() => setZoom(false)}>
             <span
               className={`zoom__cloth ${most ? 'zoom__cloth--photo' : ''}`}
               style={{ backgroundImage: `url(${swatch.src ?? fabricUrl(swatch.kind, 768)})`, ...(most ? { width: `min(68vmin, 620px, ${most}px)` } : {}) }}
@@ -264,7 +269,7 @@ export function Swatch({ swatch, ...pos }: Pos & { swatch: Project['swatches'][n
  */
 export function Print({ src, alt, size, tape, bare, ...pos }: Pos & { src: string; alt: string; size: [number, number]; tape?: 1 | 2; bare?: boolean }) {
   const [zoom, setZoom] = useState(false)
-  useEscape(zoom, useCallback(() => setZoom(false), []))
+  useEscape(zoom, setZoom)
   const [iw, ih] = size
   return (
     <>
@@ -284,7 +289,7 @@ export function Print({ src, alt, size, tape, bare, ...pos }: Pos & { src: strin
       </button>
       {zoom &&
         createPortal(
-          <div className="zoom" role="dialog" aria-label={alt} onClick={() => setZoom(false)}>
+          <div className="zoom" role="dialog" aria-label={alt} data-interactive onClick={() => setZoom(false)}>
             <img className="zoom__print" src={src} alt={alt} style={{ width: `min(92vw, ${iw * 2}px, calc(80vh * ${(iw / ih).toFixed(4)}))` }} />
             <span className="zoom__hint">click anywhere to put it back</span>
           </div>,
@@ -297,13 +302,13 @@ export function Print({ src, alt, size, tape, bare, ...pos }: Pos & { src: strin
 /**
  * "click to see more": her hand on a torn scrap of white paper, like her INSPIRATION strip. It is a
  * real link, so it opens the project's own page in a new tab (and middle-click, copy link, keyboard
- * all work); it never turns the page.
+ * all work); it never turns the page. Without a position it sits in line, after the project's name.
  */
-export function More({ href, title, className = '', ...pos }: Pos & { href: string; title: string; className?: string }) {
+export function More({ href, title, className = '', ...pos }: Partial<Pos> & { href: string; title: string; className?: string }) {
   return (
     <a
-      className={`more ${className}`}
-      style={place(pos)}
+      className={`more ${pos.x === undefined ? 'more--inline' : ''} ${className}`}
+      style={pos.x === undefined ? undefined : place(pos as Pos)}
       href={href}
       target="_blank"
       rel="noopener"
